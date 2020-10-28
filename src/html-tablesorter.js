@@ -4,29 +4,51 @@
 */
 console.log('hello world')
 
-//console.log(document.getElementsByClassName('sortable'))
 
 if (document.getElementsByClassName('sortable')) {
-    const entireTable = document.getElementById('myTable')
-    const tableColumn = document.getElementsByTagName('th');
-    const tableRow = document.getElementsByTagName('tr').item(2);
-    const tableBody = document.getElementsByTagName('tbody');
+  const columnData = []
+  document.addEventListener("DOMContentLoaded", function (e) {
 
-    console.log(tableRow)
-    // for (let i; tableRow < tableRow.length; i++) {
-    //     console.log(tableRow[i])
-    // }
+    for (let sortableTable of document.getElementsByTagName('table')) {
+      if (sortableTable.className === 'sortable') {
+        if (!sortableTable.getElementsByTagName('thead')) {
+          console.log('<thead> Tag does not exist');
+        }
+        else if (!sortableTable.getElementsByTagName('tbody')) {
+          console.log('<tbody> Tag does not exist');
+        }
+        else {
+          const tableHead = sortableTable.querySelector('thead')
+          const tableBody = sortableTable.querySelector('tbody')
+          const tableHeadHeaders = tableHead.querySelectorAll('th')
+
+          for (let [columnIndex, th] of tableHeadHeaders.entries()) {
+            th.addEventListener("click", function () {
+              console.log(th.innerText, columnIndex);
+              function getColumnDataOnClick() {
 
 
+                const tableRows = tableBody.querySelectorAll('tr');
+                for (let [i, tr] of tableRows.entries()) {
+
+
+                  columnData.push(tr.querySelectorAll('td').item(columnIndex).innerText)
+                  console.log(tr.querySelectorAll('td').item(columnIndex).innerText)
+                  console.log(columnData)
+
+                }
+              }
+
+              getColumnDataOnClick();
+            });
+          }
+          console.log(tableBody)
+
+
+        }
+      }
+    }
+  })
 }
-// const entireTable = document.getElementsByClassName('sortable')
-// const tableColumn = document.getElementsByTagName('th');
-// const tableRow = document.getElementsByTagName('tr');
-// const tableBody = document.getElementsByTagName('tbody');
-
-// console.log(entireTable)
 
 
-// for (let column of tableInfo) {
-//     console.log(column)
-// }
