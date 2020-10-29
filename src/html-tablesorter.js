@@ -4,11 +4,11 @@
 */
 console.log('hello world')
 
-
 if (document.getElementsByClassName('sortable')) {
-  const columnData = []
+  const columnData = [];
+  const dictOfColumnIndexAndTableRow = {
+  }
   document.addEventListener("DOMContentLoaded", function (e) {
-
     for (let sortableTable of document.getElementsByTagName('table')) {
       if (sortableTable.className === 'sortable') {
         if (!sortableTable.getElementsByTagName('thead')) {
@@ -21,54 +21,40 @@ if (document.getElementsByClassName('sortable')) {
           const tableHead = sortableTable.querySelector('thead')
           const tableBody = sortableTable.querySelector('tbody')
           const tableHeadHeaders = tableHead.querySelectorAll('th')
-
-
-
           for (let [columnIndex, th] of tableHeadHeaders.entries()) {
             th.addEventListener("click", function () {
-              console.log(th.innerText, columnIndex);
-              function getColumnDataOnClick() {
-
-
+              //console.log(th.innerText, columnIndex);
+              function getTableDataOnClick() {
                 const tableRows = tableBody.querySelectorAll('tr');
-                console.log(tableRows);
-
                 for (let [i, tr] of tableRows.entries()) {
                   columnData.push(tr.querySelectorAll('td').item(columnIndex).innerHTML)
-
-
-
-
-
+                  dictOfColumnIndexAndTableRow[tr.querySelectorAll('td').item(columnIndex).innerHTML] = tr.innerHTML
                 }
                 if (columnData[0].search(/[^A-Za-z]/)) {
                   console.log('work')
-                  //console.log(columnData.sort())
                   columnData.sort()
-                  for (let [i, tr] of tableRows.entries()) {
-                    tr.querySelectorAll('td').item(columnIndex).innerHTML = columnData[i]
-                    console.log(tableRows[0])
-                  }
-
                 }
               }
 
-              getColumnDataOnClick();
-              console.log(columnData)
+              getTableDataOnClick();
 
               function sortingFunction() {
                 if (columnData[0].search(/[^A-Za-z]/)) {
+                  const tableRows = tableBody.querySelectorAll('tr');
+
+                  for (let [i, tr] of tableRows.entries()) {
+
+                    console.log('fucj')
+                    tr.innerHTML = dictOfColumnIndexAndTableRow[columnData[i]]
+                    console.log(tr)
+                  }
+                  console.log(tableRows)
                 }
                 columnData.length = 0
-
               }
               sortingFunction()
-
             });
           }
-
-
-
         }
       }
     }
