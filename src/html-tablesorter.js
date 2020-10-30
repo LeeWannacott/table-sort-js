@@ -4,7 +4,7 @@
 */
 console.log('hello world')
 
-if (document.getElementsByClassName('sortable')) {
+if (document.getElementsByClassName(/[sortable]/)) {
   const columnData = [];
   const dictOfColumnIndexAndTableRow = {
   }
@@ -31,25 +31,37 @@ if (document.getElementsByClassName('sortable')) {
                   dictOfColumnIndexAndTableRow[tr.querySelectorAll('td').item(columnIndex).innerHTML] = tr.innerHTML
                 }
                 if (columnData[0].search(/[^A-Za-z]/)) {
-                  console.log('work')
+                  console.log('alpha')
                   columnData.sort()
+                } else if (columnData[0].search(/[^0-9]/)) {
+                  console.log('number')
+                  console.log(columnData)
+                  for (let [i, number] of columnData.entries()) {
+                    if (typeof (number === String)) {
+                      columnData[i] = parseFloat(number)
+                    }
+                  }
+                  console.log(columnData)
+                  columnData.sort(function (a, b) {
+                    if (a > b)
+                      return 1;
+                    if (a < b)
+                      return -1;
+                    return 0
+                  });
+
                 }
               }
 
               getTableDataOnClick();
 
               function sortingFunction() {
-                if (columnData[0].search(/[^A-Za-z]/)) {
-                  const tableRows = tableBody.querySelectorAll('tr');
 
-                  for (let [i, tr] of tableRows.entries()) {
-
-                    console.log('fucj')
-                    tr.innerHTML = dictOfColumnIndexAndTableRow[columnData[i]]
-                    console.log(tr)
-                  }
-                  console.log(tableRows)
+                const tableRows = tableBody.querySelectorAll('tr');
+                for (let [i, tr] of tableRows.entries()) {
+                  tr.innerHTML = dictOfColumnIndexAndTableRow[columnData[i]]
                 }
+
                 columnData.length = 0
               }
               sortingFunction()
