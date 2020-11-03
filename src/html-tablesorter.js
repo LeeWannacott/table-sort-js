@@ -1,11 +1,8 @@
-/*
-  html-tablesorter
-  Lee Wannacott - 2020
-*/
 console.log('hello world')
 
 if (document.getElementsByClassName(/[sortable]/)) {
   const columnData = [];
+  const numberColumnData = []
   const dictOfColumnIndexAndTableRow = {
   }
   document.addEventListener("DOMContentLoaded", function (e) {
@@ -27,18 +24,27 @@ if (document.getElementsByClassName(/[sortable]/)) {
               function getTableDataOnClick() {
                 const tableRows = tableBody.querySelectorAll('tr');
                 for (let [i, tr] of tableRows.entries()) {
-                  columnData.push(tr.querySelectorAll('td').item(columnIndex).innerHTML)
-                  dictOfColumnIndexAndTableRow[tr.querySelectorAll('td').item(columnIndex).innerHTML] = tr.innerHTML
+                  columnData.push(`${tr.querySelectorAll('td').item(columnIndex).innerHTML}#${i}`)
+                  dictOfColumnIndexAndTableRow[`${tr.querySelectorAll('td').item(columnIndex).innerHTML}#${i}`] = tr.innerHTML
+              
                 }
+                console.log(tableRows) //item
                 if (columnData[0].search(/[^A-Za-z]/)) {
                   console.log('alpha')
                   columnData.sort()
                 } else if (columnData[0].search(/[^0-9]/)) {
                   console.log('number')
-                  console.log(columnData)
+                  //console.log(columnData)
                   for (let [i, number] of columnData.entries()) {
                     if (typeof (number === String)) {
-                      columnData[i] = parseFloat(number)
+    
+                      
+                      
+                     
+                      // console.log(columnData[i].split('#')[0] = parseInt(number))
+                      // numberColumnData.push(columnData[i].split('#')[1])
+                      
+                  
                     }
                   }
                   console.log(columnData)
@@ -49,7 +55,7 @@ if (document.getElementsByClassName(/[sortable]/)) {
                       return -1;
                     return 0
                   });
-
+                  console.log(columnData)
                 }
               }
 
@@ -72,10 +78,3 @@ if (document.getElementsByClassName(/[sortable]/)) {
     }
   })
 }
-
-// Regular Expressions
-// Date = /^(\d\d?)[\/\.-](\d\d?)[\/\.-]((\d\d)?\d\d)$/;
-// Alpha = [a-z]
-// Number = [0-9]
-
-
