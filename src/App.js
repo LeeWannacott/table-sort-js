@@ -75,21 +75,21 @@ function App() {
             <td>2</td>
             <td>John</td>
             <td>jsmith@gmail.com</td>
-            <td>25</td>
+            <td>2020-11-28</td>
             <td>http://www.jsmith.com</td>
           </tr>
           <tr>
             <td>Bach</td>
             <td>Frank</td>
             <td>fbach@yahoo.com</td>
-            <td>100</td>
+            <td>2</td>
             <td>http://www.frank.com</td>
           </tr>
           <tr>
             <td>Doe</td>
             <td>Jason</td>
             <td>jdoe@hotmail.com</td>
-            <td>1</td>
+            <td>2020-11-25</td>
             <td>http://www.jdoe.com</td>
           </tr>
           <tr>
@@ -103,7 +103,7 @@ function App() {
             <td>Conway</td>
             <td>T</td>
             <td>t.net</td>
-            <td>1</td>
+            <td>2020-11-13</td>
             <td>http://www.ti.com</td>
           </tr>
         </tbody>
