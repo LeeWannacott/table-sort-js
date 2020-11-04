@@ -24,39 +24,41 @@ function App() {
             <td>Smith</td>
             <td>John</td>
             <td>jsmith@gmail.com</td>
-            <td>2</td>
+            <td>2234</td>
             <td>http://www.jsmith.com</td>
           </tr>
           <tr>
             <td>Bach</td>
             <td>Frank</td>
             <td>fbach@yahoo.com</td>
-            <td>5</td>
+            <td>1.6</td>
             <td>http://www.frank.com</td>
           </tr>
           <tr>
             <td>Doe</td>
             <td>Jason</td>
             <td>jdoe@hotmail.com</td>
-            <td>3</td>
+            <td>1,234,567,8,89</td>
             <td>http://www.jdoe.com</td>
           </tr>
           <tr>
             <td>Conway</td>
             <td>Tim</td>
             <td>tconway@earthlink.net</td>
-            <td>1</td>
+            <td>1.234.567.8,90</td>
             <td>http://www.timconway.com</td>
           </tr>
           <tr>
             <td>Conway</td>
             <td>T</td>
             <td>t.net</td>
-            <td>2</td>
+            <td>1,234,567,8,91</td>
             <td>http://www.ti.com</td>
           </tr>
         </tbody>
       </table>
+
+      
 
       <table id="myTable" className="sortable">
         <thead>
@@ -70,28 +72,28 @@ function App() {
         </thead>
         <tbody>
           <tr>
-            <td>Smith</td>
+            <td>2</td>
             <td>John</td>
             <td>jsmith@gmail.com</td>
-            <td>2</td>
+            <td>25</td>
             <td>http://www.jsmith.com</td>
           </tr>
           <tr>
             <td>Bach</td>
             <td>Frank</td>
             <td>fbach@yahoo.com</td>
-            <td>5</td>
+            <td>100</td>
             <td>http://www.frank.com</td>
           </tr>
           <tr>
             <td>Doe</td>
             <td>Jason</td>
             <td>jdoe@hotmail.com</td>
-            <td>3</td>
+            <td>1</td>
             <td>http://www.jdoe.com</td>
           </tr>
           <tr>
-            <td>Conway</td>
+            <td>t</td>
             <td>Tim</td>
             <td>tconway@earthlink.net</td>
             <td>1</td>
@@ -101,7 +103,7 @@ function App() {
             <td>Conway</td>
             <td>T</td>
             <td>t.net</td>
-            <td>2</td>
+            <td>1</td>
             <td>http://www.ti.com</td>
           </tr>
         </tbody>

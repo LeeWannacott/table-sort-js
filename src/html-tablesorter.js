@@ -3,6 +3,7 @@ console.log('hello world')
 if (document.getElementsByClassName(/[sortable]/)) {
   const columnData = [];
   const numberColumnData = []
+  
   const dictOfColumnIndexAndTableRow = {
   }
   document.addEventListener("DOMContentLoaded", function (e) {
@@ -18,8 +19,11 @@ if (document.getElementsByClassName(/[sortable]/)) {
           const tableHead = sortableTable.querySelector('thead')
           const tableBody = sortableTable.querySelector('tbody')
           const tableHeadHeaders = tableHead.querySelectorAll('th')
-          for (let [columnIndex, th] of tableHeadHeaders.entries()) {
+         
+          for (let [columnIndex, th] of tableHeadHeaders.entries('table')) {
+            let timesClickedColumn = 0
             th.addEventListener("click", function () {
+              timesClickedColumn +=1
               //console.log(th.innerText, columnIndex);
               function getTableDataOnClick() {
                 const tableRows = tableBody.querySelectorAll('tr');
@@ -30,23 +34,23 @@ if (document.getElementsByClassName(/[sortable]/)) {
                 }
                 console.log(tableRows) //item
                 if (columnData[0].search(/[^A-Za-z]/)) {
-                  console.log('alpha')
-                  columnData.sort()
-                } else if (columnData[0].search(/[^0-9]/)) {
-                  console.log('number')
-                  //console.log(columnData)
-                  for (let [i, number] of columnData.entries()) {
-                    if (typeof (number === String)) {
-    
-                      
-                      
-                     
-                      // console.log(columnData[i].split('#')[0] = parseInt(number))
-                      // numberColumnData.push(columnData[i].split('#')[1])
-                      
+                  if (timesClickedColumn == 1){
+                    console.log('1')
+                    columnData.sort()
                   
-                    }
+                  } else if (timesClickedColumn == 2){
+                    console.log('2')
+                    columnData.reverse();
+                    timesClickedColumn = 0
                   }
+                  console.log('alpha')
+                  
+                // }else if(columnData[0].search(/^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d$/)){
+                //   console.log('date')
+    
+                } else if (columnData[0].search(/[^0-9]/)) {
+                  if (timesClickedColumn == 1){
+                  console.log('number')
                   console.log(columnData)
                   columnData.sort(function (a, b) {
                     if (a > b)
@@ -54,7 +58,22 @@ if (document.getElementsByClassName(/[sortable]/)) {
                     if (a < b)
                       return -1;
                     return 0
-                  });
+                  
+                  });} 
+
+                  else if(timesClickedColumn==2){
+                    columnData.sort(function (b, a) {
+                      if (a > b)
+                        return 1;
+                      if (a < b)
+                        return -1;
+                      return 0
+                    
+                    });
+                    timesClickedColumn =0
+                  }
+                  // columnData.sort(function(a, b){return a-b});
+
                   console.log(columnData)
                 }
               }
@@ -71,6 +90,7 @@ if (document.getElementsByClassName(/[sortable]/)) {
                 columnData.length = 0
               }
               sortingFunction()
+              console.log(dictOfColumnIndexAndTableRow)
             });
           }
         }
