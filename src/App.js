@@ -66,7 +66,7 @@ function App() {
             <th>Last Name</th>
             <th>First Name</th>
             <th>Email</th>
-            <th>Due</th>
+            <th className ='reverse-sort'>Due</th>
             <th>Web Site</th>
           </tr>
         </thead>
@@ -80,9 +80,9 @@ function App() {
           </tr>
           <tr>
             <td>Bach</td>
-            <td>Frank</td>
+            <td></td>
             <td>fbach@yahoo.com</td>
-            <td>2</td>
+            <td></td>
             <td>http://www.frank.com</td>
           </tr>
           <tr>
