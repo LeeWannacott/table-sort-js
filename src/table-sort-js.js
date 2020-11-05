@@ -1,12 +1,12 @@
-//console.log('hello world')
-
-if (document.getElementsByClassName(/[sortable]/)) {
+  console.log('hello world')
+  
   const columnData = [];
   const dictOfColumnIndexAndTableRow = {
   }
+
   document.addEventListener("DOMContentLoaded", function (e) {
     for (let sortableTable of document.getElementsByTagName('table')) {
-      if (sortableTable.className === 'sortable') {
+      if (sortableTable.className === 'table-sort') {
         if (!sortableTable.getElementsByTagName('thead')) {
           console.log('<thead> Tag does not exist in table');
         }
@@ -28,42 +28,35 @@ if (document.getElementsByClassName(/[sortable]/)) {
                   if (`${tr.querySelectorAll('td').item(columnIndex).innerHTML}` !== ''){
                     columnData.push(`${tr.querySelectorAll('td').item(columnIndex).innerHTML}#${i}`)
                     dictOfColumnIndexAndTableRow[`${tr.querySelectorAll('td').item(columnIndex).innerHTML}#${i}`] = tr.innerHTML
-                   
-                    
                   } else{
                     // Fill in blank table cells with a value, so they can be sorted.
                     columnData.push(`0#${i}`)
                     dictOfColumnIndexAndTableRow[`0#${i}`] = tr.innerHTML
                   }
                 }
-                // Sort Alphabetically, default aescending.
+
+                // Sort naturally, default aescending.
                 console.log(columnData[0])
                 if (columnData[0].search(/[^A-Za-z0-9]/)) {
-                  columnData.sort((a, b) => a.localeCompare(b, navigator.languages[0] || navigator.language,
-                    {numeric: true, ignorePunctuation: true}))
-                  //console.log('alpha')
-                  if (timesClickedColumn === 1){                  
-                    //columnData.sort()
-                  } else if (timesClickedColumn === 2){
+                  if (th.className === 'order-by-desc' && timesClickedColumn === 1){
                     columnData.sort((b, a) => a.localeCompare(b, navigator.languages[0] || navigator.language,
-                      {numeric: true,ignorePunctuation: true}))
-                    //columnData.reverse();
-                    timesClickedColumn = 0
+                      {numeric: true, ignorePunctuation: true})) 
+                  }else if(th.className === 'order-by-desc' && timesClickedColumn === 2){
+                      columnData.sort((a, b) => a.localeCompare(b, navigator.languages[0] || navigator.language,
+                        {numeric: true, ignorePunctuation: true})) 
+                      timesClickedColumn = 0
                   }
+                else if (timesClickedColumn === 1){     
+                  columnData.sort((a, b) => a.localeCompare(b, navigator.languages[0] || navigator.language,
+                    {numeric: true, ignorePunctuation: true}))             
+                  //columnData.sort()
+                } else if (timesClickedColumn === 2){
+                  columnData.sort((b, a) => a.localeCompare(b, navigator.languages[0] || navigator.language,
+                    {numeric: true,ignorePunctuation: true}))
+                  //columnData.reverse();
+                  timesClickedColumn = 0
+                  } 
                 }
-                  // Sort Numbers and dates, default descending.
-                // } else if (columnData[0].search(/[^0-9]/)) {
-                //   //console.log('number')
-                //   if (timesClickedColumn === 1){
-                //   columnData.sort((b, a) => a.localeCompare(b, navigator.languages[0] || navigator.language,
-                //      {numeric: true, ignorePunctuation: true}))} 
-                 
-                //   else if(timesClickedColumn === 2){
-                //     columnData.sort((a, b) => a.localeCompare(b, navigator.languages[0] || navigator.language,
-                //        {numeric: true,ignorePunctuation: true}))
-                //     timesClickedColumn = 0
-                //   }
-                // }
               }
               getTableDataOnClick();
               function sortingFunction() {
@@ -80,4 +73,3 @@ if (document.getElementsByClassName(/[sortable]/)) {
       }
     }
   })
-}

@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import './html-tablesorter'
+import './table-sort-js'
 
 function App() {
 
@@ -9,13 +9,13 @@ function App() {
     <div className="App">
       <header className="App-header">
       </header>
-      <table id="myTable" className="sortable">
+      <table id="myTable" className="table-sort">
         <thead>
           <tr>
             <th>Last Name</th>
             <th>First Name</th>
             <th>Email</th>
-            <th>Due</th>
+            <th className='order-by-desc'>Due</th>
             <th>Web Site</th>
           </tr>
         </thead>
@@ -60,13 +60,13 @@ function App() {
 
       
 
-      <table id="myTable" className="sortable">
+      <table id="myTable" className="table-sort">
         <thead>
           <tr>
             <th>Last Name</th>
             <th>First Name</th>
             <th>Email</th>
-            <th className ='reverse-sort'>Due</th>
+            <th className ='order-by-desc'>Due</th>
             <th>Web Site</th>
           </tr>
         </thead>
