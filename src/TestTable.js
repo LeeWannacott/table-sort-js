@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import './table-sort-js'
+import './table-sort'
 
 function App() {
 

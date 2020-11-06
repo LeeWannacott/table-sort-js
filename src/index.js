@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './table-sort';
 import * as serviceWorker from './serviceWorker';
+import TestTable from './TestTable'
+import DisplayTableSort from './TableSortScript';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <TestTable />
   </React.StrictMode>,
   document.getElementById('root')
 );
