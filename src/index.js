@@ -8,7 +8,7 @@ import DisplayTableSort from './TableSortScript';
 
 ReactDOM.render(
   <React.StrictMode>
-    <TestTable />
+    <DisplayTableSort />
   </React.StrictMode>,
   document.getElementById('root')
 );
