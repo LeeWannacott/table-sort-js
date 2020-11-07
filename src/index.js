@@ -5,11 +5,16 @@ import App from './table-sort';
 import * as serviceWorker from './serviceWorker';
 import TestTable from './TestTable'
 import DisplayTableSort from './TableSortScript';
+import { HashRouter, BrowserRouter ,Route } from "react-router-dom";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <DisplayTableSort />
-  </React.StrictMode>,
+  <HashRouter>
+    
+
+<Route exact path=".js" component={DisplayTableSort} />
+
+
+  </HashRouter>,
   document.getElementById('root')
 );
 
