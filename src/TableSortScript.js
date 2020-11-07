@@ -7,9 +7,10 @@ import tablesort from './table-sort'
 
 
 function TableSortScript() {
-    return ( <pre id='content'>
+    return ( <pre>
         
-{`      
+{`    
+console.log('hello world')  
 const columnData = [];
 const dictOfColumnIndexAndTableRow = {
 }
@@ -31,6 +32,7 @@ for (let sortableTable of document.getElementsByTagName('table')) {
         for (let [columnIndex, th] of tableHeadHeaders.entries('table')) {
         let timesClickedColumn = 0
         th.addEventListener("click", function () {
+            console.log('clicked')
             timesClickedColumn += 1
             function getTableDataOnClick() {
             const tableRows = tableBody.querySelectorAll('tr');
