@@ -8,13 +8,12 @@ import DisplayTableSort from './TableSortScript';
 import { HashRouter, BrowserRouter ,Route } from "react-router-dom";
 
 ReactDOM.render(
-  <HashRouter>
-    
 
-<Route exact path=".js" component={DisplayTableSort} />
-
-
-  </HashRouter>,
+<HashRouter>
+<Route exact path="/.js" component={DisplayTableSort}>
+<DisplayTableSort/>
+</Route>
+</HashRouter>,
   document.getElementById('root')
 );
 
