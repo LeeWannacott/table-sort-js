@@ -10,14 +10,15 @@ function TableSortScript() {
     return ( <pre>
         
 {`    
-console.log('hello world')  
 const columnData = [];
 const dictOfColumnIndexAndTableRow = {
 }
 
 document.addEventListener("DOMContentLoaded", function (e) {
+    console.log('dom loaded')
 for (let sortableTable of document.getElementsByTagName('table')) {
     if (sortableTable.className === 'table-sort') {
+        console.log('table-sort')
     if (!sortableTable.getElementsByTagName('thead')) {
         console.log('<thead> Tag does not exist in table');
     }
@@ -30,10 +31,11 @@ for (let sortableTable of document.getElementsByTagName('table')) {
         const tableHeadHeaders = tableHead.querySelectorAll('th')
         
         for (let [columnIndex, th] of tableHeadHeaders.entries('table')) {
+            console.log('th')
         let timesClickedColumn = 0
         th.addEventListener("click", function () {
-            console.log('clicked')
             timesClickedColumn += 1
+            console.log('clicked')
             function getTableDataOnClick() {
             const tableRows = tableBody.querySelectorAll('tr');
             for (let [i, tr] of tableRows.entries()) {
@@ -49,25 +51,32 @@ for (let sortableTable of document.getElementsByTagName('table')) {
             }
 
             function naturalSortAescending(a,b){
-                console.log(columnData)
-                return a.localeCompare(b, navigator.languages[0] || navigator.language)
+                console.log('sort1')
+                return a.localeCompare(b, navigator.languages[0] || navigator.language,
+                    {numeric: true, ignorePunctuation: true})
             }
             function naturalSortDescending(a,b){
+                console.log('sort2')
                 return naturalSortAescending(b,a)
             }
             // Sort naturally; default aescending unless th is using 'order-by-desc' as className.
             console.log(columnData[0])
-            if (columnData[0].search(/[^A-Za-z0-9]/)) {
+            //[^A-Za-z0-9\s]
+
+            if (columnData[0].search(/[^A-Za-z0-9\s\-]/)) {
+                console.log('test1')
                 if (th.className === 'order-by-desc' && timesClickedColumn === 1){
                 columnData.sort(naturalSortDescending,{numeric: true, ignorePunctuation: true})
                 }else if(th.className === 'order-by-desc' && timesClickedColumn === 2){
                 columnData.sort(naturalSortAescending,{numeric: true, ignorePunctuation: true})
                     timesClickedColumn = 0
                 }
-            else if (timesClickedColumn === 1){     
-                columnData.sort(naturalSortAescending,{numeric: true, ignorePunctuation: true})         
+            else if (timesClickedColumn === 1){   
+                console.log('1')  
+                columnData.sort(naturalSortAescending)         
             } else if (timesClickedColumn === 2){
-                columnData.sort(naturalSortDescending,{numeric: true, ignorePunctuation: true})
+                
+                columnData.sort(naturalSortDescending)
                 timesClickedColumn = 0
                 } 
             }
@@ -76,6 +85,7 @@ for (let sortableTable of document.getElementsByTagName('table')) {
             function sortingFunction() {
             const tableRows = tableBody.querySelectorAll('tr');
             for (let [i, tr] of tableRows.entries()) {
+           
                 tr.innerHTML = dictOfColumnIndexAndTableRow[columnData[i]]
             }
             columnData.length = 0
@@ -87,7 +97,6 @@ for (let sortableTable of document.getElementsByTagName('table')) {
     }
 }
 })
-
 `}
     </pre>
     );
