@@ -1,15 +1,10 @@
 import React from 'react';
-import { scryRenderedDOMComponentsWithClass } from 'react-dom/test-utils';
-import logo from './logo.svg';
-import tablesort from './table-sort'
-
-
-
 
 function TableSortScript() {
-    return ( <pre>
+    return ( <body><pre>
         
-{`    
+{`     
+console.log('hello world')
 const columnData = [];
 const dictOfColumnIndexAndTableRow = {
 }
@@ -63,7 +58,7 @@ for (let sortableTable of document.getElementsByTagName('table')) {
             console.log(columnData[0])
             //[^A-Za-z0-9\s]
 
-            if (columnData[0].search(/[^A-Za-z0-9\s\-]/)) {
+            if (columnData[0].search(/[^A-Za-z0-9\s]/)) {
                 console.log('test1')
                 if (th.className === 'order-by-desc' && timesClickedColumn === 1){
                 columnData.sort(naturalSortDescending,{numeric: true, ignorePunctuation: true})
@@ -98,7 +93,7 @@ for (let sortableTable of document.getElementsByTagName('table')) {
 }
 })
 `}
-    </pre>
+    </pre></body>
     );
 }
 
