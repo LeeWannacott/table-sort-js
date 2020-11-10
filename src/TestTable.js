@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 // works:
-import './table-sort'
+// import './table-sort'
 
 function App() {
 
