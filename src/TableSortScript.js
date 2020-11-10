@@ -1,7 +1,7 @@
 import React from 'react';
 
 function TableSortScript() {
-    return ( <body><pre>
+    return ( <pre>
         
 {`     
 console.log('hello world')
@@ -93,7 +93,7 @@ for (let sortableTable of document.getElementsByTagName('table')) {
 }
 })
 `}
-    </pre></body>
+    </pre>
     );
 }
 
