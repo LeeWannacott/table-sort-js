@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b382154efed3866b3c341921c5a93da0",
+    "revision": "f74afc67950dc032b1fdd0ef3dc32878",
     "url": "/table-sort-js/index.html"
   },
   {
