@@ -10,7 +10,7 @@ import { HashRouter, BrowserRouter ,Route } from "react-router-dom";
 ReactDOM.render(
 
 <BrowserRouter>
-<Route exact path=".js" component={DisplayTableSort}/>
+<Route exact path="/.js" component={DisplayTableSort}/>
 <DisplayTableSort/>
 </BrowserRouter>,
   document.getElementById('root')
