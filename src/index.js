@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 // import App from './table-sort';
-// import TestTable from './TestTable'
+import TestTable from './TestTable'
 import DisplayTableSort from './TableSortScript';
 import { HashRouter, BrowserRouter ,Route } from "react-router-dom";
 
@@ -12,8 +12,8 @@ ReactDOM.render(
 <DisplayTableSort/>
 </Route>
 
-<Route exact path="/" component={DisplayTableSort}>
-<DisplayTableSort/>
+<Route exact path="/" component={TestTable}>
+<TestTable/>
 </Route>
 </HashRouter>,
   document.getElementById('display')
