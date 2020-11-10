@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 function TableSortScript() {
-    return ( <pre>
+    return ( <React.Fragment><pre style={{wordWrap: "break-word", whiteSpace: "pre-wrap"}}>
         
 {`     
 console.log('hello world')
@@ -93,7 +93,7 @@ for (let sortableTable of document.getElementsByTagName('table')) {
 }
 })
 `}
-    </pre>
+    </pre></React.Fragment>
     );
 }
 
