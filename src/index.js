@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './table-sort';
-import TestTable from './TestTable'
+// import App from './table-sort';
+// import TestTable from './TestTable'
 import DisplayTableSort from './TableSortScript';
 import { HashRouter, BrowserRouter ,Route } from "react-router-dom";
 
