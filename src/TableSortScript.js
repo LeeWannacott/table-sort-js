@@ -3,7 +3,12 @@ import React, { Fragment } from 'react';
 function TableSortScript() {
     return ( <React.Fragment><pre style={{wordWrap: "break-word", whiteSpace: "pre-wrap"}}>
         
-{`     
+{`
+/* 
+table-sort-js
+Lee Wannacott 2020
+*/
+
 console.log('hello world')
 const columnData = [];
 const dictOfColumnIndexAndTableRow = {
