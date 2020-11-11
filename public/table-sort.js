@@ -1,5 +1,6 @@
 /* 
 table-sort-js
+
 Lee Wannacott 2020
 */
 function tableSortJs(){
