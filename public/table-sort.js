@@ -1,8 +1,8 @@
 /* 
 table-sort-js
-
 Lee Wannacott 2020
 */
+
 function tableSortJs(){
     console.log('hello world')
     const columnData = [];
@@ -51,9 +51,10 @@ function tableSortJs(){
                 }
                 // Sort naturally; default aescending unless th is using 'order-by-desc' as className.
                 console.log(columnData[0])
-                //[^A-Za-z0-9s]
+                // if (columnData[0].search(/[^A-Za-z0-9\s\-]/))
     
-                if (columnData[0].search(/[^A-Za-z0-9s]/)) {
+                if (typeof columnData[0] !== "undefined") {
+                    console.log(typeof columnData)
                     console.log('test1')
                     if (th.className === 'order-by-desc' && timesClickedColumn === 1){
                     columnData.sort(naturalSortDescending,{numeric: true, ignorePunctuation: true})
@@ -87,12 +88,13 @@ function tableSortJs(){
     }
     }
     
-    if(document.readyState === 'loading' || document.readyState === 'interactive'){
+    if(document.readyState === "loading" || document.readyState === "interactive"){
         document.addEventListener("DOMContentLoaded", function (e) {
-            console.log('loading')
         tableSortJs()
         })
     }else if(document.readyState === 'complete'){
-        console.log('complete')
         tableSortJs()
     }
+    
+    
+    
