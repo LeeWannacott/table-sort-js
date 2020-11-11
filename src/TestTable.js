@@ -10,7 +10,6 @@ function App() {
 // gets CORS blocked
 React.useEffect(() => {
   const script = document.createElement("script");
-  script.type = 'javascript/html';
   script.src = "https://leewannacott.github.io/table-sort-js/#/.js";
   script.async = true;
   document.body.appendChild(script); 

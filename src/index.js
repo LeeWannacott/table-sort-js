@@ -7,15 +7,15 @@ import { HashRouter, BrowserRouter ,Route } from "react-router-dom";
 
 ReactDOM.render(
 
-<HashRouter>
-<Route exact path="/.js" component={DisplayTableSort}>
+<BrowserRouter>
+<Route exact path="/table.js" component={DisplayTableSort}>
 <DisplayTableSort/>
 </Route>
 
 <Route exact path="/" component={TestTable}>
 <TestTable/>
 </Route>
-</HashRouter>,
+</BrowserRouter>,
   document.getElementById('display')
 );
 
