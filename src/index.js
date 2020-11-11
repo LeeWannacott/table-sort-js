@@ -8,13 +8,13 @@ import { HashRouter, BrowserRouter ,Route } from "react-router-dom";
 ReactDOM.render(
 
 <BrowserRouter>
-<Route exact path="/table.js" component={DisplayTableSort}>
-<DisplayTableSort/>
-</Route>
-
-<Route exact path="/" component={TestTable}>
+<Route exact path="/" component={TestTable}/>
 <TestTable/>
-</Route>
+
+
+{/* <Route exact path="/" component={DisplayTableSort}>
+<DisplayTableSort/>
+</Route> */}
 </BrowserRouter>,
   document.getElementById('display')
 );

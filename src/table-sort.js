@@ -7,8 +7,6 @@ console.log('hello world')
 const columnData = [];
 const dictOfColumnIndexAndTableRow = {
 }
-
-document.addEventListener("DOMContentLoaded", function (e) {
     console.log('dom loaded')
 for (let sortableTable of document.getElementsByTagName('table')) {
     if (sortableTable.className === 'table-sort') {
@@ -86,6 +84,16 @@ for (let sortableTable of document.getElementsByTagName('table')) {
     }
     }
 }
-})}
+}
 
-tableSortJs()
+if(document.readyState === 'loading' || document.readyState === 'interactive'){
+    document.addEventListener("DOMContentLoaded", function (e) {
+        console.log('loading')
+    tableSortJs()
+    })
+}else if(document.readyState === 'complete'){
+    console.log('complete')
+    tableSortJs()
+}
+
+

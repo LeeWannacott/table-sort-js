@@ -3,17 +3,17 @@ import logo from './logo.svg';
 import './App.css';
 
 // works:
-// import './table-sort'
+import './table-sort'
 
 function App() {
 
-// gets CORS blocked
-React.useEffect(() => {
-  const script = document.createElement("script");
-  script.src = "https://leewannacott.github.io/table-sort-js/#/.js";
-  script.async = true;
-  document.body.appendChild(script); 
-  }, []);
+
+// React.useEffect(() => {
+//   const script = document.createElement("script");
+//   script.src = "https://leewannacott.github.io/table-sort-js/TableSortScript.js";
+//   script.async = true;
+//   document.body.appendChild(script); 
+//   }, []);
   
 
   return (
