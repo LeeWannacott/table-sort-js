@@ -2,7 +2,7 @@
 table-sort-js
 Lee Wannacott 2020
 */
-
+function tableSortJs(){
 console.log('hello world')
 const columnData = [];
 const dictOfColumnIndexAndTableRow = {
@@ -86,4 +86,6 @@ for (let sortableTable of document.getElementsByTagName('table')) {
     }
     }
 }
-})
+})}
+
+tableSortJs()
