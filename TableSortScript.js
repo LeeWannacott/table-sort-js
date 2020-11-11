@@ -1,9 +1,5 @@
-import React, { Fragment } from 'react';
 
-function TableSortScript() {
-    return ( <React.Fragment><pre style={{wordWrap: "break-word", whiteSpace: "pre-wrap"}}>
-        
-{`
+
 /* 
 table-sort-js
 Lee Wannacott 2020
@@ -15,7 +11,7 @@ function tableSortJs(){
     const dictOfColumnIndexAndTableRow = {
     }
     
-    document.addEventListener("DOMContentLoaded", function (e) {
+    // document.addEventListener("DOMContentLoaded", function (e) {
         console.log('dom loaded')
     for (let sortableTable of document.getElementsByTagName('table')) {
         if (sortableTable.className === 'table-sort') {
@@ -93,12 +89,6 @@ function tableSortJs(){
         }
         }
     }
-    })}
+    }
     
     tableSortJs()
-`}
-    </pre></React.Fragment>
-    );
-}
-
-export default TableSortScript
