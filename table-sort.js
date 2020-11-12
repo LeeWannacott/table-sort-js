@@ -17,7 +17,12 @@ function tableSortJs(){
         if (sortableTable.className === 'table-sort') {
             
         if (!sortableTable.getElementsByTagName('thead')) {
-            console.log('<thead> Tag does not exist in table');
+                if (sortableTable.getElementsByTagName('thead').length === 0) {
+                    console.log('table head created')
+                  const the = document.createElement('thead');
+                  the.appendChild(sortableTable.rows[0]);
+                  sortableTable.insertBefore(the,sortableTable.firstChild);
+                }
         }
         else if (!sortableTable.getElementsByTagName('tbody')) {
             console.log('<tbody> Tag does not exist in table');
@@ -89,7 +94,6 @@ function tableSortJs(){
     if(document.readyState === 'complete' || document.readyState === "interactive"){
         tableSortJs()
     }else if(document.readyState === "loading"){
-        console.log(document.readyState)
         document.addEventListener("DOMContentLoaded",tableSortJs,false)
           }
     
