@@ -3,6 +3,7 @@ table-sort-js
 Lee Wannacott 2020
 */
 
+console.log('test')
 function tableSortJs(){
     console.log('hello world')
     const columnData = [];
@@ -85,18 +86,18 @@ function tableSortJs(){
             }
         }
         }
+        }
     }
-    }
-    
+    console.log(document.readyState)
     if(document.readyState === "loading" || document.readyState === "interactive"){
         document.addEventListener("DOMContentLoaded", function (e) {
-            console.log('loaded')
+        console.log('loaded')
         tableSortJs()
         })
-    }else if(document.readyState === 'complete'){
+    }else if(document.readyState === 'complete' ){
         console.log('complete')
         tableSortJs()
     }
-    
-    
-    
+
+
+  
