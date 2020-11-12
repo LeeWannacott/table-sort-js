@@ -86,11 +86,13 @@ function tableSortJs(){
         }
     }
 
-    if(document.readyState === 'complete' ){
+    if(document.readyState === 'complete' || document.readyState === "interactive"){
         tableSortJs()
-    }else if(document.readyState === "loading" || document.readyState === "interactive"){
-        document.addEventListener("DOMContentLoaded", tableSortJs());
-    }
- 
+    }else if(document.readyState === "loading"){
+        console.log(document.readyState)
+        document.addEventListener("DOMContentLoaded",tableSortJs,false)
+          }
+    
+    
 
   
