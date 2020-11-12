@@ -10,7 +10,7 @@ function App() {
 
 React.useEffect(() => {
   const script = document.createElement("script");
-  script.src = "https://leewannacott.github.io/table-sort-js/tableSort.js";
+  script.src = "https://leewannacott.github.io/table-sort-js/TableSort.js";
   script.async = true;
   document.body.appendChild(script); 
   }, []);
