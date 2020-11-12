@@ -1,6 +1,6 @@
 /* 
 table-sort-js
-Author: Lee Wannacott - 2020; https://github.com/LeeWannacott
+Author: Lee Wannacott - 2020
 
 Instructions:
 Add to your HTML file: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js">
@@ -9,7 +9,7 @@ Add class="table-sort" to any <table> you'd like to make sortable.(className if 
 Click on the tables column headers to sort. <th class='order-by-desc> to sort in reverse order. 
 */
 
-function tableSortJs(){ 
+function tableSortJs(){
     const columnData = [];
     const dictOfColumnIndexAndTableRow = {
     }
