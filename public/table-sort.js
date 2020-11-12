@@ -3,9 +3,8 @@ table-sort-js
 Lee Wannacott 2020
 */
 
-console.log('test')
 function tableSortJs(){
-    console.log('hello world')
+    console.log('tableSortJs')
     const columnData = [];
     const dictOfColumnIndexAndTableRow = {
     }
@@ -73,7 +72,7 @@ function tableSortJs(){
                 }
                 }
                 getTableDataOnClick();
-                function sortingFunction() {
+                function returnSortedTable() {
                 const tableRows = tableBody.querySelectorAll('tr');
                 for (let [i, tr] of tableRows.entries()) {
                
@@ -81,22 +80,22 @@ function tableSortJs(){
                 }
                 columnData.length = 0
                 }
-                sortingFunction()
+                returnSortedTable()
             });
             }
         }
         }
         }
     }
+
     console.log(document.readyState)
-    if(document.readyState === "loading" || document.readyState === "interactive"){
-        document.addEventListener("DOMContentLoaded", function (e) {
-        console.log('loaded')
-        tableSortJs()
-        })
-    }else if(document.readyState === 'complete' ){
+    if(document.readyState === 'complete' ){
         console.log('complete')
         tableSortJs()
+        
+    }else if(document.readyState === "loading" || document.readyState === "interactive"){
+        console.log('loading')
+        document.addEventListener("DOMContentLoaded", tableSortJs());
     }
 
 
