@@ -5,19 +5,19 @@ import TestTable from './TestTable'
 import DisplayTableSort from './TableSortScript';
 import { HashRouter, BrowserRouter ,Route } from "react-router-dom";
 
-// ReactDOM.render(
+ReactDOM.render(
 
-// <BrowserRouter>
-// <Route exact path="/" component={TestTable}/>
-// <TestTable/>
+<BrowserRouter>
+<Route exact path="/" component={TestTable}/>
+<TestTable/>
 
 
-// {/* <Route exact path="/" component={DisplayTableSort}>
-// <DisplayTableSort/>
-// </Route> */}
-// </BrowserRouter>,
-//   document.getElementById('display')
-// );
+{/* <Route exact path="/" component={DisplayTableSort}>
+<DisplayTableSort/>
+</Route> */}
+</BrowserRouter>,
+  document.getElementById('display')
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
