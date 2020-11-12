@@ -1,6 +1,6 @@
 /* 
 table-sort-js
-Author: Lee Wannacott - 2020
+Author: Lee Wannacott - 2020; https://github.com/LeeWannacott
 
 Instructions:
 Add to your HTML file: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js">
@@ -85,10 +85,12 @@ function tableSortJs(){
         }
         }
     }
-
+console.log('ran')
     if(document.readyState === 'complete' ){
+        console.log('complete')
         tableSortJs()
     }else if(document.readyState === "loading" || document.readyState === "interactive"){
+        console.log('loading')
         document.addEventListener("DOMContentLoaded", tableSortJs);
     }
  
