@@ -1,17 +1,21 @@
 /* 
 table-sort-js
-Lee Wannacott 2020
+Author: Lee Wannacott - 2020
+
+Instructions:
+Add to your HTML file: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js">
+</script> (or download the file and use: <script src="table-sort.js">)
+Add class="table-sort" to any <table> you'd like to make sortable.(className if using React)
+Click on the tables column headers to sort. <th class='order-by-desc> to sort in reverse order. 
 */
 
 function tableSortJs(){
-    console.log('tableSortJs')
     const columnData = [];
     const dictOfColumnIndexAndTableRow = {
     }
-        console.log('dom loaded')
     for (let sortableTable of document.getElementsByTagName('table')) {
         if (sortableTable.className === 'table-sort') {
-            console.log('table-sort')
+            
         if (!sortableTable.getElementsByTagName('thead')) {
             console.log('<thead> Tag does not exist in table');
         }
@@ -24,11 +28,9 @@ function tableSortJs(){
             const tableHeadHeaders = tableHead.querySelectorAll('th')
             
             for (let [columnIndex, th] of tableHeadHeaders.entries('table')) {
-                console.log('th')
             let timesClickedColumn = 0
             th.addEventListener("click", function () {
                 timesClickedColumn += 1
-                console.log('clicked')
                 function getTableDataOnClick() {
                 const tableRows = tableBody.querySelectorAll('tr');
                 for (let [i, tr] of tableRows.entries()) {
@@ -49,13 +51,9 @@ function tableSortJs(){
                 function naturalSortDescending(a,b){
                     return naturalSortAescending(b,a)
                 }
+
                 // Sort naturally; default aescending unless th is using 'order-by-desc' as className.
-                console.log(columnData[0])
-                // if (columnData[0].search(/[^A-Za-z0-9\s\-]/))
-    
                 if (typeof columnData[0] !== "undefined") {
-                    console.log(typeof columnData)
-                    console.log('test1')
                     if (th.className === 'order-by-desc' && timesClickedColumn === 1){
                     columnData.sort(naturalSortDescending,{numeric: true, ignorePunctuation: true})
                     }else if(th.className === 'order-by-desc' && timesClickedColumn === 2){
@@ -88,15 +86,11 @@ function tableSortJs(){
         }
     }
 
-    console.log(document.readyState)
     if(document.readyState === 'complete' ){
-        console.log('complete')
         tableSortJs()
-
     }else if(document.readyState === "loading" || document.readyState === "interactive"){
-        console.log('loading')
-        document.addEventListener("DOMContentLoaded", tableSortJs());
+        document.addEventListener("DOMContentLoaded", tableSortJs);
     }
-
+ 
 
   
