@@ -4,7 +4,6 @@ function TableSortScript() {
     return ( <React.Fragment><pre style={{wordWrap: "break-word", whiteSpace: "pre-wrap"}}>
         
 {`
-//d
 /* 
 table-sort-js
 Lee Wannacott 2020
