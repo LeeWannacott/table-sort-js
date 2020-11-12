@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 // works:
 // import './table-sort-test'
-
+// import '../public/table-sort'
 
 function App() {
-
 
 React.useEffect(() => {
   const script = document.createElement("script");
@@ -21,7 +20,7 @@ React.useEffect(() => {
     <div className="App">
       <header className="App-header">
       </header>
-      <table id="myTable" className="table-sort">
+      <table className="table-sort">
         <thead>
           <tr>
             <th>Last Name</th>

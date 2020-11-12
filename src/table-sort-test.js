@@ -1,6 +1,6 @@
 /* 
 table-sort-js
-Author: Lee Wannacott - 2020
+Author: Lee Wannacott - 2020; https://github.com/LeeWannacott
 
 Instructions:
 Add to your HTML file: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js">
