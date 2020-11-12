@@ -89,7 +89,7 @@ function tableSortJs(){
     if(document.readyState === 'complete' ){
         tableSortJs()
     }else if(document.readyState === "loading" || document.readyState === "interactive"){
-        document.addEventListener("DOMContentLoaded", tableSortJs);
+        document.addEventListener("DOMContentLoaded",  tableSortJs());
     }
  
 

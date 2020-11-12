@@ -8,12 +8,12 @@ import './App.css';
 
 function App() {
 
-React.useEffect(() => {
-  const script = document.createElement("script");
-  script.src = "https://leewannacott.github.io/table-sort-js/table-sort.js";
-  script.async = true;
-  document.body.appendChild(script); 
-  }, []);
+// React.useEffect(() => {
+//   const script = document.createElement("script");
+//   script.src = "http://localhost:3000/table-sort-js/table-sort.js";
+//   script.async = true;
+//   document.body.appendChild(script); 
+//   }, []);
   
 
   return (

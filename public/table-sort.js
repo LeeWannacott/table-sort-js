@@ -85,13 +85,11 @@ function tableSortJs(){
         }
         }
     }
-console.log('ran')
+
     if(document.readyState === 'complete' ){
-        console.log('complete')
         tableSortJs()
     }else if(document.readyState === "loading" || document.readyState === "interactive"){
-        console.log('loading')
-        document.addEventListener("DOMContentLoaded", tableSortJs);
+        document.addEventListener("DOMContentLoaded", tableSortJs());
     }
  
 
