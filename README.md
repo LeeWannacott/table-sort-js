@@ -1,6 +1,6 @@
 table-sort-js
 
-A client side HTML table sorting library with no dependencys required. Sorts alphabetical, numerical, dates. etc
+A client side HTML table sorting library with no dependencies required. Sorts alphabetical, numerical, dates. etc
 
 Instructions:
 ```
