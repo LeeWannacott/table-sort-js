@@ -27,19 +27,19 @@ Example:
             <td>Smith</td>
             <td>John</td>
             <td>10-11-1976</td>
-            <td>1432</td>
+            <td>2</td>
           </tr>
           <tr>
             <td>Bach</td>
             <td>Frank</td>
             <td>9-2-1976</td>
-            <td>2345</td>
+            <td>3</td>
           </tr>
           <tr>
             <td>Doe</td>
             <td>Jason</td>
             <td>10-4-1998</td>
-            <td>2356</td>
+            <td>1</td>
           </tr>
         </tbody>
       </table>
