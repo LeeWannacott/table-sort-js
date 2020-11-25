@@ -46,4 +46,4 @@ Or download file e.g <script src="table-sort.js"></script>.
       </table>
 ```
 
-If <thead> does not exist it will be created by using data from first row. <tbody> optional.
+If `<thead>` does not exist it will be created by using data from first row. `<tbody>` optional.
