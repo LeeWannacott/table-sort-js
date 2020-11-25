@@ -10,9 +10,9 @@ Or download file e.g <script src="table-sort.js"></script>.
 Add class="table-sort"(className for React) to table tag; to make table column headers sort on click.
 
 Add class="order-by-desc" to <th> if sorting data in descending order on first click.
-  
+   
 ```
-<table className="table-sort">
+<table class="table-sort">
         <thead>
           <tr>
             <th>Last Name</th>
@@ -26,22 +26,22 @@ Add class="order-by-desc" to <th> if sorting data in descending order on first c
             <td>Smith</td>
             <td>John</td>
             <td>10-11-1976</td>
-            <td>http://www.jsmith.com</td>
+            <td>1432</td>
           </tr>
           <tr>
             <td>Bach</td>
             <td>Frank</td>
             <td>9-2-1976</td>
-            <td>http://www.frank.com</td>
+            <td>2345</td>
           </tr>
           <tr>
             <td>Doe</td>
             <td>Jason</td>
             <td>10-4-1998</td>
-            <td>http://www.jdoe.com</td>
+            <td>2356</td>
           </tr>
         </tbody>
       </table>
 ```
 
-
+If <thead> does not exist it will be created by using data from first row. <tbody> optional.
