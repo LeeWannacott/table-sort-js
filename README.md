@@ -12,6 +12,7 @@ Add class="table-sort"(className for React) to table tag; to make table column h
 Add class="order-by-desc" to <th> if sorting data in descending order on first click.
    
 ```
+<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
 <table class="table-sort">
         <thead>
           <tr>
