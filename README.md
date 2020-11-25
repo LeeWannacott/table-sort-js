@@ -42,7 +42,7 @@ Example:
             <td>1</td>
           </tr>
         </tbody>
-      </table>
+</table>
 ```
 
 If `<thead>` does not exist it will be created by using data from first row. `<tbody>` is optional.
