@@ -4,12 +4,13 @@ A JavaScript client-side HTML table sorting library with no dependencies require
 
 Instructions:
 ```
-Use: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
+1. Use: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
 Or download file e.g <script src="table-sort.js"></script>.
-```
-Add class="table-sort"(className for React) to table tag; to make table column headers sort on click.
 
-Add class="order-by-desc" to <th> if sorting data in descending order on first click.
+2. Add class="table-sort"(className for React) to table tag; to make table column headers sort on click.
+
+3(optional). Add class="order-by-desc" to <th> if sorting data in descending order on first click.
+```
    
 ```
 <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
