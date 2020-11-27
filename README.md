@@ -5,7 +5,7 @@ Instructions:
 
 1. `<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>`
 
-2. `class="table-sort"`(`className` for React) on table tag; makes table column headers sort on click.
+2. `class="table-sort"`(`className` for React) on table tag; makes table column headers sortable on click.
 
 
 Example:
