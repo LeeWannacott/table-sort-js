@@ -41,6 +41,7 @@ Example:
         </tbody>
 </table>
 ```
+Notes:
 
 `class="order-by-desc"`for `<th>` to sort data in descending order on first click.
 
