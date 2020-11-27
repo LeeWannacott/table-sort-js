@@ -1,4 +1,3 @@
-table-sort-js
 
 Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
 
