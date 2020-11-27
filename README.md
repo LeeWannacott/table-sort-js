@@ -12,7 +12,7 @@ Or download file e.g <script src="table-sort.js"></script>.
 3. Add class="order-by-desc" to <th> if sorting data in descending order on first click.
 ```
 Example:
-```
+```html
 <table class="table-sort">
         <thead>
           <tr>
