@@ -43,6 +43,6 @@ Example:
 ```
 Notes:
 
-`class="order-by-desc"`for `<th>` to sort data in descending order on first click.
+`class="order-by-desc"`for `<th>` to change default sort to descending order on first click.
 
 If `<thead>` does not exist it will be created by using data from first row. `<tbody>` is optional.
