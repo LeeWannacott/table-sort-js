@@ -10,6 +10,7 @@ Instructions:
 
 Example:
 ```html
+<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
 <table class="table-sort">
         <thead>
           <tr>
