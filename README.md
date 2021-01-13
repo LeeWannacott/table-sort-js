@@ -42,4 +42,4 @@ Notes:
 
 If `<thead>` does not exist it will be created by using data from first row. `<tbody>` is optional.
 
-Remember to use `className` for React.
+Remember to use `className` for ReactJS.
