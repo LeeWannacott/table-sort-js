@@ -10,7 +10,7 @@ Example:
           <tr>
             <th>Last Name</th>
             <th>First Name</th>
-            <th class='order-by-desc'>Birth Date</th>
+            <th class="order-by-desc">Birth Date</th>
             <th>Employee ID</th>
           </tr>
         </thead>
