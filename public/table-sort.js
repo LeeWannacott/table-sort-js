@@ -1,12 +1,10 @@
 /* 
 table-sort-js
-Author: Lee Wannacott - 2020; https://github.com/LeeWannacott/table-sort-js
+Author: Lee Wannacott - 2020.
+npm install table-sort-js or <script src="https://leewannacott.github.io/table-sort-js/table-sort.js">
 
 Instructions:
-Add to your HTML file: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js">
-</script> (or download the file and use: <script src="table-sort.js">)
-Add class="table-sort" to any <table> you'd like to make sortable.(className if using React)
-Click on the tables column headers to sort. <th class='order-by-desc> to sort in reverse order. 
+https://github.com/LeeWannacott/table-sort-js
 */
 
 function tableSortJs(){
@@ -55,14 +53,12 @@ function tableSortJs(){
             if (typeof columnData[0] !== "undefined") {
                 if (th.className === 'order-by-desc' && timesClickedColumn === 1){
                 columnData.sort(naturalSortDescending,{numeric: true, ignorePunctuation: true})
-                }else if(th.className === 'order-by-desc' && timesClickedColumn === 2){
+                } else if(th.className === 'order-by-desc' && timesClickedColumn === 2){
                 columnData.sort(naturalSortAescending,{numeric: true, ignorePunctuation: true})
                     timesClickedColumn = 0
-                }
-            else if (timesClickedColumn === 1){   
+                } else if (timesClickedColumn === 1){   
                 columnData.sort(naturalSortAescending)         
-            } else if (timesClickedColumn === 2){
-                
+                } else if (timesClickedColumn === 2){
                 columnData.sort(naturalSortDescending)
                 timesClickedColumn = 0
                     } 
@@ -84,9 +80,5 @@ function tableSortJs(){
     }
 }
 
-if(document.readyState === 'complete' || document.readyState === "interactive"){
-    tableSortJs()
-}else if(document.readyState === "loading")
-    {
-    document.addEventListener("DOMContentLoaded",tableSortJs,false)
-    }
+if(document.readyState === 'complete' || document.readyState === "interactive"){tableSortJs()
+}else if(document.readyState === "loading"){document.addEventListener("DOMContentLoaded",tableSortJs,false)}
