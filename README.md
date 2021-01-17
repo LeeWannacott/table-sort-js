@@ -8,7 +8,7 @@ Description: A JavaScript client-side HTML table sorting library with no depende
 If installed with npm then you need to use require example: `require("../node_modules/table-sort-js/table-sort.js")`
 
 
-Example:
+Example of table using table-sort-js:
 ```html
 <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
 
