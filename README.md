@@ -3,6 +3,11 @@
 
 Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
 
+`npm install table-sort-js` OR `<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>`
+
+If installed with npm then you need to use `require("../node_modules/table-sort-js/table-sort.js")`
+`
+
 Example:
 ```html
 <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
@@ -43,5 +48,3 @@ Notes:
 `class="order-by-desc"`for `<th>` to change default sort to descending order on first click.
 
 If `<thead>` does not exist it will be created by using data from first row. `<tbody>` is optional.
-
-Remember to use `className` for ReactJS.
