@@ -1,12 +1,12 @@
 ![table-sort-js](https://img.shields.io/npm/v/table-sort-js)  https://www.npmjs.com/package/table-sort-js
 
-Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
+* Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
 
-Backend: `npm install table-sort-js` and require("../node_modules/table-sort-js/table-sort.js") 
+* Backend: `npm install table-sort-js` and require("../node_modules/table-sort-js/table-sort.js") 
 
-Frontend: `<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>`
+* Frontend: `<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>`
 
-Instructions: Add class "table-sort" to HTML table tags.
+* Instructions: Add class "table-sort" to HTML table tags.
 
 Example:
 ```html
@@ -44,7 +44,8 @@ Example:
 </table>
 ```
 Notes:
+* Makes use of natural sorting to sort numerical values correctly. Sorts numbers, Dates, alphanumeric, etc.
 
-`class="order-by-desc"`for `<th>` to change default sort to descending order on first click.
+* `class="order-by-desc"`for `<th>` to change default sort to descending order on first click.
 
-If `<thead>` does not exist it will be created by using data from first row. `<tbody>` is optional.
+* If `<thead>` does not exist it will be created by using data from first row. `<tbody>` is optional.
