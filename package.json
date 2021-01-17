@@ -1,6 +1,6 @@
 {
   "homepage": "http://LeeWannacott.github.io/table-sort-js",
-  "name": "html-tablesorter",
+  "name": "table-sort-js",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
