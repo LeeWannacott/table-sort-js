@@ -2,8 +2,6 @@
 
 Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
 
-Installation:
-
 Backend: `npm install table-sort-js` and require("../node_modules/table-sort-js/table-sort.js") 
 
 Frontend: `<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>`
