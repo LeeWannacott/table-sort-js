@@ -1,6 +1,12 @@
-![table-sort-js](https://img.shields.io/npm/v/table-sort-js) https://www.npmjs.com/package/table-sort-js `npm install table-sort-js`
+![table-sort-js](https://img.shields.io/npm/v/table-sort-js) https://www.npmjs.com/package/table-sort-js
 
 Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
+
+Installation:
+Backend: npm install table-sort-js and require("../node_modules/table-sort-js/table-sort.js")
+Frontend: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
+
+Instructions: Add class table-sort to table HTML table tags.
 
 Example of table using table-sort-js client side:
 ```html
