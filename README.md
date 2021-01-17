@@ -1,5 +1,5 @@
 ![table-sort-js](https://img.shields.io/npm/v/table-sort-js)
-![https://img.shields.io/npm/v/table-sort-js](https://www.npmjs.com/package/table-sort-js)
+
 
 Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
 
