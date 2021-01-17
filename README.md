@@ -6,12 +6,11 @@
 
 * Frontend: `<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>`
 
-* Instructions: Add class "table-sort" to HTML table tags.
+* Instructions: Add class "table-sort" to HTML table tags. Click on column headers to sort.
 
 Example:
 ```html
 <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
-
 <table class="table-sort">
         <thead>
           <tr>
