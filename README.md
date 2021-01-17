@@ -3,10 +3,10 @@
 
 Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
 
-`npm install table-sort-js` OR `<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>`
+`npm install table-sort-js` OR `<script src="https://leewannacott.github.io/table-sort-js/table-sort.js">`
 
-If installed with npm then you need to use `require("../node_modules/table-sort-js/table-sort.js")`
-`
+If installed with npm then you need to use require example: `require("../node_modules/table-sort-js/table-sort.js")`
+
 
 Example:
 ```html
@@ -25,20 +25,20 @@ Example:
           <tr>
             <td>Smith</td>
             <td>John</td>
-            <td>10-11-1976</td>
-            <td>2</td>
+            <td>1977</td>
+            <td>1</td>
           </tr>
           <tr>
             <td>Bach</td>
             <td>Frank</td>
-            <td>9-2-1976</td>
-            <td>3</td>
+            <td>1976</td>
+            <td>10</td>
           </tr>
           <tr>
             <td>Doe</td>
             <td>Jason</td>
-            <td>10-4-1998</td>
-            <td>1</td>
+            <td>1978</td>
+            <td>100</td>
           </tr>
         </tbody>
 </table>
