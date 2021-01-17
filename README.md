@@ -8,6 +8,8 @@
 
 * Instructions: Add class "table-sort" to HTML table tags. Click on column headers to sort.
 
+Demo: https://leewannacott.github.io/Portfolio/#/GitHub
+
 Example:
 ```html
 <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
