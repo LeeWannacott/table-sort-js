@@ -1,4 +1,4 @@
-npm badge	/npm/v/:packageName
+https://img.shields.io/npm/v/table-sort-js
 
 Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
 
