@@ -1,3 +1,4 @@
+npm badge	/npm/v/:packageName
 
 Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
 
