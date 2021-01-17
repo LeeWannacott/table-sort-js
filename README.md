@@ -45,6 +45,6 @@ Example:
 Notes:
 * Makes use of natural sorting to sort numerical values correctly. Sorts numbers, Dates, alphanumeric, etc.
 
-* `class="order-by-desc"`for `<th>` to change default sort to descending order on first click.
+* `class="order-by-desc"` on `<th>` to change default sort to descending order on first click.
 
 * If `<thead>` does not exist it will be created by using data from first row. `<tbody>` is optional.
