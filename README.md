@@ -10,7 +10,7 @@ Frontend: `<script src="https://leewannacott.github.io/table-sort-js/table-sort.
 
 Instructions: Add class "table-sort" to HTML table tags.
 
-Example of table using table-sort-js client side:
+Example:
 ```html
 <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
 
