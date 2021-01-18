@@ -7,7 +7,7 @@ Pull requests can be made on the file table-sort-js/public/table-sort.js
 This file is published to https://leewannacott.github.io/table-sort-js/table-sort.js
 
 You can modify testTable.js in table-sort-js/src/testTable.js for the feature or
-bug request you are testing. 
+bug request you are testing. You can go to http://localhost:3000/ if you have npm start. 
 
 Alternatively download table-sort.js and use your
 own HTML page and table to test by using :(<script src="table-sort-js"></script>)
