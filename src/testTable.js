@@ -1,10 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-
-// works:
-// import './table-sort-test'
-// import '../public/table-sort'
 
 function App() {
 
@@ -20,6 +14,7 @@ React.useEffect(() => {
     <div className="App">
       <header className="App-header">
       </header>
+      <h1>Testing Tables</h1>
       <table className="table-sort">
         <thead>
           <tr>
