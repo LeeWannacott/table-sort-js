@@ -1,3 +1,12 @@
+Repository link: https://github.com/LeeWannacott/table-sort-js
+
+I made table-sort-js for my own use case when I needed to sort a table.
+
+Objectives of table-sort-js:
+* Be easy to use (e.g Be one file and just put "table-sort" on table to make sortable).
+* No dependencies (No jQuery)
+* Be able to sort (dates, numbers, alpha,alphanumeric, etc.)(Properly; meaning natural sort)
+* Not interfere too much with the css of tables that should be left to the user.
 
 You are welcome to open issues or make pull requests.
 
