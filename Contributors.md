@@ -11,6 +11,7 @@ bug request you are testing. You can go to http://localhost:3000/ if you have us
 
 Alternatively download table-sort.js and use your
 own HTML page and table to test by using <script src="table-sort-js"></script>
+
 Example: https://www.cssscript.com/minimal-table-sorter/
 
 If table-sort-js actually gets used by people then I might set up a testing framework.
