@@ -5,6 +5,7 @@ Licence: MIT License Copyright (c) 2021 Lee Wannacott
     
 GitHub Repository: https://github.com/LeeWannacott/table-sort-js
 npm package: https://www.npmjs.com/package/table-sort-js
+Demo: https://leewannacott.github.io/Portfolio/#/GitHub
 
 Install:
 Frontend: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script> or
@@ -31,6 +32,20 @@ function tableSortJs() {
             const tableHead = sortableTable.querySelector("thead");
             const tableBody = sortableTable.querySelector("tbody");
             const tableHeadHeaders = tableHead.querySelectorAll("th");
+
+
+            // Display a mouse pointer on hover over table headers.
+            tableHead.addEventListener("mouseover", function (event) {
+                setCursor(tableHead, "pointer");
+            });
+            function setCursor(tag, cursorStyle) {
+                var elem;
+                if (sortableTable.getElementsByTagName && (elem = tag)) {
+                    if (elem.style) {
+                        elem.style.cursor = cursorStyle;
+                    }
+                }
+            }
 
             for (let [columnIndex, th] of tableHeadHeaders.entries("table")) {
                 let timesClickedColumn = 0;
