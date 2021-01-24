@@ -9,7 +9,7 @@ Demo: https://leewannacott.github.io/Portfolio/#/GitHub
 
 Install:
 Frontend: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script> or
-Download this file and Add <script src="table-sort.js"></script> to your HTML 
+Download this file and add <script src="table-sort.js"></script> to your HTML 
 
 Backend: npm install table-sort-js and use require("../node_modules/table-sort-js/table-sort.js") 
 
@@ -22,7 +22,7 @@ function tableSortJs() {
     const columnData = [];
     const dictOfColumnIndexAndTableRow = {};
     for (let sortableTable of document.getElementsByTagName("table")) {
-        if (sortableTable.className === "table-sort") {
+        if (sortableTable.classList.contains("table-sort")) {
             if (sortableTable.getElementsByTagName("thead").length === 0) {
                 const the = document.createElement("thead");
                 the.appendChild(sortableTable.rows[0]);
@@ -90,10 +90,10 @@ function tableSortJs() {
                             return naturalSortAescending(b, a);
                         }
 
-                        // Sort naturally; default aescending unless th is using 'order-by-desc' as className.
+                        // Sort naturally; default aescending unless th contains 'order-by-desc' as className.
                         if (typeof columnData[0] !== "undefined") {
                             if (
-                                th.className === "order-by-desc" &&
+                                th.classList.contains("order-by-desc")  &&
                                 timesClickedColumn === 1
                             ) {
                                 columnData.sort(naturalSortDescending, {
@@ -101,7 +101,7 @@ function tableSortJs() {
                                     ignorePunctuation: true,
                                 });
                             } else if (
-                                th.className === "order-by-desc" &&
+                                th.classList.contains("order-by-desc")  &&
                                 timesClickedColumn === 2
                             ) {
                                 columnData.sort(naturalSortAescending, {
