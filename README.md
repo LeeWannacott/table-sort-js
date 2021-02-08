@@ -41,6 +41,19 @@ Example:
             <td>1978</td>
             <td>100</td>
           </tr>
+          <tr>
+            <td>Micheal</td>
+            <td>Jackson</td>
+            <td>1964</td>
+            <td>54</td>
+          </tr>
+
+          <tr>
+            <td>Ben</td>
+            <td>Tenison</td>
+            <td>1994</td>
+            <td>134</td>
+          </tr>
         </tbody>
 </table>
 ```
