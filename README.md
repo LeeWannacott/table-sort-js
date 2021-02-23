@@ -26,20 +26,33 @@ Example:
           <tr>
             <td>Smith</td>
             <td>John</td>
-            <td>1977</td>
+            <td>1977/12/4</td>
             <td>1</td>
           </tr>
           <tr>
             <td>Bach</td>
             <td>Frank</td>
-            <td>1976</td>
+            <td>1976/10/27</td>
             <td>10</td>
           </tr>
           <tr>
             <td>Doe</td>
             <td>Jason</td>
-            <td>1978</td>
+            <td>1978/4/6</td>
             <td>100</td>
+          </tr>
+          <tr>
+            <td>Michael</td>
+            <td>Jackson</td>
+            <td>1958/8/29</td>
+            <td>54</td>
+          </tr>
+
+          <tr>
+            <td>Ben</td>
+            <td>Tenison</td>
+            <td>1994/7/21</td>
+            <td>134</td>
           </tr>
         </tbody>
 </table>
