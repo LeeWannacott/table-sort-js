@@ -66,4 +66,4 @@ Notes:
 
 * Example of use: https://www.cssscript.com/minimal-table-sorter/
 
-* Add `table-arrows` class to display aescending descending triangle
+* Add `table-arrows` class to display ascending or descending triangle.
