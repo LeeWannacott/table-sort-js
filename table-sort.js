@@ -75,8 +75,8 @@ function tableSortJs() {
                             } else {
                                 // Fill in blank table cells with the highest
                                 // value replacement character that works.
-                                columnData.push("ӿ#" + i);
-                                dictOfColumnIndexAndTableRow["ӿ#" + i] =
+                                columnData.push("ZZZ#" + i);
+                                dictOfColumnIndexAndTableRow["ZZZ#" + i] =
                                     tr.innerHTML;
                             }
                         }
