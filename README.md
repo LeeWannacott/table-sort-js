@@ -65,3 +65,5 @@ Notes:
 * If `<thead>` does not exist it will be created by using data from first row. `<tbody>` is optional.
 
 * Example of use: https://www.cssscript.com/minimal-table-sorter/
+
+* Add `table-arrows` class to display aescending descending triangle
