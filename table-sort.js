@@ -73,9 +73,10 @@ function tableSortJs() {
                                         i
                                 ] = tr.innerHTML;
                             } else {
-                                // Fill in blank table cells with a value(0)
-                                columnData.push("0#" + i);
-                                dictOfColumnIndexAndTableRow["0#" + i] =
+                                // Fill in blank table cells with the highest
+                                // unicode value(00xFFFD) replacement character.
+                                columnData.push("�#" + i);
+                                dictOfColumnIndexAndTableRow["�#" + i] =
                                     tr.innerHTML;
                             }
                         }
@@ -90,34 +91,59 @@ function tableSortJs() {
                             return naturalSortAescending(b, a);
                         }
 
+                        function clearArrows(arrowUp="▲",arrowDown="▼") {
+                                let ifDownArrow = th.innerText.includes(arrowDown);
+                                let ifUpArrow = th.innerText.includes(arrowUp);
+                                if ((ifDownArrow) === true || (ifUpArrow) === true) {
+                                    th.innerText = th.innerText.replace(arrowUp,"")
+                                    th.innerText = th.innerText.replace(arrowDown,"")
+                                }
+                        }
+
+                        let arrowUp=" ▲";
+                        let arrowDown=" ▼";
+
                         // Sort naturally; default aescending unless th contains 'order-by-desc' as className.
                         if (typeof columnData[0] !== "undefined") {
+                                originalColumnText = th.innerText
                             if (
                                 th.classList.contains("order-by-desc")  &&
                                 timesClickedColumn === 1
                             ) {
+                                clearArrows(arrowUp,arrowDown)
+                                th.insertAdjacentText("beforeend",arrowDown);
                                 columnData.sort(naturalSortDescending, {
                                     numeric: true,
                                     ignorePunctuation: true,
                                 });
+
                             } else if (
                                 th.classList.contains("order-by-desc")  &&
                                 timesClickedColumn === 2
                             ) {
+                                clearArrows(arrowUp,arrowDown)
+                                th.insertAdjacentText("beforeend",arrowUp);
                                 columnData.sort(naturalSortAescending, {
                                     numeric: true,
                                     ignorePunctuation: true,
                                 });
                                 timesClickedColumn = 0;
+
                             } else if (timesClickedColumn === 1) {
+                                clearArrows(arrowUp,arrowDown)
+                                th.insertAdjacentText("beforeend",arrowUp);
                                 columnData.sort(naturalSortAescending);
+                                
                             } else if (timesClickedColumn === 2) {
+                                clearArrows(arrowUp,arrowDown)
+                                th.insertAdjacentText("beforeend",arrowDown);
                                 columnData.sort(naturalSortDescending);
                                 timesClickedColumn = 0;
                             }
                         }
                     }
                     getTableDataOnClick();
+
                     function returnSortedTable() {
                         const tableRows = tableBody.querySelectorAll("tr");
                         for (let [i, tr] of tableRows.entries()) {
