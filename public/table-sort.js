@@ -45,7 +45,7 @@ function tableSortJs() {
             const tableRows = tableBody.querySelectorAll("tr");
             for (let [i, tr] of tableRows.entries()) {
               if (
-                tr.querySelectorAll("td").item(columnIndex).innerHTML !== ""
+                tr.querySelectorAll("td").item(columnIndex).innerHTML.trim() !== "" 
               ) {
                 columnData.push(
                   tr.querySelectorAll("td").item(columnIndex).innerHTML +
