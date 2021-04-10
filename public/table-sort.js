@@ -21,133 +21,138 @@ Instructions:
 function tableSortJs() {
   const columnData = [];
   const dictOfColumnIndexAndTableRow = {};
-  for (let sortableTable of document.getElementsByTagName("table")) {
-    if (sortableTable.classList.contains("table-sort")) {
-      if (sortableTable.getElementsByTagName("thead").length === 0) {
-        const the = document.createElement("thead");
-        the.appendChild(sortableTable.rows[0]);
-        sortableTable.insertBefore(the, sortableTable.firstChild);
-      }
 
-      const tableHead = sortableTable.querySelector("thead");
-      const tableBody = sortableTable.querySelector("tbody");
-      const tableHeadHeaders = tableHead.querySelectorAll("th");
+  for (let table of document.getElementsByTagName("table")) {
+    if (table.classList.contains("table-sort")) {
+      makeTableSortable(table);
+    }
+  }
 
-      tableHead.style.cursor = "pointer";
+  function makeTableSortable(sortableTable) {
+    if (sortableTable.getElementsByTagName("thead").length === 0) {
+      const the = document.createElement("thead");
+      the.appendChild(sortableTable.rows[0]);
+      sortableTable.insertBefore(the, sortableTable.firstChild);
+    }
 
-      for (let [columnIndex, th] of tableHeadHeaders.entries("table")) {
-        let timesClickedColumn = 0;
+    const tableHead = sortableTable.querySelector("thead");
+    const tableBody = sortableTable.querySelector("tbody");
+    const tableHeadHeaders = tableHead.querySelectorAll("th");
 
-        th.addEventListener("click", function () {
-          timesClickedColumn += 1;
+    tableHead.style.cursor = "pointer";
 
-          function getTableDataOnClick() {
-            const tableRows = tableBody.querySelectorAll("tr");
-            for (let [i, tr] of tableRows.entries()) {
-              if (
-                tr.querySelectorAll("td").item(columnIndex).innerHTML.trim() !== "" 
-              ) {
-                columnData.push(
-                  tr.querySelectorAll("td").item(columnIndex).innerHTML +
-                    "#" +
-                    i
-                );
-                dictOfColumnIndexAndTableRow[
-                  tr.querySelectorAll("td").item(columnIndex).innerHTML +
-                    "#" +
-                    i
-                ] = tr.innerHTML;
-              } else {
-                // Fill in blank table cells dict key with filler value.
-                columnData.push("!X!Y!Z!#" + i);
-                dictOfColumnIndexAndTableRow["!X!Y!Z!#" + i] = tr.innerHTML;
-              }
-            }
-            function naturalSortAescending(a, b) {
-              if (a.includes("X!Y!Z!#")) {
-                return 1;
-              } else if (b.includes("X!Y!Z!#")) {
-                return -1;
-              } else {
-                return a.localeCompare(
-                  b,
-                  navigator.languages[0] || navigator.language,
-                  { numeric: true, ignorePunctuation: true }
-                );
-              }
-            }
-            function naturalSortDescending(a, b) {
-              return naturalSortAescending(b, a);
-            }
+    for (let [columnIndex, th] of tableHeadHeaders.entries("table")) {
+      let timesClickedColumn = 0;
 
-            function clearArrows(arrowUp = "▲", arrowDown = "▼") {
-              let ifDownArrow = th.innerText.includes(arrowDown);
-              let ifUpArrow = th.innerText.includes(arrowUp);
-              if (ifDownArrow === true || ifUpArrow === true) {
-                th.innerText = th.innerText.replace(arrowUp, "");
-                th.innerText = th.innerText.replace(arrowDown, "");
-              }
-            }
+      th.addEventListener("click", function () {
+        timesClickedColumn += 1;
 
-            let arrowUp = " ▲";
-            let arrowDown = " ▼";
-
-            // Sort naturally; default aescending unless th contains 'order-by-desc' as className.
-            if (typeof columnData[0] !== "undefined") {
-              originalColumnText = th.innerText;
-              if (
-                th.classList.contains("order-by-desc") &&
-                timesClickedColumn === 1
-              ) {
-                if (sortableTable.classList.contains("table-arrows")) {
-                  clearArrows(arrowUp, arrowDown);
-                  th.insertAdjacentText("beforeend", arrowDown);
-                }
-                columnData.sort(naturalSortDescending, {
-                  numeric: true,
-                  ignorePunctuation: true,
-                });
-              } else if (
-                th.classList.contains("order-by-desc") &&
-                timesClickedColumn === 2
-              ) {
-                if (sortableTable.classList.contains("table-arrows")) {
-                  clearArrows(arrowUp, arrowDown);
-                  th.insertAdjacentText("beforeend", arrowUp);
-                }
-                columnData.sort(naturalSortAescending, {
-                  numeric: true,
-                  ignorePunctuation: true,
-                });
-                timesClickedColumn = 0;
-              } else if (timesClickedColumn === 1) {
-                if (sortableTable.classList.contains("table-arrows")) {
-                  clearArrows(arrowUp, arrowDown);
-                  th.insertAdjacentText("beforeend", arrowUp);
-                }
-                columnData.sort(naturalSortAescending);
-              } else if (timesClickedColumn === 2) {
-                if (sortableTable.classList.contains("table-arrows")) {
-                  clearArrows(arrowUp, arrowDown);
-                  th.insertAdjacentText("beforeend", arrowDown);
-                }
-                columnData.sort(naturalSortDescending);
-                timesClickedColumn = 0;
-              }
+        function getTableDataOnClick() {
+          const tableRows = tableBody.querySelectorAll("tr");
+          for (let [i, tr] of tableRows.entries()) {
+            if (
+              tr.querySelectorAll("td").item(columnIndex).innerHTML.trim() !== "" 
+            ) {
+              columnData.push(
+                tr.querySelectorAll("td").item(columnIndex).innerHTML +
+                  "#" +
+                  i
+              );
+              dictOfColumnIndexAndTableRow[
+                tr.querySelectorAll("td").item(columnIndex).innerHTML +
+                  "#" +
+                  i
+              ] = tr.innerHTML;
+            } else {
+              // Fill in blank table cells dict key with filler value.
+              columnData.push("!X!Y!Z!#" + i);
+              dictOfColumnIndexAndTableRow["!X!Y!Z!#" + i] = tr.innerHTML;
             }
           }
-          getTableDataOnClick();
-
-          function returnSortedTable() {
-            const tableRows = tableBody.querySelectorAll("tr");
-            for (let [i, tr] of tableRows.entries()) {
-              tr.innerHTML = dictOfColumnIndexAndTableRow[columnData[i]];
+          function naturalSortAescending(a, b) {
+            if (a.includes("X!Y!Z!#")) {
+              return 1;
+            } else if (b.includes("X!Y!Z!#")) {
+              return -1;
+            } else {
+              return a.localeCompare(
+                b,
+                navigator.languages[0] || navigator.language,
+                { numeric: true, ignorePunctuation: true }
+              );
             }
-            columnData.length = 0;
           }
-          returnSortedTable();
-        });
-      }
+          function naturalSortDescending(a, b) {
+            return naturalSortAescending(b, a);
+          }
+
+          function clearArrows(arrowUp = "▲", arrowDown = "▼") {
+            let ifDownArrow = th.innerText.includes(arrowDown);
+            let ifUpArrow = th.innerText.includes(arrowUp);
+            if (ifDownArrow === true || ifUpArrow === true) {
+              th.innerText = th.innerText.replace(arrowUp, "");
+              th.innerText = th.innerText.replace(arrowDown, "");
+            }
+          }
+
+          let arrowUp = " ▲";
+          let arrowDown = " ▼";
+
+          // Sort naturally; default aescending unless th contains 'order-by-desc' as className.
+          if (typeof columnData[0] !== "undefined") {
+            originalColumnText = th.innerText;
+            if (
+              th.classList.contains("order-by-desc") &&
+              timesClickedColumn === 1
+            ) {
+              if (sortableTable.classList.contains("table-arrows")) {
+                clearArrows(arrowUp, arrowDown);
+                th.insertAdjacentText("beforeend", arrowDown);
+              }
+              columnData.sort(naturalSortDescending, {
+                numeric: true,
+                ignorePunctuation: true,
+              });
+            } else if (
+              th.classList.contains("order-by-desc") &&
+              timesClickedColumn === 2
+            ) {
+              if (sortableTable.classList.contains("table-arrows")) {
+                clearArrows(arrowUp, arrowDown);
+                th.insertAdjacentText("beforeend", arrowUp);
+              }
+              columnData.sort(naturalSortAescending, {
+                numeric: true,
+                ignorePunctuation: true,
+              });
+              timesClickedColumn = 0;
+            } else if (timesClickedColumn === 1) {
+              if (sortableTable.classList.contains("table-arrows")) {
+                clearArrows(arrowUp, arrowDown);
+                th.insertAdjacentText("beforeend", arrowUp);
+              }
+              columnData.sort(naturalSortAescending);
+            } else if (timesClickedColumn === 2) {
+              if (sortableTable.classList.contains("table-arrows")) {
+                clearArrows(arrowUp, arrowDown);
+                th.insertAdjacentText("beforeend", arrowDown);
+              }
+              columnData.sort(naturalSortDescending);
+              timesClickedColumn = 0;
+            }
+          }
+        }
+        getTableDataOnClick();
+
+        function returnSortedTable() {
+          const tableRows = tableBody.querySelectorAll("tr");
+          for (let [i, tr] of tableRows.entries()) {
+            tr.innerHTML = dictOfColumnIndexAndTableRow[columnData[i]];
+          }
+          columnData.length = 0;
+        }
+        returnSortedTable();
+      });
     }
   }
 }
