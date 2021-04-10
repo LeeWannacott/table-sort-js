@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.js": "/table-sort-js/static/js/main.7f68d3fb.chunk.js",
-    "main.js.map": "/table-sort-js/static/js/main.7f68d3fb.chunk.js.map",
-    "runtime-main.js": "/table-sort-js/static/js/runtime-main.4794419e.js",
-    "runtime-main.js.map": "/table-sort-js/static/js/runtime-main.4794419e.js.map",
-    "static/js/2.92db3973.chunk.js": "/table-sort-js/static/js/2.92db3973.chunk.js",
-    "static/js/2.92db3973.chunk.js.map": "/table-sort-js/static/js/2.92db3973.chunk.js.map",
+    "main.js": "/table-sort-js/static/js/main.f5a6b5be.chunk.js",
+    "main.js.map": "/table-sort-js/static/js/main.f5a6b5be.chunk.js.map",
+    "runtime-main.js": "/table-sort-js/static/js/runtime-main.cfa1ad2c.js",
+    "runtime-main.js.map": "/table-sort-js/static/js/runtime-main.cfa1ad2c.js.map",
+    "static/js/2.85694514.chunk.js": "/table-sort-js/static/js/2.85694514.chunk.js",
+    "static/js/2.85694514.chunk.js.map": "/table-sort-js/static/js/2.85694514.chunk.js.map",
     "index.html": "/table-sort-js/index.html",
-    "static/js/2.92db3973.chunk.js.LICENSE.txt": "/table-sort-js/static/js/2.92db3973.chunk.js.LICENSE.txt"
+    "static/js/2.85694514.chunk.js.LICENSE.txt": "/table-sort-js/static/js/2.85694514.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.4794419e.js",
-    "static/js/2.92db3973.chunk.js",
-    "static/js/main.7f68d3fb.chunk.js"
+    "static/js/runtime-main.cfa1ad2c.js",
+    "static/js/2.85694514.chunk.js",
+    "static/js/main.f5a6b5be.chunk.js"
   ]
 }

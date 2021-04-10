@@ -33,19 +33,7 @@ function tableSortJs() {
             const tableBody = sortableTable.querySelector("tbody");
             const tableHeadHeaders = tableHead.querySelectorAll("th");
 
-
-            // Display a mouse pointer on hover over table headers.
-            tableHead.addEventListener("mouseover", function (event) {
-                setCursor(tableHead, "pointer");
-            });
-            function setCursor(tag, cursorStyle) {
-                var elem;
-                if (sortableTable.getElementsByTagName && (elem = tag)) {
-                    if (elem.style) {
-                        elem.style.cursor = cursorStyle;
-                    }
-                }
-            }
+            tableHead.style.cursor = "pointer";
 
             for (let [columnIndex, th] of tableHeadHeaders.entries("table")) {
                 let timesClickedColumn = 0;
@@ -73,19 +61,22 @@ function tableSortJs() {
                                         i
                                 ] = tr.innerHTML;
                             } else {
-                                // Fill in blank table cells with the highest
-                                // value replacement character that works.
-                                columnData.push("ZZZ#" + i);
-                                dictOfColumnIndexAndTableRow["ZZZ#" + i] =
+                                // Fill in blank table cells dict key with filler value.
+                                columnData.push("!X!Y!Z!#" + i);
+                                dictOfColumnIndexAndTableRow["!X!Y!Z!#" + i] =
                                     tr.innerHTML;
                             }
                         }
                         function naturalSortAescending(a, b) {
-                            return a.localeCompare(
-                                b,
-                                navigator.languages[0] || navigator.language,
+                            if (a.includes("X!Y!Z!#")){ 
+                                return 1;
+                            }else if (b.includes("X!Y!Z!#")){
+                                return -1;
+                            } else {
+                            return a.localeCompare( b, navigator.languages[0] || navigator.language,
                                 { numeric: true, ignorePunctuation: true }
                             );
+                            }
                         }
                         function naturalSortDescending(a, b) {
                             return naturalSortAescending(b, a);
