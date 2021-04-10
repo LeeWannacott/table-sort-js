@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import testTable from './testTable'
+import TestTable from './TestTable'
 import { BrowserRouter ,Route } from "react-router-dom";
 
 ReactDOM.render(
 
 <BrowserRouter>
-<Route exact path="/" component={testTable}/>
-<testTable/>
+<Route exact path="/" component={TestTable}/>
+<TestTable/>
 </BrowserRouter>,
 
   document.getElementById('display')
