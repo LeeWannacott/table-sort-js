@@ -47,10 +47,10 @@ function tableSortJs() {
       th.addEventListener("click", function () {
         timesClickedColumn += 1;
 
-        getTableDataOnClick();
-        returnSortedTable();
+        getTableData();
+        updateTable();
 
-        function returnSortedTable() {
+        function updateTable() {
           const tableRows = tableBody.querySelectorAll("tr");
           for (let [i, tr] of tableRows.entries()) {
             tr.innerHTML = columnIndexAndTableRow[columnData[i]];
@@ -58,7 +58,7 @@ function tableSortJs() {
           columnData.length = 0;
         }
 
-        function getTableDataOnClick() {
+        function getTableData() {
           const tableRows = tableBody.querySelectorAll("tr");
           for (let [i, tr] of tableRows.entries()) {
             let tdInnerHTML = tr.querySelectorAll('td').item(columnIndex).innerHTML;
