@@ -19,7 +19,6 @@ Instructions:
 */
 
 function tableSortJs() {
-  const columnData = [];
   const columnIndexAndTableRow = {};
 
   for (let table of document.getElementsByTagName("table")) {
@@ -45,6 +44,7 @@ function tableSortJs() {
       let timesClickedColumn = 0;
 
       th.addEventListener("click", function () {
+        const columnData = [];
         timesClickedColumn += 1;
 
         getTableData();
@@ -55,7 +55,6 @@ function tableSortJs() {
           for (let [i, tr] of tableRows.entries()) {
             tr.innerHTML = columnIndexAndTableRow[columnData[i]];
           }
-          columnData.length = 0;
         }
 
         function getTableData() {
