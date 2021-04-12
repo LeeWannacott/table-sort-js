@@ -20,7 +20,7 @@ Instructions:
 
 function tableSortJs() {
   const columnData = [];
-  const dictOfColumnIndexAndTableRow = {};
+  const columnIndexAndTableRow = {};
 
   for (let table of document.getElementsByTagName("table")) {
     if (table.classList.contains("table-sort")) {
@@ -50,23 +50,14 @@ function tableSortJs() {
         function getTableDataOnClick() {
           const tableRows = tableBody.querySelectorAll("tr");
           for (let [i, tr] of tableRows.entries()) {
-            if (
-              tr.querySelectorAll("td").item(columnIndex).innerHTML.trim() !== "" 
-            ) {
-              columnData.push(
-                tr.querySelectorAll("td").item(columnIndex).innerHTML +
-                  "#" +
-                  i
-              );
-              dictOfColumnIndexAndTableRow[
-                tr.querySelectorAll("td").item(columnIndex).innerHTML +
-                  "#" +
-                  i
-              ] = tr.innerHTML;
+            let tdInnerHTML = tr.querySelectorAll('td').item(columnIndex).innerHTML;
+            if (tdInnerHTML.trim() !== "") {
+              columnData.push(tdInnerHTML+ '#' + i);
+              columnIndexAndTableRow[tdInnerHTML+ '#' + i] = tr.innerHTML;
             } else {
               // Fill in blank table cells dict key with filler value.
               columnData.push("!X!Y!Z!#" + i);
-              dictOfColumnIndexAndTableRow["!X!Y!Z!#" + i] = tr.innerHTML;
+              columnIndexAndTableRow["!X!Y!Z!#" + i] = tr.innerHTML;
             }
           }
           function naturalSortAescending(a, b) {
@@ -147,7 +138,7 @@ function tableSortJs() {
         function returnSortedTable() {
           const tableRows = tableBody.querySelectorAll("tr");
           for (let [i, tr] of tableRows.entries()) {
-            tr.innerHTML = dictOfColumnIndexAndTableRow[columnData[i]];
+            tr.innerHTML = columnIndexAndTableRow[columnData[i]];
           }
           columnData.length = 0;
         }
