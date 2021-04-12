@@ -47,6 +47,17 @@ function tableSortJs() {
       th.addEventListener("click", function () {
         timesClickedColumn += 1;
 
+        getTableDataOnClick();
+        returnSortedTable();
+
+        function returnSortedTable() {
+          const tableRows = tableBody.querySelectorAll("tr");
+          for (let [i, tr] of tableRows.entries()) {
+            tr.innerHTML = columnIndexAndTableRow[columnData[i]];
+          }
+          columnData.length = 0;
+        }
+
         function getTableDataOnClick() {
           const tableRows = tableBody.querySelectorAll("tr");
           for (let [i, tr] of tableRows.entries()) {
@@ -60,6 +71,7 @@ function tableSortJs() {
               columnIndexAndTableRow["!X!Y!Z!#" + i] = tr.innerHTML;
             }
           }
+
           function naturalSortAescending(a, b) {
             if (a.includes("X!Y!Z!#")) {
               return 1;
@@ -73,6 +85,7 @@ function tableSortJs() {
               );
             }
           }
+
           function naturalSortDescending(a, b) {
             return naturalSortAescending(b, a);
           }
@@ -133,16 +146,6 @@ function tableSortJs() {
             }
           }
         }
-        getTableDataOnClick();
-
-        function returnSortedTable() {
-          const tableRows = tableBody.querySelectorAll("tr");
-          for (let [i, tr] of tableRows.entries()) {
-            tr.innerHTML = columnIndexAndTableRow[columnData[i]];
-          }
-          columnData.length = 0;
-        }
-        returnSortedTable();
       });
     }
   }
