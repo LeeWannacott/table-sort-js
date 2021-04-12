@@ -101,47 +101,49 @@ function tableSortJs() {
           let arrowDown = " ▼";
 
           // Sort naturally; default aescending unless th contains 'order-by-desc' as className.
-          if (typeof columnData[0] !== "undefined") {
-            originalColumnText = th.innerText;
-            if (
-              th.classList.contains("order-by-desc") &&
-              timesClickedColumn === 1
-            ) {
-              if (sortableTable.classList.contains("table-arrows")) {
-                clearArrows(arrowUp, arrowDown);
-                th.insertAdjacentText("beforeend", arrowDown);
-              }
-              columnData.sort(naturalSortDescending, {
-                numeric: true,
-                ignorePunctuation: true,
-              });
-            } else if (
-              th.classList.contains("order-by-desc") &&
-              timesClickedColumn === 2
-            ) {
-              if (sortableTable.classList.contains("table-arrows")) {
-                clearArrows(arrowUp, arrowDown);
-                th.insertAdjacentText("beforeend", arrowUp);
-              }
-              columnData.sort(naturalSortAescending, {
-                numeric: true,
-                ignorePunctuation: true,
-              });
-              timesClickedColumn = 0;
-            } else if (timesClickedColumn === 1) {
-              if (sortableTable.classList.contains("table-arrows")) {
-                clearArrows(arrowUp, arrowDown);
-                th.insertAdjacentText("beforeend", arrowUp);
-              }
-              columnData.sort(naturalSortAescending);
-            } else if (timesClickedColumn === 2) {
-              if (sortableTable.classList.contains("table-arrows")) {
-                clearArrows(arrowUp, arrowDown);
-                th.insertAdjacentText("beforeend", arrowDown);
-              }
-              columnData.sort(naturalSortDescending);
-              timesClickedColumn = 0;
+          if (columnData[0] === undefined) {
+            return;
+          }
+
+          originalColumnText = th.innerText;
+          if (
+            th.classList.contains("order-by-desc") &&
+            timesClickedColumn === 1
+          ) {
+            if (sortableTable.classList.contains("table-arrows")) {
+              clearArrows(arrowUp, arrowDown);
+              th.insertAdjacentText("beforeend", arrowDown);
             }
+            columnData.sort(naturalSortDescending, {
+              numeric: true,
+              ignorePunctuation: true,
+            });
+          } else if (
+            th.classList.contains("order-by-desc") &&
+            timesClickedColumn === 2
+          ) {
+            if (sortableTable.classList.contains("table-arrows")) {
+              clearArrows(arrowUp, arrowDown);
+              th.insertAdjacentText("beforeend", arrowUp);
+            }
+            columnData.sort(naturalSortAescending, {
+              numeric: true,
+              ignorePunctuation: true,
+            });
+            timesClickedColumn = 0;
+          } else if (timesClickedColumn === 1) {
+            if (sortableTable.classList.contains("table-arrows")) {
+              clearArrows(arrowUp, arrowDown);
+              th.insertAdjacentText("beforeend", arrowUp);
+            }
+            columnData.sort(naturalSortAescending);
+          } else if (timesClickedColumn === 2) {
+            if (sortableTable.classList.contains("table-arrows")) {
+              clearArrows(arrowUp, arrowDown);
+              th.insertAdjacentText("beforeend", arrowDown);
+            }
+            columnData.sort(naturalSortDescending);
+            timesClickedColumn = 0;
           }
         }
       });
