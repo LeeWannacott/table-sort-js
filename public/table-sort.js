@@ -89,12 +89,8 @@ function tableSortJs() {
           }
 
           function clearArrows(arrowUp = "▲", arrowDown = "▼") {
-            let ifDownArrow = th.innerText.includes(arrowDown);
-            let ifUpArrow = th.innerText.includes(arrowUp);
-            if (ifDownArrow === true || ifUpArrow === true) {
-              th.innerText = th.innerText.replace(arrowUp, "");
-              th.innerText = th.innerText.replace(arrowDown, "");
-            }
+            th.innerText = th.innerText.replace(arrowUp, "");
+            th.innerText = th.innerText.replace(arrowDown, "");
           }
 
           let arrowUp = " ▲";
@@ -105,8 +101,6 @@ function tableSortJs() {
             return;
           }
 
-          originalColumnText = th.innerText;
-
           let desc = th.classList.contains('order-by-desc');
           let tableArrows = sortableTable.classList.contains('table-arrows');
 
@@ -116,7 +110,6 @@ function tableSortJs() {
                 clearArrows(arrowUp, arrowDown);
                 th.insertAdjacentText("beforeend", arrowDown);
               }
-
               columnData.sort(naturalSortDescending, {
                 numeric: true,
                 ignorePunctuation: true,
@@ -126,16 +119,15 @@ function tableSortJs() {
                 clearArrows(arrowUp, arrowDown);
                 th.insertAdjacentText("beforeend", arrowUp);
               }
-
               columnData.sort(naturalSortAescending);
             }
           } else if (timesClickedColumn === 2) {
+            timesClickedColumn = 0;
             if (desc) {
               if (tableArrows) {
                 clearArrows(arrowUp, arrowDown);
                 th.insertAdjacentText("beforeend", arrowUp);
               }
-
               columnData.sort(naturalSortAescending, {
                 numeric: true,
                 ignorePunctuation: true,
@@ -145,11 +137,8 @@ function tableSortJs() {
                 clearArrows(arrowUp, arrowDown);
                 th.insertAdjacentText("beforeend", arrowDown);
               }
-
               columnData.sort(naturalSortDescending);
             }
-
-            timesClickedColumn = 0;
           }
         }
       });
