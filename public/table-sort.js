@@ -19,7 +19,6 @@ Instructions:
 */
 
 function tableSortJs() {
-  const columnData = [];
   const columnIndexAndTableRow = {};
 
   for (let table of document.getElementsByTagName("table")) {
@@ -37,18 +36,28 @@ function tableSortJs() {
 
     const tableHead = sortableTable.querySelector("thead");
     const tableBody = sortableTable.querySelector("tbody");
+    const tableRows = tableBody.querySelectorAll("tr");
     const tableHeadHeaders = tableHead.querySelectorAll("th");
 
     tableHead.style.cursor = "pointer";
 
-    for (let [columnIndex, th] of tableHeadHeaders.entries("table")) {
+    for (let [columnIndex, th] of tableHeadHeaders.entries()) {
       let timesClickedColumn = 0;
 
       th.addEventListener("click", function () {
+        const columnData = [];
         timesClickedColumn += 1;
 
-        function getTableDataOnClick() {
-          const tableRows = tableBody.querySelectorAll("tr");
+        getTableData();
+        updateTable();
+
+        function updateTable() {
+          for (let [i, tr] of tableRows.entries()) {
+            tr.innerHTML = columnIndexAndTableRow[columnData[i]];
+          }
+        }
+
+        function getTableData() {
           for (let [i, tr] of tableRows.entries()) {
             let tdInnerHTML = tr.querySelectorAll('td').item(columnIndex).innerHTML;
             if (tdInnerHTML.trim() !== "") {
@@ -60,6 +69,7 @@ function tableSortJs() {
               columnIndexAndTableRow["!X!Y!Z!#" + i] = tr.innerHTML;
             }
           }
+
           function naturalSortAescending(a, b) {
             if (a.includes("X!Y!Z!#")) {
               return 1;
@@ -73,30 +83,30 @@ function tableSortJs() {
               );
             }
           }
+
           function naturalSortDescending(a, b) {
             return naturalSortAescending(b, a);
           }
 
           function clearArrows(arrowUp = "▲", arrowDown = "▼") {
-            let ifDownArrow = th.innerText.includes(arrowDown);
-            let ifUpArrow = th.innerText.includes(arrowUp);
-            if (ifDownArrow === true || ifUpArrow === true) {
-              th.innerText = th.innerText.replace(arrowUp, "");
-              th.innerText = th.innerText.replace(arrowDown, "");
-            }
+            th.innerText = th.innerText.replace(arrowUp, "");
+            th.innerText = th.innerText.replace(arrowDown, "");
           }
 
           let arrowUp = " ▲";
           let arrowDown = " ▼";
 
           // Sort naturally; default aescending unless th contains 'order-by-desc' as className.
-          if (typeof columnData[0] !== "undefined") {
-            originalColumnText = th.innerText;
-            if (
-              th.classList.contains("order-by-desc") &&
-              timesClickedColumn === 1
-            ) {
-              if (sortableTable.classList.contains("table-arrows")) {
+          if (columnData[0] === undefined) {
+            return;
+          }
+
+          let desc = th.classList.contains('order-by-desc');
+          let tableArrows = sortableTable.classList.contains('table-arrows');
+
+          if (timesClickedColumn === 1) {
+            if (desc) {
+              if (tableArrows) {
                 clearArrows(arrowUp, arrowDown);
                 th.insertAdjacentText("beforeend", arrowDown);
               }
@@ -104,11 +114,17 @@ function tableSortJs() {
                 numeric: true,
                 ignorePunctuation: true,
               });
-            } else if (
-              th.classList.contains("order-by-desc") &&
-              timesClickedColumn === 2
-            ) {
-              if (sortableTable.classList.contains("table-arrows")) {
+            } else {
+              if (tableArrows) {
+                clearArrows(arrowUp, arrowDown);
+                th.insertAdjacentText("beforeend", arrowUp);
+              }
+              columnData.sort(naturalSortAescending);
+            }
+          } else if (timesClickedColumn === 2) {
+            timesClickedColumn = 0;
+            if (desc) {
+              if (tableArrows) {
                 clearArrows(arrowUp, arrowDown);
                 th.insertAdjacentText("beforeend", arrowUp);
               }
@@ -116,33 +132,15 @@ function tableSortJs() {
                 numeric: true,
                 ignorePunctuation: true,
               });
-              timesClickedColumn = 0;
-            } else if (timesClickedColumn === 1) {
-              if (sortableTable.classList.contains("table-arrows")) {
-                clearArrows(arrowUp, arrowDown);
-                th.insertAdjacentText("beforeend", arrowUp);
-              }
-              columnData.sort(naturalSortAescending);
-            } else if (timesClickedColumn === 2) {
-              if (sortableTable.classList.contains("table-arrows")) {
+            } else {
+              if (tableArrows) {
                 clearArrows(arrowUp, arrowDown);
                 th.insertAdjacentText("beforeend", arrowDown);
               }
               columnData.sort(naturalSortDescending);
-              timesClickedColumn = 0;
             }
           }
         }
-        getTableDataOnClick();
-
-        function returnSortedTable() {
-          const tableRows = tableBody.querySelectorAll("tr");
-          for (let [i, tr] of tableRows.entries()) {
-            tr.innerHTML = columnIndexAndTableRow[columnData[i]];
-          }
-          columnData.length = 0;
-        }
-        returnSortedTable();
       });
     }
   }
