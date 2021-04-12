@@ -36,11 +36,12 @@ function tableSortJs() {
 
     const tableHead = sortableTable.querySelector("thead");
     const tableBody = sortableTable.querySelector("tbody");
+    const tableRows = tableBody.querySelectorAll("tr");
     const tableHeadHeaders = tableHead.querySelectorAll("th");
 
     tableHead.style.cursor = "pointer";
 
-    for (let [columnIndex, th] of tableHeadHeaders.entries("table")) {
+    for (let [columnIndex, th] of tableHeadHeaders.entries()) {
       let timesClickedColumn = 0;
 
       th.addEventListener("click", function () {
@@ -51,14 +52,12 @@ function tableSortJs() {
         updateTable();
 
         function updateTable() {
-          const tableRows = tableBody.querySelectorAll("tr");
           for (let [i, tr] of tableRows.entries()) {
             tr.innerHTML = columnIndexAndTableRow[columnData[i]];
           }
         }
 
         function getTableData() {
-          const tableRows = tableBody.querySelectorAll("tr");
           for (let [i, tr] of tableRows.entries()) {
             let tdInnerHTML = tr.querySelectorAll('td').item(columnIndex).innerHTML;
             if (tdInnerHTML.trim() !== "") {
