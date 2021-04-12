@@ -108,10 +108,11 @@ function tableSortJs() {
           originalColumnText = th.innerText;
 
           let desc = th.classList.contains('order-by-desc');
+          let tableArrows = sortableTable.classList.contains('table-arrows');
 
           if (timesClickedColumn === 1) {
             if (desc) {
-              if (sortableTable.classList.contains("table-arrows")) {
+              if (tableArrows) {
                 clearArrows(arrowUp, arrowDown);
                 th.insertAdjacentText("beforeend", arrowDown);
               }
@@ -121,7 +122,7 @@ function tableSortJs() {
                 ignorePunctuation: true,
               });
             } else {
-              if (sortableTable.classList.contains("table-arrows")) {
+              if (tableArrows) {
                 clearArrows(arrowUp, arrowDown);
                 th.insertAdjacentText("beforeend", arrowUp);
               }
@@ -130,7 +131,7 @@ function tableSortJs() {
             }
           } else if (timesClickedColumn === 2) {
             if (desc) {
-              if (sortableTable.classList.contains("table-arrows")) {
+              if (tableArrows) {
                 clearArrows(arrowUp, arrowDown);
                 th.insertAdjacentText("beforeend", arrowUp);
               }
@@ -140,7 +141,7 @@ function tableSortJs() {
                 ignorePunctuation: true,
               });
             } else {
-              if (sortableTable.classList.contains("table-arrows")) {
+              if (tableArrows) {
                 clearArrows(arrowUp, arrowDown);
                 th.insertAdjacentText("beforeend", arrowDown);
               }
