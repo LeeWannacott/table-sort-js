@@ -37,6 +37,7 @@ function tableSortJs() {
 
     tableHead.style.cursor = "pointer";
 
+    let columnIndexesClicked= [];
     for (let [columnIndex, th] of tableHeadHeaders.entries()) {
       let timesClickedColumn = 0;
 
@@ -44,8 +45,20 @@ function tableSortJs() {
 
         const tableRows = tableBody.querySelectorAll("tr");
         const columnData = [];
-        timesClickedColumn += 1;
 
+        // Checking if user has clicked different column from the first column if yes reset times clicked.
+        columnIndexesClicked.push(columnIndex);
+        if(timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
+          const lastColumnClicked = columnIndexesClicked[columnIndexesClicked.length -1];
+          const secondLastColumnClicked = columnIndexesClicked[columnIndexesClicked.length -2];
+          if(lastColumnClicked !== secondLastColumnClicked) {
+            timesClickedColumn = 0;
+            columnIndexesClicked.shift()
+            console.log(columnIndexesClicked)
+          }
+        }
+
+        timesClickedColumn += 1;
         getTableData();
         updateTable();
 
