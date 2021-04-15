@@ -54,7 +54,6 @@ function tableSortJs() {
           if(lastColumnClicked !== secondLastColumnClicked) {
             timesClickedColumn = 0;
             columnIndexesClicked.shift()
-            console.log(columnIndexesClicked)
           }
         }
 
