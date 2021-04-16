@@ -1,14 +1,14 @@
-![table-sort-js](https://img.shields.io/npm/v/table-sort-js)(https://www.npmjs.com/package/table-sort-js)
+![table-sort-js](https://img.shields.io/npm/v/table-sort-js)
 
 * Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
 
-* Demo: https://leewannacott.github.io/Portfolio/#/GitHub
+* Demo: https://leewannacott.github.io/Portfolio/#/GitHub.
 
-* Backend: `npm install table-sort-js` and `require("../node_modules/table-sort-js/table-sort.js")`
+* Backend: https://www.npmjs.com/package/table-sort-js.
 
 * Frontend: `<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>`
 
-* Instructions: Add class "table-sort" to HTML table tags. Click on column headers to sort.
+* Instructions: Add `class="table-sort"` to HTML table tags. Click on column headers to sort.
 
 Example:
 ```html
