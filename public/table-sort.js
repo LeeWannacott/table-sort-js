@@ -46,6 +46,32 @@ function tableSortJs() {
         const tableRows = tableBody.querySelectorAll("tr");
         const columnData = [];
 
+        // Handle filesize sorting (e.g KB, MB, GB, TB).
+        let isFileSize = th.classList.contains('file-size')
+        if(isFileSize) {
+            const numberWithUnitType = /[. 0-9]+(KB|MB|GB|TB)/i;
+            const unitType = /(KB|MB|GB|TB)/i;
+          for (let [i, tr] of tableRows.entries()) {
+            let fileSizeTd = tr.querySelectorAll('td').item(columnIndex).innerHTML
+            if (fileSizeTd.match(numberWithUnitType)){
+              if(fileSizeTd.match(/KB/i)){
+                fileSizeTd = fileSizeTd.replace(unitType,"");
+              } else if(fileSizeTd.match(/MB/i)){
+                fileSizeTd = fileSizeTd.replace(unitType,"");
+                fileSizeTd = fileSizeTd * 1000;
+              } else if(fileSizeTd.match(/GB/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType,"");
+                fileSizeTd =  fileSizeTd * 1e+6;
+              } else if(fileSizeTd.match(/TB/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType,"");
+                fileSizeTd =  fileSizeTd * 9e+9;
+              }
+              tr.querySelectorAll('td').item(columnIndex).innerHTML = fileSizeTd;
+            };
+          }
+        }
+
+
         // Checking if user has clicked different column from the first column if yes reset times clicked.
         columnIndexesClicked.push(columnIndex);
         if(timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
@@ -64,8 +90,27 @@ function tableSortJs() {
         function updateTable() {
           for (let [i, tr] of tableRows.entries()) {
             tr.innerHTML = columnIndexAndTableRow[columnData[i]];
+            // Add unit types for file-size e.g (KB,MB,GB,TB).
+            if(isFileSize){
+            let fileSizeKilobytes = tr.querySelectorAll('td').item(columnIndex).innerHTML;
+              if (fileSizeKilobytes.match(/[.0-9]/)){
+                if(fileSizeKilobytes < 1000){
+                    fileSizeKilobytes = fileSizeKilobytes + "KB";
+                  }else if(fileSizeKilobytes >= 1000){
+                    fileSizeKilobytes = (fileSizeKilobytes / 1000) + "MB";
+                  } else if(fileSizeKilobytes >= 1e+6){
+                    fileSizeKilobytes = (fileSizeKilobytes / 1e+6) + "GB";
+                  } else if(fileSizeKilobytes >= 1e+9){
+                    fileSizeKilobytes = (fileSizeKilobytes / 1e+9) + "TB";
+                  }
+                  tr.querySelectorAll('td').item(columnIndex).innerHTML = fileSizeKilobytes;
+                }
+              }
+            }
           }
-        }
+        
+        
+        
 
         function getTableData() {
           for (let [i, tr] of tableRows.entries()) {
