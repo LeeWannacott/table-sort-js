@@ -15,10 +15,9 @@ Instructions:
   Click on the table headers to sort them.
 */
 
-function tableSortJs() {
+function tableSortJs(doc = document) {
   const columnIndexAndTableRow = {};
-
-  for (let table of document.getElementsByTagName("table")) {
+  for (let table of doc.getElementsByTagName("table")) {
     if (table.classList.contains("table-sort")) {
       makeTableSortable(table);
     }
@@ -26,7 +25,7 @@ function tableSortJs() {
 
   function makeTableSortable(sortableTable) {
     if (sortableTable.getElementsByTagName("thead").length === 0) {
-      const the = document.createElement("thead");
+      const the = doc.createElement("thead");
       the.appendChild(sortableTable.rows[0]);
       sortableTable.insertBefore(the, sortableTable.firstChild);
     }
@@ -42,14 +41,13 @@ function tableSortJs() {
       let timesClickedColumn = 0;
 
       th.addEventListener("click", function () {
-
         const tableRows = tableBody.querySelectorAll("tr");
         const columnData = [];
 
         // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
         let isFileSize = th.classList.contains('file-size')
         if(isFileSize) {
-            const numberWithUnitType = /[. 0-9]+(KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+            const numberWithUnitType = /[.0-9]+(KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
             const unitType = /(KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
           for (let [i, tr] of tableRows.entries()) {
             let fileSizeTd = tr.querySelectorAll('td').item(columnIndex).innerHTML
@@ -105,7 +103,7 @@ function tableSortJs() {
             // Add unit types for file-size e.g (KiB,MiB,GiB,TiB).
             if(isFileSize){
             let fileSizeKibibytes= tr.querySelectorAll('td').item(columnIndex).innerHTML;
-              if (fileSizeKibibytes.match(/[.0-9]/)){
+              if (fileSizeKibibytes.match(/.[0-9]/)){
                 if(fileSizeKibibytes< 1024){
                     fileSizeKibibytes = parseFloat((fileSizeKibibytes)).toFixed(2) + "KiB";
                   } else if(fileSizeKibibytes>= 1024 && fileSizeKibibytes < 1.049e+6){
@@ -217,4 +215,7 @@ if (
   tableSortJs();
 } else if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", tableSortJs, false);
+}
+if (typeof module == 'object') {
+  module.exports = tableSortJs;
 }
