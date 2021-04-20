@@ -1,4 +1,4 @@
-![table-sort-js](https://img.shields.io/npm/v/table-sort-js)
+![table-sort-js](https://img.shields.io/npm/v/table-sort-js) ![table-sort-js](https://img.shields.io/github/workflow/status/leewannacott/table-sort-js/Jest%20CI%20-%20Automated%20testing%20of%20table%20sorting.?label=tests)
 
 * Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
 
