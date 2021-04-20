@@ -47,20 +47,20 @@ function tableSortJs(doc = document) {
         // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
         let isFileSize = th.classList.contains('file-size')
         if(isFileSize) {
-            const numberWithUnitType = /[.0-9]+(KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-            const unitType = /(KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+            const numberWithUnitType = /[.0-9]+(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+            const unitType = /(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
           for (let [i, tr] of tableRows.entries()) {
-            let fileSizeTd = tr.querySelectorAll('td').item(columnIndex).innerHTML
+            let fileSizeTd = tr.querySelectorAll('td').item(columnIndex).innerText
             if (fileSizeTd.match(numberWithUnitType)){
               if(fileSizeTd.match(/KB/i)){
                 fileSizeTd = fileSizeTd.replace(unitType,"");
                 fileSizeTd = fileSizeTd / 1.024;
               } else if(fileSizeTd.match(/KiB/i)){
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-              } else if(fileSizeTd.match(/MB/i)){
+              } else if(fileSizeTd.match(/MB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
                 fileSizeTd = fileSizeTd * 977;
-              } else if(fileSizeTd.match(/MiB/i)){
+              } else if(fileSizeTd.match(/MiB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
                 fileSizeTd = fileSizeTd * 1024;
               } else if(fileSizeTd.match(/GB/i)) {
@@ -75,8 +75,12 @@ function tableSortJs(doc = document) {
               } else if(fileSizeTd.match(/TiB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
                 fileSizeTd =  fileSizeTd * 1.074e+9;
+              } else if(fileSizeTd.match(/B/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType,"");
+                fileSizeTd =  fileSizeTd / 1024
               }
-              tr.querySelectorAll('td').item(columnIndex).innerHTML = fileSizeTd;
+              console.log(fileSizeTd)
+              tr.querySelectorAll('td').item(columnIndex).innerText= fileSizeTd;
             };
           }
         }
@@ -102,29 +106,28 @@ function tableSortJs(doc = document) {
             tr.innerHTML = columnIndexAndTableRow[columnData[i]];
             // Add unit types for file-size e.g (KiB,MiB,GiB,TiB).
             if(isFileSize){
-            let fileSizeKibibytes= tr.querySelectorAll('td').item(columnIndex).innerHTML;
-              if (fileSizeKibibytes.match(/.[0-9]/)){
-                if(fileSizeKibibytes< 1024){
+            let fileSizeKibibytes = tr.querySelectorAll('td').item(columnIndex).innerText;
+                if(fileSizeKibibytes < 1024){
                     fileSizeKibibytes = parseFloat((fileSizeKibibytes)).toFixed(2) + "KiB";
-                  } else if(fileSizeKibibytes>= 1024 && fileSizeKibibytes < 1.049e+6){
-                    fileSizeKibibytes = (fileSizeKibibytes / 977).toFixed(2) + "MiB";
+                  } else if(fileSizeKibibytes >= 1024 && fileSizeKibibytes < 1.049e+6){
+                    fileSizeKibibytes = (fileSizeKibibytes / 1024).toFixed(2) + "MiB";
                   } else if(fileSizeKibibytes >= 1.049e+6 && fileSizeKibibytes < 1.074e+9){
                     fileSizeKibibytes = (fileSizeKibibytes / 1.049e+6).toFixed(2) + "GiB";
                   } else if(fileSizeKibibytes >= 1.074e+9 < 1.1e+12){
                     fileSizeKibibytes = (fileSizeKibibytes /1.074e+9).toFixed(2) + "TiB";
                   }
-                  tr.querySelectorAll('td').item(columnIndex).innerHTML = fileSizeKibibytes;
-                }
+                  tr.querySelectorAll('td').item(columnIndex).innerText = fileSizeKibibytes;
               }
             }
           }
 
         function getTableData() {
           for (let [i, tr] of tableRows.entries()) {
-            let tdInnerHTML = tr.querySelectorAll('td').item(columnIndex).innerHTML;
-            if (tdInnerHTML.trim() !== "") {
-              columnData.push(tdInnerHTML+ '#' + i);
-              columnIndexAndTableRow[tdInnerHTML+ '#' + i] = tr.innerHTML;
+            // inner text for column we click on
+            let tdInnerText = tr.querySelectorAll('td').item(columnIndex).innerText;
+            if (tdInnerText.trim() !== "") {
+              columnData.push(tdInnerText + '#' + i);
+              columnIndexAndTableRow[tdInnerText + '#' + i] = tr.innerHTML;
             } else {
               // Fill in blank table cells dict key with filler value.
               columnData.push("!X!Y!Z!#" + i);
