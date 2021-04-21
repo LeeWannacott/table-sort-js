@@ -66,7 +66,7 @@ test("file-size", () => {
    expect(createTestTable(["20KB", "20GB", "20TB", "20Kib", "20MiB", "file-size"])).toStrictEqual([
       "19.53KiB",
       "20.00KiB",
-      "20.96MiB",
+      "20.00MiB",
       "18.62GiB",
       "18.19TiB",
    ]);
