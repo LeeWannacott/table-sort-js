@@ -50,7 +50,7 @@ function tableSortJs(doc = document) {
             const numberWithUnitType = /[.0-9]+(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
             const unitType = /(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
           for (let [i, tr] of tableRows.entries()) {
-            let fileSizeTd = tr.querySelectorAll('td').item(columnIndex).innerText
+            let fileSizeTd = tr.querySelectorAll('td').item(columnIndex).textContent
             if (fileSizeTd.match(numberWithUnitType)){
               if(fileSizeTd.match(/KB/i)){
                 fileSizeTd = fileSizeTd.replace(unitType,"");
@@ -79,8 +79,7 @@ function tableSortJs(doc = document) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
                 fileSizeTd =  fileSizeTd / 1024
               }
-              console.log(fileSizeTd)
-              tr.querySelectorAll('td').item(columnIndex).innerText= fileSizeTd;
+              tr.querySelectorAll('td').item(columnIndex).textContent = fileSizeTd;
             };
           }
         }
@@ -106,7 +105,7 @@ function tableSortJs(doc = document) {
             tr.innerHTML = columnIndexAndTableRow[columnData[i]];
             // Add unit types for file-size e.g (KiB,MiB,GiB,TiB).
             if(isFileSize){
-            let fileSizeKibibytes = tr.querySelectorAll('td').item(columnIndex).innerText;
+            let fileSizeKibibytes = tr.querySelectorAll('td').item(columnIndex).textContent;
                 if(fileSizeKibibytes < 1024){
                     fileSizeKibibytes = parseFloat((fileSizeKibibytes)).toFixed(2) + "KiB";
                   } else if(fileSizeKibibytes >= 1024 && fileSizeKibibytes < 1.049e+6){
@@ -116,7 +115,7 @@ function tableSortJs(doc = document) {
                   } else if(fileSizeKibibytes >= 1.074e+9 < 1.1e+12){
                     fileSizeKibibytes = (fileSizeKibibytes /1.074e+9).toFixed(2) + "TiB";
                   }
-                  tr.querySelectorAll('td').item(columnIndex).innerText = fileSizeKibibytes;
+                  tr.querySelectorAll('td').item(columnIndex).textContent = fileSizeKibibytes;
               }
             }
           }
@@ -124,15 +123,19 @@ function tableSortJs(doc = document) {
         function getTableData() {
           for (let [i, tr] of tableRows.entries()) {
             // inner text for column we click on
-            let tdInnerText = tr.querySelectorAll('td').item(columnIndex).innerText;
-            if (tdInnerText.trim() !== "") {
-              columnData.push(tdInnerText + '#' + i);
-              columnIndexAndTableRow[tdInnerText + '#' + i] = tr.innerHTML;
+            let tdTextContent = tr.querySelectorAll('td').item(columnIndex).textContent;
+            if(tdTextContent.length === 0){
+              tdTextContent = ""
+            }
+            if (tdTextContent.trim() !== "") {
+              columnData.push(tdTextContent + '#' + i);
+              columnIndexAndTableRow[tdTextContent + '#' + i] = tr.innerHTML;
             } else {
               // Fill in blank table cells dict key with filler value.
               columnData.push("!X!Y!Z!#" + i);
               columnIndexAndTableRow["!X!Y!Z!#" + i] = tr.innerHTML;
             }
+          
           }
 
           function naturalSortAescending(a, b) {
