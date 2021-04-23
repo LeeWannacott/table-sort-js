@@ -17,6 +17,7 @@ Instructions:
 
 function tableSortJs(doc = document) {
   const columnIndexAndTableRow = {};
+  const dictionaryFSTextkeyandHTMLValue = {};
   for (let table of doc.getElementsByTagName("table")) {
     if (table.classList.contains("table-sort")) {
       makeTableSortable(table);
@@ -54,33 +55,67 @@ function tableSortJs(doc = document) {
             if (fileSizeTd.match(numberWithUnitType)){
               if(fileSizeTd.match(/KB/i)){
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd / 1.024;
+                fileSizeTd = fileSizeTd.replace(fileSizeTd / 1.024)
+                columnData.push(fileSizeTd)
+
               } else if(fileSizeTd.match(/KiB/i)){
                 fileSizeTd = fileSizeTd.replace(unitType,"");
+                columnData.push(fileSizeTd)
+
               } else if(fileSizeTd.match(/MB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd * 977;
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * 977);
+                columnData.push(fileSizeTd)
+
               } else if(fileSizeTd.match(/MiB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd * 1024;
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * 1024);
+                columnData.push(fileSizeTd)
+
               } else if(fileSizeTd.match(/GB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd =  fileSizeTd * 976563;
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * 976563);
+                columnData.push(fileSizeTd)
+
               } else if(fileSizeTd.match(/GiB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd =  fileSizeTd * 1.049e+6;
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * 1.049e+6);
+                columnData.push(fileSizeTd)
+
               } else if(fileSizeTd.match(/TB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd =  fileSizeTd * 9.766e+8;
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * 9.766e+8);
+                columnData.push(fileSizeTd)
+
               } else if(fileSizeTd.match(/TiB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd =  fileSizeTd * 1.074e+9;
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * 1.074e+9);
+                columnData.push(fileSizeTd)
+
               } else if(fileSizeTd.match(/B/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd =  fileSizeTd / 1024
+                fileSizeTd =  fileSizeTd.replace(fileSizeTd, fileSizeTd / 1024)
+                console.log(fileSizeTd, "bytes")
+                columnData.push(fileSizeTd)
+              }else{
+                columnData.push("!X!Y!Z!#" + i);
               }
-              tr.querySelectorAll('td').item(columnIndex).textContent = fileSizeTd;
+              
             };
+
+            // if(isFileSize) {
+            // let fileSizeKibibytes = tr.querySelectorAll('td').item(columnIndex).innerHTML;
+            //     if(fileSizeKibibytes < 1024){
+            //         fileSizeKibibytes = `${parseFloat(fileSizeKibibytes).toFixed(2)}KiB`;
+            //       } else if(fileSizeKibibytes >= 1024 && fileSizeKibibytes < 1.049e+6){
+            //         fileSizeKibibytes = `${(fileSizeKibibytes / 1024).toFixed(2)}MiB`;
+            //       } else if(fileSizeKibibytes >= 1.049e+6 && fileSizeKibibytes < 1.074e+9){
+            //         fileSizeKibibytes = `${(fileSizeKibibytes / 1.049e+6).toFixed(2)}GiB`;
+            //       } else if(fileSizeKibibytes >= 1.074e+9 &&  fileSizeKibibytes < 1.1e+12){
+            //         fileSizeKibibytes = `${(fileSizeKibibytes /1.074e+9).toFixed(2)}TiB`;
+            //       }
+            //       tr.querySelectorAll('td').item(columnIndex).innerHTML = fileSizeKibibytes;
+            //   }
           }
         }
 
@@ -97,26 +132,32 @@ function tableSortJs(doc = document) {
         }
 
         timesClickedColumn += 1;
-        getTableData();
-        updateTable();
+
+          getTableData();
+          updateTable();
 
         function updateTable() {
           for (let [i, tr] of tableRows.entries()) {
-            tr.innerHTML = columnIndexAndTableRow[columnData[i]];
-            // Add unit types for file-size e.g (KiB,MiB,GiB,TiB).
             if(isFileSize){
-            let fileSizeKibibytes = tr.querySelectorAll('td').item(columnIndex).textContent;
-                if(fileSizeKibibytes < 1024){
-                    fileSizeKibibytes = parseFloat((fileSizeKibibytes)).toFixed(2) + "KiB";
-                  } else if(fileSizeKibibytes >= 1024 && fileSizeKibibytes < 1.049e+6){
-                    fileSizeKibibytes = (fileSizeKibibytes / 1024).toFixed(2) + "MiB";
-                  } else if(fileSizeKibibytes >= 1.049e+6 && fileSizeKibibytes < 1.074e+9){
-                    fileSizeKibibytes = (fileSizeKibibytes / 1.049e+6).toFixed(2) + "GiB";
-                  } else if(fileSizeKibibytes >= 1.074e+9 < 1.1e+12){
-                    fileSizeKibibytes = (fileSizeKibibytes /1.074e+9).toFixed(2) + "TiB";
+              tr.innerHTML = dictionaryFSTextkeyandHTMLValue[columnData[i]]
+              let fileSizeKibibytes = tr.querySelectorAll('td').item(columnIndex).innerHTML;
+              let fileSizeKibibytesText = tr.querySelectorAll('td').item(columnIndex).textContent;
+                if(columnData [i] < 1024){
+                    fileSizeKibibytes = fileSizeKibibytes.replace(fileSizeKibibytesText,`${parseFloat(columnData[i]).toFixed(2)}KiB`);
+                  } else if(columnData[i] >= 1024 && columnData[i] < 1.049e+6){
+                    fileSizeKibibytes = fileSizeKibibytes.replace(fileSizeKibibytesText,`${(columnData[i]/ 1024).toFixed(2)}MiB`);
+                  } else if(columnData[i] >= 1.049e+6 && columnData[i] < 1.074e+9){
+                    fileSizeKibibytes = fileSizeKibibytes.replace(fileSizeKibibytesText,`${(columnData[i]/ 1.049e+6).toFixed(2)}GiB`);
+                  } else if(columnData[i] >= 1.074e+9 && columnData[i] < 2.1e+12){
+                    fileSizeKibibytes = fileSizeKibibytes.replace(fileSizeKibibytesText,`${(columnData[i]/1.074e+9).toFixed(2)}TiB`);
+                  }else{
+                    fileSizeKibibytes = fileSizeKibibytes.replace(fileSizeKibibytesText,`NaN`);
                   }
-                  tr.querySelectorAll('td').item(columnIndex).textContent = fileSizeKibibytes;
-              }
+                tr.querySelectorAll('td').item(columnIndex).innerHTML= fileSizeKibibytes;
+            } else if (!isFileSize) {
+              tr.innerHTML = columnIndexAndTableRow[columnData[i]];
+            }
+            // Add unit types for file-size e.g (KiB,MiB,GiB,TiB).
             }
           }
 
@@ -128,15 +169,20 @@ function tableSortJs(doc = document) {
               tdTextContent = ""
             }
             if (tdTextContent.trim() !== "") {
+            if(!isFileSize){
               columnData.push(tdTextContent + '#' + i);
               columnIndexAndTableRow[tdTextContent + '#' + i] = tr.innerHTML;
+            } else if (isFileSize){
+              dictionaryFSTextkeyandHTMLValue[columnData[i]] = tr.innerHTML
+            }
+            
             } else {
               // Fill in blank table cells dict key with filler value.
               columnData.push("!X!Y!Z!#" + i);
               columnIndexAndTableRow["!X!Y!Z!#" + i] = tr.innerHTML;
+              }
             }
           
-          }
 
           function naturalSortAescending(a, b) {
             if (a.includes("X!Y!Z!#")) {
