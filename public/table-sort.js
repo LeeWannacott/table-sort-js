@@ -37,7 +37,7 @@ function tableSortJs(doc = document) {
 
     tableHead.style.cursor = "pointer";
 
-    let columnIndexesClicked= [];
+    let columnIndexesClicked = [];
     for (let [columnIndex, th] of tableHeadHeaders.entries()) {
       let timesClickedColumn = 0;
 
@@ -45,134 +45,199 @@ function tableSortJs(doc = document) {
         const tableRows = tableBody.querySelectorAll("tr");
         const columnData = [];
         // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
-        let isFileSize = th.classList.contains('file-size')
-        if(isFileSize) {
-            const numberWithUnitType = /[.0-9]+(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-            const unitType = /(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-            const fileSizes = { Kibibyte:1024, Mebibyte:1.049e+6, Gibibyte:1.074e+9, Tebibyte:1.1e+12, Pebibyte:1.126e+15,
-              Kilobyte: 1000, Megabyte:1e+6,Gigabyte:1e+9, Terabyte: 1e+12,
-            }
+        let isFileSize = th.classList.contains("file-size");
+        if (isFileSize) {
+          const numberWithUnitType = /[.0-9]+(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|\s?GiB|T\s?B|\s?TiB)/i;
+          const unitType = /(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|G\s?iB|\s?TB|\s?TiB)/i;
+          const fileSizes = {
+            Kibibyte: 1024,
+            Mebibyte: 1.049e6,
+            Gibibyte: 1.074e9,
+            Tebibyte: 1.1e12,
+            Pebibyte: 1.126e15,
+            Kilobyte: 1000,
+            Megabyte: 1e6,
+            Gigabyte: 1e9,
+            Terabyte: 1e12,
+          };
           for (let [i, tr] of tableRows.entries()) {
-            let fileSizeTd = tr.querySelectorAll('td').item(columnIndex).textContent
-            if (fileSizeTd.match(numberWithUnitType)){
-              if(fileSizeTd.match(/KB/i)){
-                fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Kilobyte)
-                columnData.push(fileSizeTd)
-
-              } else if(fileSizeTd.match(/KiB/i)){
-                fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Kibibyte);
-                columnData.push(fileSizeTd)
-
-              } else if(fileSizeTd.match(/MB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Megabyte);
-                columnData.push(fileSizeTd)
-
-              } else if(fileSizeTd.match(/MiB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Mebibyte);
-                columnData.push(fileSizeTd)
-
-              } else if(fileSizeTd.match(/GB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Gigabyte);
-                columnData.push(fileSizeTd)
-
-              } else if(fileSizeTd.match(/GiB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd *fileSizes.Gibibyte);
-                columnData.push(fileSizeTd)
-
-              } else if(fileSizeTd.match(/TB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Terabyte);
-                columnData.push(fileSizeTd)
-
-              } else if(fileSizeTd.match(/TiB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Tebibyte);
-                columnData.push(fileSizeTd)
-
-              } else if(fileSizeTd.match(/B/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType,"");
-                columnData.push(fileSizeTd)
-              }else{
-                columnData.push("!X!Y!Z!#" + i);
+            let fileSizeTd = tr.querySelectorAll("td").item(columnIndex)
+              .textContent;
+            if (fileSizeTd.match(numberWithUnitType)) {
+              if (fileSizeTd.match(/\s?KB/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType, "");
+                fileSizeTd = fileSizeTd.replace(
+                  fileSizeTd,
+                  fileSizeTd * fileSizes.Kilobyte
+                );
+                columnData.push(fileSizeTd);
+              } else if (fileSizeTd.match(/\s?KiB/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType, "");
+                fileSizeTd = fileSizeTd.replace(
+                  fileSizeTd,
+                  fileSizeTd * fileSizes.Kibibyte
+                );
+                columnData.push(fileSizeTd);
+              } else if (fileSizeTd.match(/\s?MB/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType, "");
+                fileSizeTd = fileSizeTd.replace(
+                  fileSizeTd,
+                  fileSizeTd * fileSizes.Megabyte
+                );
+                columnData.push(fileSizeTd);
+              } else if (fileSizeTd.match(/\s?MiB/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType, "");
+                fileSizeTd = fileSizeTd.replace(
+                  fileSizeTd,
+                  fileSizeTd * fileSizes.Mebibyte
+                );
+                columnData.push(fileSizeTd);
+              } else if (fileSizeTd.match(/\s?GB/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType, "");
+                fileSizeTd = fileSizeTd.replace(
+                  fileSizeTd,
+                  fileSizeTd * fileSizes.Gigabyte
+                );
+                columnData.push(fileSizeTd);
+              } else if (fileSizeTd.match(/\s?GiB/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType, "");
+                fileSizeTd = fileSizeTd.replace(
+                  fileSizeTd,
+                  fileSizeTd * fileSizes.Gibibyte
+                );
+                columnData.push(fileSizeTd);
+              } else if (fileSizeTd.match(/\s?TB/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType, "");
+                fileSizeTd = fileSizeTd.replace(
+                  fileSizeTd,
+                  fileSizeTd * fileSizes.Terabyte
+                );
+                columnData.push(fileSizeTd);
+              } else if (fileSizeTd.match(/\s?TiB/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType, "");
+                fileSizeTd = fileSizeTd.replace(
+                  fileSizeTd,
+                  fileSizeTd * fileSizes.Tebibyte
+                );
+                columnData.push(fileSizeTd);
+              } else if (fileSizeTd.match(/\s?B/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType, "");
+                columnData.push(fileSizeTd);
               }
-              
-            };
+            } else {
+              columnData.push("!X!Y!Z!#" + i);
+            }
           }
         }
 
-
         // Checking if user has clicked different column from the first column if yes reset times clicked.
         columnIndexesClicked.push(columnIndex);
-        if(timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
-          const lastColumnClicked = columnIndexesClicked[columnIndexesClicked.length -1];
-          const secondLastColumnClicked = columnIndexesClicked[columnIndexesClicked.length -2];
-          if(lastColumnClicked !== secondLastColumnClicked) {
+        if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
+          const lastColumnClicked =
+            columnIndexesClicked[columnIndexesClicked.length - 1];
+          const secondLastColumnClicked =
+            columnIndexesClicked[columnIndexesClicked.length - 2];
+          if (lastColumnClicked !== secondLastColumnClicked) {
             timesClickedColumn = 0;
-            columnIndexesClicked.shift()
+            columnIndexesClicked.shift();
           }
         }
 
         timesClickedColumn += 1;
 
-          getTableData();
-          updateTable();
+        getTableData();
+        updateTable();
 
         function updateTable() {
           for (let [i, tr] of tableRows.entries()) {
-            if(isFileSize){
-              tr.innerHTML = fileSizeColumnTextAndRow[columnData[i]]
-              let fileSizeInBytesHTML = tr.querySelectorAll('td').item(columnIndex).innerHTML;
-              let fileSizeInBytesText = tr.querySelectorAll('td').item(columnIndex).textContent;
-              const fileSizes = { Kibibyte:1024, Mebibyte:1.049e+6, Gibibyte:1.074e+9, Tebibyte:1.1e+12, Pebibyte:1.126e+15,}
-                if(columnData [i] < fileSizes.Kibibyte){
-                    fileSizeInBytesHTML = fileSizeInBytesHTML.replace(fileSizeInBytesText,`${parseFloat(columnData[i]).toFixed(2)}B`);
-                  } else if(columnData[i] >= fileSizes.Kibibyte && columnData[i] < fileSizes.Mebibyte){
-                    fileSizeInBytesHTML = fileSizeInBytesHTML.replace(fileSizeInBytesText,`${(columnData[i]/fileSizes.Kibibyte).toFixed(2)}KiB`);
-                  } else if(columnData[i] >= fileSizes.Mebibyte && columnData[i] < fileSizes.Gibibyte){
-                    fileSizeInBytesHTML = fileSizeInBytesHTML.replace(fileSizeInBytesText,`${(columnData[i]/fileSizes.Mebibyte).toFixed(2)}MiB`);
-                  } else if(columnData[i] >= fileSizes.Gibibyte && columnData[i] < fileSizes.Tebibyte){
-                    fileSizeInBytesHTML = fileSizeInBytesHTML.replace(fileSizeInBytesText,`${(columnData[i]/fileSizes.Gibibyte).toFixed(2)}GiB`);
-                  } else if(columnData[i] >= fileSizes.Tebibyte && columnData[i] < fileSizes.Pebibyte){
-                    fileSizeInBytesHTML = fileSizeInBytesHTML.replace(fileSizeInBytesText,`${(columnData[i]/fileSizes.Tebibyte).toFixed(2)}TiB`);
-                  }else{
-                    fileSizeInBytesHTML = fileSizeInBytesHTML.replace(fileSizeInBytesText,`NaN`);
-                  }
-                tr.querySelectorAll('td').item(columnIndex).innerHTML= fileSizeInBytesHTML;
+            if (isFileSize) {
+              tr.innerHTML = fileSizeColumnTextAndRow[columnData[i]];
+              let fileSizeInBytesHTML = tr
+                .querySelectorAll("td")
+                .item(columnIndex).innerHTML;
+              let fileSizeInBytesText = tr
+                .querySelectorAll("td")
+                .item(columnIndex).textContent;
+              const fileSizes = {
+                Kibibyte: 1024,
+                Mebibyte: 1.049e6,
+                Gibibyte: 1.074e9,
+                Tebibyte: 1.1e12,
+                Pebibyte: 1.126e15,
+              };
+              if (columnData[i] < fileSizes.Kibibyte) {
+                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                  fileSizeInBytesText,
+                  `${parseFloat(columnData[i]).toFixed(2)} B`
+                );
+              } else if (
+                columnData[i] >= fileSizes.Kibibyte &&
+                columnData[i] < fileSizes.Mebibyte
+              ) {
+                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                  fileSizeInBytesText,
+                  `${(columnData[i] / fileSizes.Kibibyte).toFixed(2)} KiB`
+                );
+              } else if (
+                columnData[i] >= fileSizes.Mebibyte &&
+                columnData[i] < fileSizes.Gibibyte
+              ) {
+                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                  fileSizeInBytesText,
+                  `${(columnData[i] / fileSizes.Mebibyte).toFixed(2)} MiB`
+                );
+              } else if (
+                columnData[i] >= fileSizes.Gibibyte &&
+                columnData[i] < fileSizes.Tebibyte
+              ) {
+                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                  fileSizeInBytesText,
+                  `${(columnData[i] / fileSizes.Gibibyte).toFixed(2)} GiB`
+                );
+              } else if (
+                columnData[i] >= fileSizes.Tebibyte &&
+                columnData[i] < fileSizes.Pebibyte
+              ) {
+                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                  fileSizeInBytesText,
+                  `${(columnData[i] / fileSizes.Tebibyte).toFixed(2)} TiB`
+                );
+              } else {
+                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                  fileSizeInBytesText,
+                  "NaN"
+                );
+              }
+              tr
+                .querySelectorAll("td")
+                .item(columnIndex).innerHTML = fileSizeInBytesHTML;
             } else if (!isFileSize) {
               tr.innerHTML = columnIndexAndTableRow[columnData[i]];
             }
-            // Add unit types for file-size e.g (KiB,MiB,GiB,TiB).
-            }
           }
+        }
 
         function getTableData() {
           for (let [i, tr] of tableRows.entries()) {
             // inner text for column we click on
-            let tdTextContent = tr.querySelectorAll('td').item(columnIndex).textContent;
-            if(tdTextContent.length === 0){
-              tdTextContent = ""
+            let tdTextContent = tr.querySelectorAll("td").item(columnIndex)
+              .textContent;
+            if (tdTextContent.length === 0) {
+              tdTextContent = "";
             }
             if (tdTextContent.trim() !== "") {
-            if(!isFileSize){
-              columnData.push(tdTextContent + '#' + i);
-              columnIndexAndTableRow[tdTextContent + '#' + i] = tr.innerHTML;
-            } else if (isFileSize){
-              fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML
-            }
-            
+              if (!isFileSize) {
+                columnData.push(tdTextContent + "#" + i);
+                columnIndexAndTableRow[tdTextContent + "#" + i] = tr.innerHTML;
+              } else if (isFileSize) {
+                fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
+              }
             } else {
               // Fill in blank table cells dict key with filler value.
               columnData.push("!X!Y!Z!#" + i);
               columnIndexAndTableRow["!X!Y!Z!#" + i] = tr.innerHTML;
-              }
             }
-          
+          }
 
           function naturalSortAescending(a, b) {
             if (a.includes("X!Y!Z!#")) {
@@ -205,8 +270,8 @@ function tableSortJs(doc = document) {
             return;
           }
 
-          let desc = th.classList.contains('order-by-desc');
-          let tableArrows = sortableTable.classList.contains('table-arrows');
+          let desc = th.classList.contains("order-by-desc");
+          let tableArrows = sortableTable.classList.contains("table-arrows");
 
           if (timesClickedColumn === 1) {
             if (desc) {
@@ -258,6 +323,6 @@ if (
 } else if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", tableSortJs, false);
 }
-if (typeof module == 'object') {
+if (typeof module == "object") {
   module.exports = tableSortJs;
 }
