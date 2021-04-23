@@ -17,7 +17,7 @@ Instructions:
 
 function tableSortJs(doc = document) {
   const columnIndexAndTableRow = {};
-  const dictionaryFSTextkeyandHTMLValue = {};
+  const fileSizeColumnTextAndRow = {};
   for (let table of doc.getElementsByTagName("table")) {
     if (table.classList.contains("table-sort")) {
       makeTableSortable(table);
@@ -44,78 +44,65 @@ function tableSortJs(doc = document) {
       th.addEventListener("click", function () {
         const tableRows = tableBody.querySelectorAll("tr");
         const columnData = [];
-
         // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
         let isFileSize = th.classList.contains('file-size')
         if(isFileSize) {
             const numberWithUnitType = /[.0-9]+(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
             const unitType = /(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+            const fileSizes = { Kibibyte:1024, Mebibyte:1.049e+6, Gibibyte:1.074e+9, Tebibyte:1.1e+12, Pebibyte:1.126e+15,
+              Kilobyte: 1000, Megabyte:1e+6,Gigabyte:1e+9, Terabyte: 1e+12,
+            }
           for (let [i, tr] of tableRows.entries()) {
             let fileSizeTd = tr.querySelectorAll('td').item(columnIndex).textContent
             if (fileSizeTd.match(numberWithUnitType)){
               if(fileSizeTd.match(/KB/i)){
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd / 1.024)
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Kilobyte)
                 columnData.push(fileSizeTd)
 
               } else if(fileSizeTd.match(/KiB/i)){
                 fileSizeTd = fileSizeTd.replace(unitType,"");
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Kibibyte);
                 columnData.push(fileSizeTd)
 
               } else if(fileSizeTd.match(/MB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * 977);
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Megabyte);
                 columnData.push(fileSizeTd)
 
               } else if(fileSizeTd.match(/MiB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * 1024);
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Mebibyte);
                 columnData.push(fileSizeTd)
 
               } else if(fileSizeTd.match(/GB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * 976563);
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Gigabyte);
                 columnData.push(fileSizeTd)
 
               } else if(fileSizeTd.match(/GiB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * 1.049e+6);
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd *fileSizes.Gibibyte);
                 columnData.push(fileSizeTd)
 
               } else if(fileSizeTd.match(/TB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * 9.766e+8);
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Terabyte);
                 columnData.push(fileSizeTd)
 
               } else if(fileSizeTd.match(/TiB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * 1.074e+9);
+                fileSizeTd = fileSizeTd.replace(fileSizeTd,fileSizeTd * fileSizes.Tebibyte);
                 columnData.push(fileSizeTd)
 
               } else if(fileSizeTd.match(/B/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType,"");
-                fileSizeTd =  fileSizeTd.replace(fileSizeTd, fileSizeTd / 1024)
-                console.log(fileSizeTd, "bytes")
                 columnData.push(fileSizeTd)
               }else{
                 columnData.push("!X!Y!Z!#" + i);
               }
               
             };
-
-            // if(isFileSize) {
-            // let fileSizeKibibytes = tr.querySelectorAll('td').item(columnIndex).innerHTML;
-            //     if(fileSizeKibibytes < 1024){
-            //         fileSizeKibibytes = `${parseFloat(fileSizeKibibytes).toFixed(2)}KiB`;
-            //       } else if(fileSizeKibibytes >= 1024 && fileSizeKibibytes < 1.049e+6){
-            //         fileSizeKibibytes = `${(fileSizeKibibytes / 1024).toFixed(2)}MiB`;
-            //       } else if(fileSizeKibibytes >= 1.049e+6 && fileSizeKibibytes < 1.074e+9){
-            //         fileSizeKibibytes = `${(fileSizeKibibytes / 1.049e+6).toFixed(2)}GiB`;
-            //       } else if(fileSizeKibibytes >= 1.074e+9 &&  fileSizeKibibytes < 1.1e+12){
-            //         fileSizeKibibytes = `${(fileSizeKibibytes /1.074e+9).toFixed(2)}TiB`;
-            //       }
-            //       tr.querySelectorAll('td').item(columnIndex).innerHTML = fileSizeKibibytes;
-            //   }
           }
         }
 
@@ -139,21 +126,24 @@ function tableSortJs(doc = document) {
         function updateTable() {
           for (let [i, tr] of tableRows.entries()) {
             if(isFileSize){
-              tr.innerHTML = dictionaryFSTextkeyandHTMLValue[columnData[i]]
-              let fileSizeKibibytes = tr.querySelectorAll('td').item(columnIndex).innerHTML;
-              let fileSizeKibibytesText = tr.querySelectorAll('td').item(columnIndex).textContent;
-                if(columnData [i] < 1024){
-                    fileSizeKibibytes = fileSizeKibibytes.replace(fileSizeKibibytesText,`${parseFloat(columnData[i]).toFixed(2)}KiB`);
-                  } else if(columnData[i] >= 1024 && columnData[i] < 1.049e+6){
-                    fileSizeKibibytes = fileSizeKibibytes.replace(fileSizeKibibytesText,`${(columnData[i]/ 1024).toFixed(2)}MiB`);
-                  } else if(columnData[i] >= 1.049e+6 && columnData[i] < 1.074e+9){
-                    fileSizeKibibytes = fileSizeKibibytes.replace(fileSizeKibibytesText,`${(columnData[i]/ 1.049e+6).toFixed(2)}GiB`);
-                  } else if(columnData[i] >= 1.074e+9 && columnData[i] < 2.1e+12){
-                    fileSizeKibibytes = fileSizeKibibytes.replace(fileSizeKibibytesText,`${(columnData[i]/1.074e+9).toFixed(2)}TiB`);
+              tr.innerHTML = fileSizeColumnTextAndRow[columnData[i]]
+              let fileSizeInBytesHTML = tr.querySelectorAll('td').item(columnIndex).innerHTML;
+              let fileSizeInBytesText = tr.querySelectorAll('td').item(columnIndex).textContent;
+              const fileSizes = { Kibibyte:1024, Mebibyte:1.049e+6, Gibibyte:1.074e+9, Tebibyte:1.1e+12, Pebibyte:1.126e+15,}
+                if(columnData [i] < fileSizes.Kibibyte){
+                    fileSizeInBytesHTML = fileSizeInBytesHTML.replace(fileSizeInBytesText,`${parseFloat(columnData[i]).toFixed(2)}B`);
+                  } else if(columnData[i] >= fileSizes.Kibibyte && columnData[i] < fileSizes.Mebibyte){
+                    fileSizeInBytesHTML = fileSizeInBytesHTML.replace(fileSizeInBytesText,`${(columnData[i]/fileSizes.Kibibyte).toFixed(2)}KiB`);
+                  } else if(columnData[i] >= fileSizes.Mebibyte && columnData[i] < fileSizes.Gibibyte){
+                    fileSizeInBytesHTML = fileSizeInBytesHTML.replace(fileSizeInBytesText,`${(columnData[i]/fileSizes.Mebibyte).toFixed(2)}MiB`);
+                  } else if(columnData[i] >= fileSizes.Gibibyte && columnData[i] < fileSizes.Tebibyte){
+                    fileSizeInBytesHTML = fileSizeInBytesHTML.replace(fileSizeInBytesText,`${(columnData[i]/fileSizes.Gibibyte).toFixed(2)}GiB`);
+                  } else if(columnData[i] >= fileSizes.Tebibyte && columnData[i] < fileSizes.Pebibyte){
+                    fileSizeInBytesHTML = fileSizeInBytesHTML.replace(fileSizeInBytesText,`${(columnData[i]/fileSizes.Tebibyte).toFixed(2)}TiB`);
                   }else{
-                    fileSizeKibibytes = fileSizeKibibytes.replace(fileSizeKibibytesText,`NaN`);
+                    fileSizeInBytesHTML = fileSizeInBytesHTML.replace(fileSizeInBytesText,`NaN`);
                   }
-                tr.querySelectorAll('td').item(columnIndex).innerHTML= fileSizeKibibytes;
+                tr.querySelectorAll('td').item(columnIndex).innerHTML= fileSizeInBytesHTML;
             } else if (!isFileSize) {
               tr.innerHTML = columnIndexAndTableRow[columnData[i]];
             }
@@ -173,7 +163,7 @@ function tableSortJs(doc = document) {
               columnData.push(tdTextContent + '#' + i);
               columnIndexAndTableRow[tdTextContent + '#' + i] = tr.innerHTML;
             } else if (isFileSize){
-              dictionaryFSTextkeyandHTMLValue[columnData[i]] = tr.innerHTML
+              fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML
             }
             
             } else {
