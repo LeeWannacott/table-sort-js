@@ -15,10 +15,22 @@ Instructions:
   Click on the table headers to sort them.
 */
 
-function tableSortJs(doc = document) {
+function tableSortJs(test = false, domDocumentWindow = document) {
+  function checkIfTesting() {
+    if (test === true) {
+      const getTagTable = domDocumentWindow.getElementsByTagName("table");
+      const createTableHead = domDocumentWindow.createElement("thead");
+      return [getTagTable, createTableHead];
+    } else {
+      const getTagTable = document.getElementsByTagName("table");
+      const createTableHead = document.createElement("thead");
+      return [getTagTable, createTableHead];
+    }
+  }
+  const [getTagTable, createTableHead] = checkIfTesting();
   const columnIndexAndTableRow = {};
   const fileSizeColumnTextAndRow = {};
-  for (let table of doc.getElementsByTagName("table")) {
+  for (let table of getTagTable) {
     if (table.classList.contains("table-sort")) {
       makeTableSortable(table);
     }
@@ -26,7 +38,7 @@ function tableSortJs(doc = document) {
 
   function makeTableSortable(sortableTable) {
     if (sortableTable.getElementsByTagName("thead").length === 0) {
-      const the = doc.createElement("thead");
+      createTableHead;
       the.appendChild(sortableTable.rows[0]);
       sortableTable.insertBefore(the, sortableTable.firstChild);
     }
@@ -34,7 +46,6 @@ function tableSortJs(doc = document) {
     const tableHead = sortableTable.querySelector("thead");
     const tableBody = sortableTable.querySelector("tbody");
     const tableHeadHeaders = tableHead.querySelectorAll("th");
-
     tableHead.style.cursor = "pointer";
 
     let columnIndexesClicked = [];

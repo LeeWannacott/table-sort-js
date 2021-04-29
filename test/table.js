@@ -32,7 +32,7 @@ function createTestTable(testTableData, classTags="") {
   </html>`);
 
   // Call tablesort and make table sortable and simulate click from a user.
-  tableSortJs(dom.window.document);
+  tableSortJs(test=true,dom.window.document);
   dom.window.document.querySelector("table th").click();
 
   // Make an array from table contents to test if sorted correctly.
