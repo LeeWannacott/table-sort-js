@@ -9,14 +9,15 @@
 
 * Demo: https://leewannacott.github.io/Portfolio/#/GitHub.
 
-* Backend: https://www.npmjs.com/package/table-sort-js.
+* NPM: https://www.npmjs.com/package/table-sort-js.
 
-* Frontend: `<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>`
+* Script: `<script src="table-sort.js"></script>`
 
 * Instructions: Add `class="table-sort"` to HTML table tags. Click on column headers to sort.
 
 Example:
 ```html
+<-- Download table-sort.js from: "https://leewannacott.github.io/table-sort-js/table-sort.js" -->
 <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
 <table class="table-sort">
         <thead>
