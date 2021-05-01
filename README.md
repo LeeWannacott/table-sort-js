@@ -17,7 +17,7 @@
 
 Example:
 ```html
-<-- Download table-sort.js from: "https://leewannacott.github.io/table-sort-js/table-sort.js" -->
+<-- Download: "https://leewannacott.github.io/table-sort-js/table-sort.js" -->
 <script src="table-sort.js"></script>
 <table class="table-sort">
         <thead>
