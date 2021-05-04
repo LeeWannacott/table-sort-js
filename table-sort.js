@@ -81,62 +81,62 @@ function tableSortJs(test = false, domDocumentWindow = document) {
                   fileSizeTd,
                   fileSizeTd * fileSizes.Kilobyte
                 );
-                columnData.push(fileSizeTd);
+                columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?KiB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType, "");
                 fileSizeTd = fileSizeTd.replace(
                   fileSizeTd,
                   fileSizeTd * fileSizes.Kibibyte
                 );
-                columnData.push(fileSizeTd);
+                columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?MB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType, "");
                 fileSizeTd = fileSizeTd.replace(
                   fileSizeTd,
                   fileSizeTd * fileSizes.Megabyte
                 );
-                columnData.push(fileSizeTd);
+                columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?MiB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType, "");
                 fileSizeTd = fileSizeTd.replace(
                   fileSizeTd,
                   fileSizeTd * fileSizes.Mebibyte
                 );
-                columnData.push(fileSizeTd);
+                columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?GB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType, "");
                 fileSizeTd = fileSizeTd.replace(
                   fileSizeTd,
                   fileSizeTd * fileSizes.Gigabyte
                 );
-                columnData.push(fileSizeTd);
+                columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?GiB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType, "");
                 fileSizeTd = fileSizeTd.replace(
                   fileSizeTd,
                   fileSizeTd * fileSizes.Gibibyte
                 );
-                columnData.push(fileSizeTd);
+                columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?TB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType, "");
                 fileSizeTd = fileSizeTd.replace(
                   fileSizeTd,
                   fileSizeTd * fileSizes.Terabyte
                 );
-                columnData.push(fileSizeTd);
+                columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?TiB/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType, "");
                 fileSizeTd = fileSizeTd.replace(
                   fileSizeTd,
                   fileSizeTd * fileSizes.Tebibyte
                 );
-                columnData.push(fileSizeTd);
+                columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?B/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType, "");
-                columnData.push(fileSizeTd);
+                columnData.push(`${fileSizeTd}#${i}`);
               }
             } else {
-              columnData.push("!X!Y!Z!#" + i);
+              columnData.push(`!X!Y!Z!#${i}`);
             }
           }
         }
@@ -176,6 +176,8 @@ function tableSortJs(test = false, domDocumentWindow = document) {
                 Tebibyte: 1.1e12,
                 Pebibyte: 1.126e15,
               };
+              // Remove the unique identifyer for duplicate values(#number).
+              columnData[i] = columnData[i].replace(/#[0-9]*/,"");
               if (columnData[i] < fileSizes.Kibibyte) {
                 fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
                   fileSizeInBytesText,
@@ -238,15 +240,15 @@ function tableSortJs(test = false, domDocumentWindow = document) {
             }
             if (tdTextContent.trim() !== "") {
               if (!isFileSize) {
-                columnData.push(tdTextContent + "#" + i);
-                columnIndexAndTableRow[tdTextContent + "#" + i] = tr.innerHTML;
+                columnData.push(`${tdTextContent}#${i}`);
+                columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
               } else if (isFileSize) {
                 fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
               }
             } else {
               // Fill in blank table cells dict key with filler value.
-              columnData.push("!X!Y!Z!#" + i);
-              columnIndexAndTableRow["!X!Y!Z!#" + i] = tr.innerHTML;
+              columnData.push(`!X!Y!Z!#${i}`);
+              columnIndexAndTableRow[`!X!Y!Z!#${i}`] = tr.innerHTML;
             }
           }
 

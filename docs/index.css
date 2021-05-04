@@ -45,8 +45,22 @@ body{
   display: block;
 }
 
+.wrapper .sidebar ul li a .fab{
+  width: 25px;
+}
+.wrapper .sidebar ul li a .far{
+  width: 25px;
+}
 .wrapper .sidebar ul li a .fas{
   width: 25px;
+}
+
+pre code {
+  border: 1px solid #999;
+  display: block;
+  padding: 20px;
+  padding-bottom:1px;
+  margin-bottom:-30px;
 }
 
 .wrapper .sidebar ul li:hover{
@@ -79,7 +93,7 @@ body{
 }
 
 .wrapper .main_content{
-  width: 100%;
+  width: 90%;
   margin-left: 200px;
 }
 
@@ -100,3 +114,30 @@ body{
   margin-bottom: 20px;
 }
 
+.table{
+  width: 80%;
+}
+
+#classes-table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#classes-table td, #classes-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#classes-table tr:nth-child(even){background-color: #f2f2f2;}
+
+/*#classes-table tr:hover {background-color: #ddd;}*/
+
+#classes-table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color:#002b36;
+  color: white;
+  white-space: nowrap;
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>table-sort-js : React Example</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <link href="assets/solarized-dark.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <script src="assets/rainbow.js"></script>
+    <div class="wrapper">
+      <div class="sidebar">
+        <h2>table-sort-js</h2>
+        <ul style="font-size: 1em">
+          <li>
+            <a href="about.html"><i class="far fa-clipboard fa-fw"></i>About</a>
+          </li>
+          <li>
+            <a href="demo.html"><i class="fas fa-table fa-fw"></i>Demo</a>
+          </li>
+          <li>
+            <a href="classes.html"
+              ><i class="fas fa-chalkboard-teacher"></i>Classes</a
+            >
+          </li>
+          <li>
+            <a href="html5.html"
+              ><i class="fab fa-html5 fa-fw"></i>HTML Example</a
+            >
+          </li>
+          <li>
+            <a href="react.html"
+              ><i class="fab fa-react fa-fw"></i>ReactJS Example</a
+            >
+          </li>
+          <li>
+            <a href="angular.html"
+              ><i class="fab fa-angular fa-fw"></i>Angular Example</a
+            >
+          </li>
+          <li>
+            <a href="vue.html"
+              ><i class="fab fa-vuejs fa-fw"></i>VueJS Example</a
+            >
+          </li>
+          <li>
+            <a href="development.html"
+              ><i class="fas fa-file-code fa-fw"></i>Development</a
+            >
+          </li>
+        </ul>
+        <div class="social_media">
+          <a
+            href="https://github.com/LeeWannacott/table-sort-js"
+            target="_blank"
+            ><i class="fab fa-github"></i
+          ></a>
+          <a href="https://www.npmjs.com/package/table-sort-js" target="_blank"
+            ><i class="fab fa-npm"></i
+          ></a>
+        </div>
+      </div>
+      <div class="main_content">
+        <div class="header">Example of how to use table-sort.js in a ReactJS application.</div>
+        <div class="info">
+          Download with NPM:
+          <code style="background-color:#839496;color:white;padding-top:3px"
+            >npm install table-sort-js</code
+          >
+        </div>
+
+        <pre><code data-language="js">
+import React, { Component } from "react";
+import tableSort from "table-sort-js/table-sort.js";
+export class App extends Component {
+  componentDidMount() {
+    tableSort()
+    }
+    render(){
+      return(
+      &lt;div&gt;
+      &lt;table className="table-sort"&gt;
+          &lt;thead&gt;
+              &lt;tr&gt;
+                  &lt;th&gt;Alphabet&lt;/th&gt;
+                  &lt;th className="order-by-desc"&gt;Order&lt;/th&gt;
+              &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody&gt;
+                  &lt;td&gt;
+                      &lt;td&gt;Alpha&lt;/td&gt;
+                      &lt;td&gt;1&lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                      &lt;td&gt;Bravo&lt;/td&gt;
+                      &lt;td&gt;2&lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                      &lt;td&gt;Charlie&lt;/td&gt;
+                      &lt;td&gt;3&lt;/td&gt;
+                  &lt;/tr&gt;
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+        &lt;/div&gt;
+      );
+    }
+  }
+export default App;
+        </code>
+        </pre>
+        <div class="info">
+          Option 2: Download table-sort-js from
+          <a
+            href="https://leewannacott.github.io/table-sort-js/table-sort.js"
+            target="_blank"
+            >table-sort.js</a
+          >
+          (Select option save as.)
+        </div>
+
+        <pre><code data-language="js">
+import React, { Component } from "react";
+export class App extends Component {
+  componentDidMount() {
+        const script = document.createElement("script");
+        script.src = "table-sort.js";
+        script.async = true;
+        document.body.appendChild(script);
+    }
+    render(){
+      return(
+      &lt;div&gt;
+      &lt;table className="table-sort"&gt;
+          &lt;thead&gt;
+              &lt;tr&gt;
+                  &lt;th&gt;Alphabet&lt;/th&gt;
+                  &lt;th className="order-by-desc"&gt;Order&lt;/th&gt;
+              &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody&gt;
+                  &lt;td&gt;
+                      &lt;td&gt;Alpha&lt;/td&gt;
+                      &lt;td&gt;1&lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                      &lt;td&gt;Bravo&lt;/td&gt;
+                      &lt;td&gt;2&lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                      &lt;td&gt;Charlie&lt;/td&gt;
+                      &lt;td&gt;3&lt;/td&gt;
+                  &lt;/tr&gt;
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+        &lt;/div&gt;
+      );
+    }
+  }
+export default App;
+        </code>
+        </pre>
+      </div>
+    </div>
+  </body>
+</html>

@@ -2,11 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>table-sort-js : documentation</title>
+    <title>table-sort-js : HTML Example.</title>
     <link rel="stylesheet" href="index.css" />
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <link href="assets/solarized-dark.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
+    <script src="assets/rainbow.js"></script>
     <div class="wrapper">
       <div class="sidebar">
         <h2>table-sort-js</h2>
@@ -60,9 +62,45 @@
         </div>
       </div>
       <div class="main_content">
-        <div class="header"></div>
-        <div class="info">
+        <div class="header">
+          Example of how to use table-sort-js with basic HTML.
         </div>
+        <div class="info">
+          Download: <a
+            href="https://leewannacott.github.io/table-sort-js/table-sort.js"
+            target="_blank">table-sort.js
+            </a> (Select option save as.)
+        </div>
+        <pre><code data-language="html">
+        &lt;script src="table-sort.js"&gt;&lt;/script&gt;
+          &lt;table class="table-sort"&gt;
+            &lt;thead&gt;
+              &lt;tr&gt;
+                &lt;th&gt;Last Name&lt;/th&gt;
+                &lt;th&gt;First Name&lt;/th&gt;
+                &lt;th class="order-by-desc"&gt;Birth Date&lt;/th&gt;
+              &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+              &lt;tr&gt;
+                &lt;td&gt;Franklin&lt;/td&gt;
+                &lt;td&gt;Benjamin&lt;/td&gt;
+                &lt;td&gt;1706/1/17&lt;/td&gt;
+              &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td&gt;Carnegie&lt;/td&lt;
+                &lt;td&gt;Andew&lt;/td&lt;
+                &lt;td&gt;1835/11/25&lt;/td&lt;
+              &lt;/tr&gt;
+              &lt;tr&gt;
+                &lt;td&gt;Twain&lt;/td&lt;
+                &lt;td&gt;Mark&lt;/td&lt;
+                &lt;td&gt;1835/11/30&lt;/td&gt;
+              &lt;/tr&gt;
+            &lt;/tbody&gt;
+          &lt;/table&gt;
+        </code>
+        </pre>
       </div>
     </div>
   </body>
