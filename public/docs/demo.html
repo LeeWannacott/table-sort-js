@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>table-sort-js : documentation</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <script src="../table-sort.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="sidebar">
+        <h2>table-sort-js</h2>
+        <ul style="font-size: 1em">
+          <li>
+            <a href="about.html"><i class="far fa-clipboard fa-fw"></i>About</a>
+          </li>
+          <li>
+            <a href="demo.html"><i class="fas fa-table fa-fw"></i>Demo</a>
+          </li>
+          <li>
+            <a href="classes.html"
+              ><i class="fas fa-chalkboard-teacher"></i>Classes</a
+            >
+          </li>
+          <li>
+            <a href="html5.html"
+              ><i class="fab fa-html5 fa-fw"></i>HTML Example</a
+            >
+          </li>
+          <li>
+            <a href="react.html"
+              ><i class="fab fa-react fa-fw"></i>ReactJS Example</a
+            >
+          </li>
+          <li>
+            <a href="angular.html"
+              ><i class="fab fa-angular fa-fw"></i>Angular Example</a
+            >
+          </li>
+          <li>
+            <a href="vue.html"
+              ><i class="fab fa-vuejs fa-fw"></i>VueJS Example</a
+            >
+          </li>
+          <li>
+            <a href="development.html"
+              ><i class="fas fa-file-code fa-fw"></i>Development</a
+            >
+          </li>
+        </ul>
+        <div class="social_media">
+          <a
+            href="https://github.com/LeeWannacott/table-sort-js"
+            target="_blank"
+            ><i class="fab fa-github"></i
+          ></a>
+          <a href="https://www.npmjs.com/package/table-sort-js" target="_blank"
+            ><i class="fab fa-npm"></i
+          ></a>
+        </div>
+      </div>
+      <div class="main_content">
+        <div class="header">Demo tables showing off what table-sort-js can sort
+          and features.</div>
+        <div class="info">
+          <table class="table table-sort" id="classes-table" style="width: 100%">
+            <thead>
+            <tr>
+              <th>Names</th>
+              <th>Numbers</th>
+              <th>Floating Point</th>
+              <th>Money</th>
+              <th>Dates</th>
+              <th>Release version</th>
+              <th class="file-size order-by-desc">File-size</th>
+            </tr>
+            </thead>
+            <tr>
+              <td>Malcom</td>
+              <td>405</td>
+              <td>81.98</td>
+              <td>$400.23</td>
+              <td>2023/5/23</td>
+              <td>1.23.12</td>
+              <td>10GiB</td>
+            </tr>
+            <tr>
+              <td>Bernie</td>
+              <td>2922</td>
+              <td>72.33</td>
+              <td>$63.23</td>
+              <td>2014/8/28</td>
+              <td>1.28.12</td>
+              <td>10MB</td>
+            </tr>
+            <tr>
+              <td>Doris</td>
+              <td>3232</td>
+              <td>29.953</td>
+              <td>$19.23</td>
+              <td>2014/8/30</td>
+              <td>1.23.32</td>
+              <td>10tb</td>
+            </tr>
+            <tr>
+              <td>Harry</td>
+              <td>4</td>
+              <td>83.93</td>
+              <td>$102.33</td>
+              <td>1893/8/13</td>
+              <td>2.23.12</td>
+              <td>10B</td>
+            </tr>
+              <td>Walter</td>
+              <td>29</td>
+              <td>2345.23</td>
+              <td>$17.83</td>
+              <td>1645/8/18</td>
+              <td>1.23.12</td>
+              <td>10GB</td>
+            </tr>
+            <tr>
+              <td>Ben</td>
+              <td>222</td>
+              <td>42.743</td>
+              <td>$630.33</td>
+              <td>1972/3/12</td>
+              <td>1.28.12</td>
+              <td>2000B</td>
+            </tr>
+            <tr>
+              <td>Roy</td>
+              <td>302</td>
+              <td>903.933</td>
+              <td>$19.82</td>
+              <td>1942/12/23</td>
+              <td>1.23.32</td>
+              <td>1000tb</td>
+            </tr>
+            <tr>
+              <td>Juan</td>
+              <td>84</td>
+              <td>982.743</td>
+              <td>$1920.59</td>
+              <td>1924/5/23</td>
+              <td>2.23.12</td>
+              <td>blank</td>
+            </tr>
+            </tr>
+              <td>Joe</td>
+              <td>23</td>
+              <td>9834.943</td>
+              <td>$13.23</td>
+              <td>2023/5/23</td>
+              <td>3.18.12</td>
+              <td>10 KiB</td>
+            </tr>
+            <tr>
+              <td>Johnny</td>
+              <td>42</td>
+              <td>138.943</td>
+              <td>$13.93</td>
+              <td>1923.5.13</td>
+              <td>5.7.72</td>
+              <td>10 MiB</td>
+            </tr>
+            <tr>
+              <td>Marilyn</td>
+              <td>420</td>
+              <td>234.953</td>
+              <td>$18.23</td>
+              <td>1923-7-23</td>
+              <td>2.3.33</td>
+              <td>1000MB</td>
+            </tr>
+            <tr>
+              <td>Richard</td>
+              <td>69</td>
+              <td>3832.23</td>
+              <td>$102.89</td>
+              <td>1733,08,31</td>
+              <td>4.1.12</td>
+              <td>10TiB</td>
+            </tr>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
