@@ -230,6 +230,59 @@ test("Release Versions: order-by-desc", () => {
   ).toStrictEqual(["4.2.0", "4.1.0", "4.0.1", "3.0.4", "3.0.2"]);
 });
 
+test("Expects week begins at Monday.", () => {
+  expect(
+    createTestTable(
+      [
+        "Saturday",
+        "Wednesday",
+        "Sunday",
+        "Friday",
+        "Thursday",
+        "Tuesday",
+        "Monday",
+      ], "days-of-week"
+    )
+  ).toStrictEqual([
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ]);
+});
+
+test("Expects week begins at Monday: order-by-desc", () => {
+  expect(
+    createTestTable(
+      [
+        "Saturday",
+        "Wednesday",
+        "Sunday",
+        "Friday",
+        "Thursday",
+        "Tuesday",
+        "Monday",
+      ], "days-of-week order-by-desc"
+    )
+  ).toStrictEqual([
+    "Sunday",
+    "Saturday",
+    "Friday",
+    "Thursday",
+    "Wednesday",
+    "Tuesday",
+    "Monday",
+  ]);
+});
+
+// test("Day of the weeks. order-by-desc", () =
+// expect(
+// createTestTable([])
+// ).toStrictEqual([]);
+// });
 // Tests For Sorting not yet implemented
 // test("Sizes", () => {
 //    expect(createTestTable(["xs", "lg", "sm", "md", "xlg"])).toStrictEqual([
