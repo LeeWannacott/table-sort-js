@@ -9,7 +9,7 @@
 - Description: A JavaScript client-side HTML table sorting library with no dependencies required.
 
 - [Demo](https://leewannacott.github.io/Portfolio/#/GitHub)
-- [Documentation.](https://leewannacott.github.io/TABLE-SORT-JS/docs/about.html)
+- [Documentation.](https://leewannacott.github.io/table-sort-js/docs/about.html)
   (work in progress)
 - [npm package.](https://www.npmjs.com/package/table-sort-js)
 ## Install instructions - pick one option.
@@ -19,16 +19,16 @@
 ```javascript
 import tableSort from "table-sort-js/table-sort.js";
 ```
-Refer to the documentation for examples on using TABLE-SORT-JS with frontend frameworks such as
-[ReactJS.](https://leewannacott.github.io/TABLE-SORT-JS/docs/react.html)
+Refer to the documentation for examples on using table-sort-js with frontend frameworks such as
+[ReactJS.](https://leewannacott.github.io/table-sort-js/docs/react.html)
 
-2. [Download table-sort.js](https://leewannacott.github.io/TABLE-SORT-JS/table-sort.js) (Select save as.)
+2. [Download table-sort.js](https://leewannacott.github.io/table-sort-js/table-sort.js) (Select save as.)
 
 Then add the following script before your HTML table: 
 ```html
 <script src="table-sort.js"></script>
 ```
-Refer to the documenation for examples how to use TABLE-SORT-JS with [HTML.](https://leewannacott.github.io/TABLE-SORT-JS/docs/html5.html)
+Refer to the documenation for examples how to use table-sort-js with [HTML.](https://leewannacott.github.io/table-sort-js/docs/html5.html)
 #### To make a table sortable: 
 - Add `class="table-sort"` to HTML &lt;table&gt; tags. Click on the columns heads to sort.
 
