@@ -10,7 +10,7 @@
 }
 
 body{
-   background-color: #f3f5f9;
+  background-color:#073642;
 }
 
 .wrapper{
@@ -82,7 +82,7 @@ pre code {
 .wrapper .sidebar .social_media a{
   display: block;
   width: 40px;
-  background: #594f8d;
+  background: #052028;
   height: 40px;
   line-height: 45px;
   text-align: center;
@@ -95,18 +95,21 @@ pre code {
 .wrapper .main_content{
   width: 90%;
   margin-left: 200px;
+  background-color:#073642;
+  color:white;
 }
 
 .wrapper .main_content .header{
   padding: 20px;
-  background: #fff;
-  color: #717171;
-  border-bottom: 1px solid #e0e4e8;
+  background: #052028;
 }
 
 .wrapper .main_content .info{
   margin: 2em;
   color: #212121;
+  background-color:#073642;
+  color:white;
+  
 }
 .bullet-point{
   list-style-type: disc;
@@ -116,10 +119,18 @@ pre code {
 
 .wrapper .main_content .info div{
   margin-bottom: 20px;
+  background-color:#255957;
 }
 
-.table{
+.table {
   width: 80%;
+}
+.a {
+  color: #268bd2;
+}
+
+a:visited {
+  color: #6c71c4;
 }
 
 #classes-table {
@@ -133,7 +144,6 @@ pre code {
   padding: 8px;
 }
 
-#classes-table tr:nth-child(even){background-color: #f2f2f2;}
 
 /*#classes-table tr:hover {background-color: #ddd;}*/
 
@@ -141,7 +151,7 @@ pre code {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color:#002b36;
+  background-color:#052028;
   color: white;
   white-space: nowrap;
 }
