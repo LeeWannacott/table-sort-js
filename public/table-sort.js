@@ -109,65 +109,43 @@ function tableSortJs(test = false, domDocumentWindow = document) {
             Gigabyte: 1e9,
             Terabyte: 1e12,
           };
+
+          function removeUnitTypeConvertToBytes(fileSizeTd, _replace) {
+            fileSizeTd = fileSizeTd.replace(unitType, "");
+            fileSizeTd = fileSizeTd.replace(
+              fileSizeTd,
+              fileSizeTd * fileSizes[_replace]
+            );
+            return fileSizeTd;
+          }
+
           for (let [i, tr] of tableRows.entries()) {
             let fileSizeTd = tr.querySelectorAll("td").item(columnIndex)
               .textContent;
             if (fileSizeTd.match(numberWithUnitType)) {
               if (fileSizeTd.match(/\s?KB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Kilobyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Kilobyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?KiB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Kibibyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Kibibyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?MB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Megabyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Megabyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?MiB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Mebibyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Mebibyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?GB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Gigabyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Gigabyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?GiB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Gibibyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Gibibyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?TB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Terabyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Terabyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?TiB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Tebibyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Tebibyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?B/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType, "");
