@@ -9,7 +9,7 @@ Demo: https://leewannacott.github.io/Portfolio/#/GitHub
 Install:
 Frontend: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script> or
 Download this file and add <script src="table-sort.js"></script> to your HTML 
-Backend: npm install table-sort-js and use require("../node_modules/table-sort-js/table-sort.js") 
+Backend: npm install table-sort-js and use import tableSort from "table-sort-js/table-sort.js";
 Instructions:
   Add class="table-sort" to tables you'd like to make sortable
   Click on the table headers to sort them.
@@ -39,11 +39,15 @@ function tableSortJs(test = false, domDocumentWindow = document) {
   function makeTableSortable(sortableTable) {
     if (sortableTable.getElementsByTagName("thead").length === 0) {
       createTableHead;
-      the.appendChild(sortableTable.rows[0]);
-      sortableTable.insertBefore(the, sortableTable.firstChild);
+      console.log(createTableHead)
+      createTableHead.appendChild(sortableTable.rows[0]);
+      console.log(createTableHead)
+      sortableTable.insertBefore(createTableHead, sortableTable.firstChild);
+      console.log(sortableTable)
     }
 
     const tableHead = sortableTable.querySelector("thead");
+    console.log(tableHead)
     const tableBody = sortableTable.querySelector("tbody");
     const tableHeadHeaders = tableHead.querySelectorAll("th");
     tableHead.style.cursor = "pointer";
@@ -55,6 +59,44 @@ function tableSortJs(test = false, domDocumentWindow = document) {
       th.addEventListener("click", function () {
         const tableRows = tableBody.querySelectorAll("tr");
         const columnData = [];
+
+          let isDayOfWeek = th.classList.contains("days-of-week");
+          if (isDayOfWeek) {
+            const day = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thur|Fri|Sat|Sun)/i;
+            const dayOfWeek = {
+              Monday: 1,
+              Tuesday: 2,
+              Wednesday: 3,
+              Thursday: 4,
+              Friday: 5,
+              Saturday: 6,
+              Sunday: 7,
+            };
+            for (let [i, tr] of tableRows.entries()) {
+              const dayOfWeekTd = tr.querySelectorAll("td").item(columnIndex)
+                .textContent;
+              if (dayOfWeekTd.match(day)) {
+                if (dayOfWeekTd.match(/Monday|Mon/i)) {
+                  columnData.push(`${dayOfWeek.Monday}#${i}`);
+                } else if (dayOfWeekTd.match(/Tuesday|Tue/i)) {
+                  columnData.push(`${dayOfWeek.Tuesday}#${i}`)
+                } else if (dayOfWeekTd.match(/Wednesday|Wed/i)) {
+                  columnData.push(`${dayOfWeek.Wednesday}#${i}`)
+                } else if (dayOfWeekTd.match(/Thursday|Thur/i)) {
+                  columnData.push(`${dayOfWeek.Thursday}#${i}`)
+                } else if (dayOfWeekTd.match(/Friday|Fri/i)) {
+                  columnData.push(`${dayOfWeek.Friday}#${i}`)
+                } else if (dayOfWeekTd.match(/Saturday|Sat/i)) {
+                  columnData.push(`${dayOfWeek.Saturday}#${i}`);
+                } else if (dayOfWeekTd.match(/Sunday|Sun/i)) {
+                  columnData.push(`${dayOfWeek.Sunday}#${i}`);
+                }
+              } else {
+                columnData.push(`!X!Y!Z!#${i}`);
+              }
+            }
+          }
+
         // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
         let isFileSize = th.classList.contains("file-size");
         if (isFileSize) {
@@ -140,7 +182,6 @@ function tableSortJs(test = false, domDocumentWindow = document) {
             }
           }
         }
-
         // Checking if user has clicked different column from the first column if yes reset times clicked.
         columnIndexesClicked.push(columnIndex);
         if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
@@ -177,7 +218,7 @@ function tableSortJs(test = false, domDocumentWindow = document) {
                 Pebibyte: 1.126e15,
               };
               // Remove the unique identifyer for duplicate values(#number).
-              columnData[i] = columnData[i].replace(/#[0-9]*/,"");
+              columnData[i] = columnData[i].replace(/#[0-9]*/, "");
               if (columnData[i] < fileSizes.Kibibyte) {
                 fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
                   fileSizeInBytesText,
@@ -239,11 +280,14 @@ function tableSortJs(test = false, domDocumentWindow = document) {
               tdTextContent = "";
             }
             if (tdTextContent.trim() !== "") {
-              if (!isFileSize) {
+              if (isFileSize) {
+                fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
+              } 
+              if (isDayOfWeek) {
+                columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
+              } if (!isFileSize && !isDayOfWeek) {
                 columnData.push(`${tdTextContent}#${i}`);
                 columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
-              } else if (isFileSize) {
-                fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
               }
             } else {
               // Fill in blank table cells dict key with filler value.
