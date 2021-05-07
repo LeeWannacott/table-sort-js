@@ -34,10 +34,11 @@ Refer to the documenation for examples how to use table-sort-js with [HTML.](htt
 
 #### Classes:
 
-| table classes  | Description                                      |
-| -------------- | ------------------------------------------------ |
-| "table-sort"   | Make the table sortable! (Words, numbers, dates) |
-| "table-arrows" | Display ascending or descending triangle.        |
+| table classes  | Description                                                                             |
+| -------------- | ------------------------------------------------                                        |
+| "table-sort"   | Make the table sortable! (Words, numbers, dates)                                        |
+| "table-arrows" | Display ascending or descending triangles.                                              |
+| "remember-sort"| If clicking on different columns remembers sort of the original column.                 |
 
 | th classes      | Description                                                 |
 | --------------- | ----------------------------------------------------------- |
