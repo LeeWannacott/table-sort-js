@@ -9,7 +9,7 @@ Demo: https://leewannacott.github.io/Portfolio/#/GitHub
 Install:
 Frontend: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script> or
 Download this file and add <script src="table-sort.js"></script> to your HTML 
-Backend: npm install table-sort-js and use import tableSort from "table-sort-js/table-sort.js";
+Backend: npm install table-sort-js and use require("../node_modules/table-sort-js/table-sort.js") 
 Instructions:
   Add class="table-sort" to tables you'd like to make sortable
   Click on the table headers to sort them.
@@ -39,15 +39,11 @@ function tableSortJs(test = false, domDocumentWindow = document) {
   function makeTableSortable(sortableTable) {
     if (sortableTable.getElementsByTagName("thead").length === 0) {
       createTableHead;
-      console.log(createTableHead)
-      createTableHead.appendChild(sortableTable.rows[0]);
-      console.log(createTableHead)
-      sortableTable.insertBefore(createTableHead, sortableTable.firstChild);
-      console.log(sortableTable)
+      the.appendChild(sortableTable.rows[0]);
+      sortableTable.insertBefore(the, sortableTable.firstChild);
     }
 
     const tableHead = sortableTable.querySelector("thead");
-    console.log(tableHead)
     const tableBody = sortableTable.querySelector("tbody");
     const tableHeadHeaders = tableHead.querySelectorAll("th");
     tableHead.style.cursor = "pointer";
@@ -60,42 +56,42 @@ function tableSortJs(test = false, domDocumentWindow = document) {
         const tableRows = tableBody.querySelectorAll("tr");
         const columnData = [];
 
-          let isDayOfWeek = th.classList.contains("days-of-week");
-          if (isDayOfWeek) {
-            const day = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thur|Fri|Sat|Sun)/i;
-            const dayOfWeek = {
-              Monday: 1,
-              Tuesday: 2,
-              Wednesday: 3,
-              Thursday: 4,
-              Friday: 5,
-              Saturday: 6,
-              Sunday: 7,
-            };
-            for (let [i, tr] of tableRows.entries()) {
-              const dayOfWeekTd = tr.querySelectorAll("td").item(columnIndex)
-                .textContent;
-              if (dayOfWeekTd.match(day)) {
-                if (dayOfWeekTd.match(/Monday|Mon/i)) {
-                  columnData.push(`${dayOfWeek.Monday}#${i}`);
-                } else if (dayOfWeekTd.match(/Tuesday|Tue/i)) {
-                  columnData.push(`${dayOfWeek.Tuesday}#${i}`)
-                } else if (dayOfWeekTd.match(/Wednesday|Wed/i)) {
-                  columnData.push(`${dayOfWeek.Wednesday}#${i}`)
-                } else if (dayOfWeekTd.match(/Thursday|Thur/i)) {
-                  columnData.push(`${dayOfWeek.Thursday}#${i}`)
-                } else if (dayOfWeekTd.match(/Friday|Fri/i)) {
-                  columnData.push(`${dayOfWeek.Friday}#${i}`)
-                } else if (dayOfWeekTd.match(/Saturday|Sat/i)) {
-                  columnData.push(`${dayOfWeek.Saturday}#${i}`);
-                } else if (dayOfWeekTd.match(/Sunday|Sun/i)) {
-                  columnData.push(`${dayOfWeek.Sunday}#${i}`);
-                }
-              } else {
-                columnData.push(`!X!Y!Z!#${i}`);
+        let isDayOfWeek = th.classList.contains("days-of-week");
+        if (isDayOfWeek) {
+          const day = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thur|Fri|Sat|Sun)/i;
+          const dayOfWeek = {
+            Monday: 1,
+            Tuesday: 2,
+            Wednesday: 3,
+            Thursday: 4,
+            Friday: 5,
+            Saturday: 6,
+            Sunday: 7,
+          };
+          for (let [i, tr] of tableRows.entries()) {
+            const dayOfWeekTd = tr.querySelectorAll("td").item(columnIndex)
+              .textContent;
+            if (dayOfWeekTd.match(day)) {
+              if (dayOfWeekTd.match(/Monday|Mon/i)) {
+                columnData.push(`${dayOfWeek.Monday}#${i}`);
+              } else if (dayOfWeekTd.match(/Tuesday|Tue/i)) {
+                columnData.push(`${dayOfWeek.Tuesday}#${i}`);
+              } else if (dayOfWeekTd.match(/Wednesday|Wed/i)) {
+                columnData.push(`${dayOfWeek.Wednesday}#${i}`);
+              } else if (dayOfWeekTd.match(/Thursday|Thur/i)) {
+                columnData.push(`${dayOfWeek.Thursday}#${i}`);
+              } else if (dayOfWeekTd.match(/Friday|Fri/i)) {
+                columnData.push(`${dayOfWeek.Friday}#${i}`);
+              } else if (dayOfWeekTd.match(/Saturday|Sat/i)) {
+                columnData.push(`${dayOfWeek.Saturday}#${i}`);
+              } else if (dayOfWeekTd.match(/Sunday|Sun/i)) {
+                columnData.push(`${dayOfWeek.Sunday}#${i}`);
               }
+            } else {
+              columnData.push(`!X!Y!Z!#${i}`);
             }
           }
+        }
 
         // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
         let isFileSize = th.classList.contains("file-size");
@@ -113,65 +109,43 @@ function tableSortJs(test = false, domDocumentWindow = document) {
             Gigabyte: 1e9,
             Terabyte: 1e12,
           };
+
+          function removeUnitTypeConvertToBytes(fileSizeTd, _replace) {
+            fileSizeTd = fileSizeTd.replace(unitType, "");
+            fileSizeTd = fileSizeTd.replace(
+              fileSizeTd,
+              fileSizeTd * fileSizes[_replace]
+            );
+            return fileSizeTd;
+          }
+
           for (let [i, tr] of tableRows.entries()) {
             let fileSizeTd = tr.querySelectorAll("td").item(columnIndex)
               .textContent;
             if (fileSizeTd.match(numberWithUnitType)) {
               if (fileSizeTd.match(/\s?KB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Kilobyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Kilobyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?KiB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Kibibyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Kibibyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?MB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Megabyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Megabyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?MiB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Mebibyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Mebibyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?GB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Gigabyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Gigabyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?GiB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Gibibyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Gibibyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?TB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Terabyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Terabyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?TiB/i)) {
-                fileSizeTd = fileSizeTd.replace(unitType, "");
-                fileSizeTd = fileSizeTd.replace(
-                  fileSizeTd,
-                  fileSizeTd * fileSizes.Tebibyte
-                );
+                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Tebibyte')
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?B/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType, "");
@@ -182,16 +156,20 @@ function tableSortJs(test = false, domDocumentWindow = document) {
             }
           }
         }
+
+        let isRememberSort = sortableTable.classList.contains("remember-sort");
         // Checking if user has clicked different column from the first column if yes reset times clicked.
-        columnIndexesClicked.push(columnIndex);
-        if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
-          const lastColumnClicked =
-            columnIndexesClicked[columnIndexesClicked.length - 1];
-          const secondLastColumnClicked =
-            columnIndexesClicked[columnIndexesClicked.length - 2];
-          if (lastColumnClicked !== secondLastColumnClicked) {
-            timesClickedColumn = 0;
-            columnIndexesClicked.shift();
+        if (!isRememberSort) {
+          columnIndexesClicked.push(columnIndex);
+          if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
+            const lastColumnClicked =
+              columnIndexesClicked[columnIndexesClicked.length - 1];
+            const secondLastColumnClicked =
+              columnIndexesClicked[columnIndexesClicked.length - 2];
+            if (lastColumnClicked !== secondLastColumnClicked) {
+              timesClickedColumn = 0;
+              columnIndexesClicked.shift();
+            }
           }
         }
 
@@ -282,10 +260,11 @@ function tableSortJs(test = false, domDocumentWindow = document) {
             if (tdTextContent.trim() !== "") {
               if (isFileSize) {
                 fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
-              } 
+              }
               if (isDayOfWeek) {
                 columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
-              } if (!isFileSize && !isDayOfWeek) {
+              }
+              if (!isFileSize && !isDayOfWeek) {
                 columnData.push(`${tdTextContent}#${i}`);
                 columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
               }
