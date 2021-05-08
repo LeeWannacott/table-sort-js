@@ -49,3 +49,6 @@ Refer to the documenation for examples how to use table-sort-js with [HTML.](htt
 
 - Makes use of natural sorting to sort numerical values correctly.
 - If `<thead>` does not exist it will be created by using data from first row. `<tbody>` is optional.
+
+#### Development:
+If you wish to contribute, install instructions can be found [here.](https://leewannacott.github.io/table-sort-js/docs/development.html)
