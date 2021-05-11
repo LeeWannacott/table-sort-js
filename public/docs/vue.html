@@ -2,15 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>table-sort-js : documentation</title>
+    <title>table-sort-js : Vue Example</title>
     <link rel="stylesheet" href="index.css" />
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <link href="assets/solarized-dark.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
+    <script src="assets/rainbow.js"></script>
     <div class="wrapper">
       <div class="sidebar">
         <h2>table-sort-js</h2>
-        <ul style="font-size: 1em">
+        <ul style="font-size: 1rem">
           <li>
             <a href="about.html"><i class="far fa-clipboard fa-fw"></i>About</a>
           </li>
@@ -60,9 +62,98 @@
         </div>
       </div>
       <div class="main_content">
-        <div class="header"></div>
-        <div class="info">
+        <div class="header">
+          Example of how to use table-sort.js in a Vue application. You need to have Vue CLI or Webpack (with Vue Loader). For more information on Vue CLI and/or Webpack, please see their respective documentation! The code below should get things working..
         </div>
+        <div class="info" style="text-align:left">
+          Download with NPM:
+          <code
+            style="background-color: #839496; color: white; padding-top: 3px"
+            >npm install table-sort-js -g</code
+          >
+          <br>
+        </div>
+        <li style="text-align: center">
+          Insert this code block into your entry point JavaScript file like main.js
+        </li>
+        <pre><code style="font-size:1rem" data-language="js">
+          import Vue from 'vue'
+          import App from './App'
+          import tableSort from 'table-sort-js/table-sort.js';
+
+          Vue.config.productionTip = false
+          Vue.use(tableSort)
+
+
+          new Vue({
+            render: h => h(App),
+          }).$mount('#app')
+        </code>
+        </pre>
+        <li style="text-align: center">
+          Insert this markup into your html
+        </li>
+        <pre><code style="font-size:1rem; margin-bottom:10px" data-language="html">
+          &lt;!DOCTYPE html&gt;
+          &lt;html&gt;
+
+          &lt;head&gt;
+            &lt;meta charset="utf-8"&gt;
+            &lt;meta name="viewport" content="width=device-width,initial-scale=1.0"&gt;
+            &lt;title>Table-Sort-JS&lt;/title&gt;
+          &lt;/head&gt;
+
+          &lt;body&gt;
+            &lt;div id="app"&gt;&lt;/div&gt;
+          &lt;/body&gt;
+
+          &lt;/html&gt;
+
+</code></pre>
+        <div class="info">
+          The next step!
+        </div>
+
+        <li style="text-align: center">
+          Now insert this code block in your .Vue file, usually App.vue
+        </li>
+        <pre><code style="font-size:1rem" data-language="js">
+          &lt;template&gt;
+            &lt;table class="table-sort"&gt;
+              &lt;thead&gt;
+                &lt;tr&gt;
+                  &lt;th&gt;Last Name&lt;/th&gt;
+                  &lt;th&gt;First Name&lt;/th&gt;
+                  &lt;th class="order-by-desc"&gt;Birth Date&lt;/th&gt;
+                &lt;/tr&gt;
+              &lt;/thead&gt;
+              &lt;tbody&gt;
+                &lt;tr&gt;
+                  &lt;td&gt;Jobs&lt;/td&gt;
+                  &lt;td&gt;Steve&lt;/td&gt;
+                  &lt;td&gt;1955/2/24&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                  &lt;td&gt;Bezos&lt;/td&gt;
+                  &lt;td&gt;Jeff&lt;/td&gt;
+                  &lt;td&gt;1964/1/12&lt;/td&gt;
+                &lt;/tr&gt;
+                &lt;tr&gt;
+                  &lt;td&gt;Dorsey&lt;/td&gt;
+                  &lt;td&gt;Jack&lt;/td&gt;
+                  &lt;td&gt;1976/11/19&lt;/td&gt;
+                &lt;/tr&gt;
+              &lt;/tbody&gt;
+            &lt;/table&gt;
+          &lt;/template&gt;
+
+          &lt;script&gt;
+          export default {
+            name: 'App'
+          }
+          &lt;/script&gt;
+        </code>
+        </pre>
       </div>
     </div>
   </body>
