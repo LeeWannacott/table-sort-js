@@ -12,7 +12,7 @@
     <div class="wrapper">
       <div class="sidebar">
         <h2>table-sort-js</h2>
-        <ul style="font-size: 1em">
+        <ul style="font-size: 1rem">
           <li>
             <a href="about.html"><i class="far fa-clipboard fa-fw"></i>About</a>
           </li>
@@ -62,15 +62,21 @@
         </div>
       </div>
       <div class="main_content">
-        <div class="header">Example of how to use table-sort.js in a ReactJS application.</div>
-        <div class="info">
+        <div class="header">
+          Example of how to use table-sort.js in a ReactJS application.
+        </div>
+        <div class="info" style="text-align:left">
           Download with NPM:
-          <code style="background-color:#839496;color:white;padding-top:3px"
+          <code
+            style="background-color: #839496; color: white; padding-top: 3px"
             >npm install table-sort-js</code
           >
+          <br>
         </div>
-
-        <pre><code style="font-size:1.3em" data-language="js">
+        <li style="text-align: center">
+          Example using the class component style:
+        </li>
+        <pre><code style="font-size:1rem" data-language="js">
 import React, { Component } from "react";
 import tableSort from "table-sort-js/table-sort.js";
 export class App extends Component {
@@ -88,7 +94,7 @@ export class App extends Component {
               &lt;/tr&gt;
           &lt;/thead&gt;
           &lt;tbody&gt;
-                  &lt;td&gt;
+                  &lt;tr&gt;
                       &lt;td&gt;Alpha&lt;/td&gt;
                       &lt;td&gt;1&lt;/td&gt;
                   &lt;/tr&gt;
@@ -109,6 +115,45 @@ export class App extends Component {
 export default App;
         </code>
         </pre>
+        <li style="text-align: center">
+          Same example but using the functional hooks style:
+        </li>
+        <pre><code style="font-size:1rem; margin-bottom:10px" data-language="js">
+import React, { useEffect,useState,} from "react";
+import tableSort from "table-sort-js/table-sort.js";
+function App(){
+  useEffect(() = &gt;{
+    tableSort()
+  },[]);
+      return(
+      &lt;div&gt;
+      &lt;table className="table-sort"&gt;
+          &lt;thead&gt;
+              &lt;tr&gt;
+                  &lt;th&gt;Alphabet&lt;/th&gt;
+                  &lt;th className="order-by-desc"&gt;Order&lt;/th&gt;
+              &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody&gt;
+                  &lt;tr&gt;
+                      &lt;td&gt;Alpha&lt;/td&gt;
+                      &lt;td&gt;1&lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                      &lt;td&gt;Bravo&lt;/td&gt;
+                      &lt;td&gt;2&lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                      &lt;td&gt;Charlie&lt;/td&gt;
+                      &lt;td&gt;3&lt;/td&gt;
+                  &lt;/tr&gt;
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+        &lt;/div&gt;
+      );
+  }
+export default App;
+</code></pre>
         <div class="info">
           Option 2: Download table-sort-js from
           <a
@@ -119,7 +164,10 @@ export default App;
           (Select option save as.)
         </div>
 
-        <pre><code style="font-size:1.3em" data-language="js">
+        <li style="text-align: center">
+          Example using a &lt;script&gt; tag rather than npm:
+        </li>
+        <pre><code style="font-size:1rem" data-language="js">
 import React, { Component } from "react";
 export class App extends Component {
   componentDidMount() {
@@ -139,7 +187,7 @@ export class App extends Component {
               &lt;/tr&gt;
           &lt;/thead&gt;
           &lt;tbody&gt;
-                  &lt;td&gt;
+                  &lt;tr&gt;
                       &lt;td&gt;Alpha&lt;/td&gt;
                       &lt;td&gt;1&lt;/td&gt;
                   &lt;/tr&gt;
