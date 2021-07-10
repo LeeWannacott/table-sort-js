@@ -1,5 +1,5 @@
 ![table-sort-js](https://img.shields.io/npm/v/table-sort-js)
-![table-sort-js](https://img.shields.io/npm/dt/table-sort-js)
+![table-sort-js](https://img.shields.io/npm/dw/table-sort-js)
 ![table-sort-js](https://img.shields.io/github/repo-size/leewannacott/table-sort-js)
 ![table-sort-js](https://img.shields.io/github/license/LeeWannacott/table-sort-js)
 ![table-sort-js](https://img.shields.io/github/workflow/status/leewannacott/table-sort-js/Jest%20CI%20-%20Automated%20testing%20of%20table%20sorting.?label=tests)
@@ -44,6 +44,7 @@ Refer to the documenation for examples how to use table-sort-js with [HTML.](htt
 | --------------- | ----------------------------------------------------------- |
 | "order-by-desc" | Order by descending on first click. (default is aescending) |
 | "file-size"     | Sort file sizes(B->TiB) uses the binary prefix. (e.g KiB)   |
+| "data-sort"     | Sort by [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes), e.g &lt;td data-sort="42"&gt; |
 
 #### Notes:
 

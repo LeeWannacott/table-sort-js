@@ -56,6 +56,15 @@ function tableSortJs(test = false, domDocumentWindow = document) {
         const tableRows = tableBody.querySelectorAll("tr");
         const columnData = [];
 
+        let isDataAttribute = th.classList.contains("data-sort");
+        if(isDataAttribute){
+          for (let [i, tr] of tableRows.entries()) {
+            const dataAttributeTd = tr.querySelectorAll("td").item(columnIndex).dataset.sort
+            columnData.push(`${dataAttributeTd}#${i}`)
+            columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
+          }
+        }
+
         let isDayOfWeek = th.classList.contains("days-of-week");
         if (isDayOfWeek) {
           const day = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thur|Fri|Sat|Sun)/i;
@@ -264,7 +273,7 @@ function tableSortJs(test = false, domDocumentWindow = document) {
               if (isDayOfWeek) {
                 columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
               }
-              if (!isFileSize && !isDayOfWeek) {
+              if (!isFileSize && !isDayOfWeek && !isDataAttribute) {
                 columnData.push(`${tdTextContent}#${i}`);
                 columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
               }
