@@ -91,6 +91,22 @@
         </code>
         </pre>
 
+
+        <li style="text-align: center">
+          If you are using Vue 3.0 or later, then insert this code block into your entry point JavaScript file i.e. main.js
+        </li>
+        <pre><code style="font-size:1rem" data-language="js">
+          import { createApp } from 'vue'
+          import App from './App'
+          import tableSort from 'table-sort-js/table-sort.js';
+
+          const app = createApp(App)
+          app.provide('tableSort', tableSort)
+          app.mount('#app')
+
+        </code>
+        </pre>
+
         <div class="info">
           The next step!
         </div>
