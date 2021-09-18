@@ -65,24 +65,26 @@
         <div class="header">
           Example of how to use table-sort.js in a ReactJS application.
         </div>
-        <div class="info" style="text-align:left">
+        <div class="info" style="text-align: left">
           Download with NPM:
           <code
             style="background-color: #839496; color: white; padding-top: 3px"
             >npm install table-sort-js</code
           >
-          <br>
+          <br />
         </div>
         <li style="text-align: center">
-          Example using the class component style:
+          Example using the Class component style:
         </li>
         <pre><code style="font-size:1rem" data-language="js">
 import React, { Component } from "react";
 import tableSort from "table-sort-js/table-sort.js";
 export class App extends Component {
+
   componentDidMount() {
     tableSort()
     }
+
     render(){
       return(
       &lt;div&gt;
@@ -116,15 +118,17 @@ export default App;
         </code>
         </pre>
         <li style="text-align: center">
-          Same example but using the functional hooks style:
+          Example using the functional hooks style:
         </li>
         <pre><code style="font-size:1rem; margin-bottom:10px" data-language="js">
 import React, { useEffect,useState,} from "react";
 import tableSort from "table-sort-js/table-sort.js";
 function App(){
-  useEffect(() = &gt;{
+
+  useEffect(() =&gt; {
     tableSort()
   },[]);
+
       return(
       &lt;div&gt;
       &lt;table className="table-sort"&gt;
@@ -154,16 +158,69 @@ function App(){
   }
 export default App;
 </code></pre>
+        <div class="info"></div>
+
+        <li style="text-align: center">
+          Example: Functional hooks style with
+          <a
+            href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#dynamic_imports"
+            >dynamically importing</a
+          >
+          table-sort-js on rendering of a React component.
+        </li>
+        <pre><code style="font-size:1rem; margin-bottom:10px" data-language="js">
+
+import React, { useEffect, useState } from "react";
+function App() {
+
+  useEffect(() =&gt; {
+    (async () =&gt; {
+      const tableSortJs = await import("table-sort-js/table-sort.js");
+      return tableSortJs;
+    })().then((tableSortJs) =&gt; {
+      tableSortJs.default();
+    });
+  }, []);
+
+      return(
+      &lt;div&gt;
+      &lt;table className="table-sort"&gt;
+          &lt;thead&gt;
+              &lt;tr&gt;
+                  &lt;th&gt;Alphabet&lt;/th&gt;
+                  &lt;th className="order-by-desc"&gt;Order&lt;/th&gt;
+              &lt;/tr&gt;
+          &lt;/thead&gt;
+          &lt;tbody&gt;
+                  &lt;tr&gt;
+                      &lt;td&gt;Alpha&lt;/td&gt;
+                      &lt;td&gt;1&lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                      &lt;td&gt;Bravo&lt;/td&gt;
+                      &lt;td&gt;2&lt;/td&gt;
+                  &lt;/tr&gt;
+                  &lt;tr&gt;
+                      &lt;td&gt;Charlie&lt;/td&gt;
+                      &lt;td&gt;3&lt;/td&gt;
+                  &lt;/tr&gt;
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+        &lt;/div&gt;
+      );
+  }
+export default App;
+</code></pre>
+
         <div class="info">
           Option 2: Download table-sort-js from
           <a
-            href="https://leewannacott.github.io/TABLE-SORT-JS/table-sort.js"
+            href="https://leewannacott.github.io/table-sort-js/table-sort.js"
             target="_blank"
             >table-sort.js</a
           >
           (Select option save as.)
         </div>
-
         <li style="text-align: center">
           Example using a &lt;script&gt; tag rather than npm:
         </li>
@@ -176,6 +233,7 @@ export class App extends Component {
         script.async = true;
         document.body.appendChild(script);
     }
+
     render(){
       return(
       &lt;div&gt;
@@ -205,6 +263,7 @@ export class App extends Component {
       );
     }
   }
+
 export default App;
         </code>
         </pre>
