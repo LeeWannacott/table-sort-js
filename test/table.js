@@ -1,7 +1,7 @@
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 require("iconv-lite").encodingExists("foo");
-tableSortJs = require("../public/table-sort");
+const tableSortJs = require("../public/table-sort");
 
 function createTestTable(testTableData, classTags="") {
 
@@ -39,7 +39,7 @@ function createTestTable(testTableData, classTags="") {
   let table = dom.window.document.querySelector("table");
   const tableBody = table.querySelector("tbody");
   const tableRows = tableBody.querySelectorAll("tr");
-  testIfSortedList = [];
+  const testIfSortedList = [];
   for (let [i, tr] of tableRows.entries()) {
     testIfSortedList.push(tr.querySelectorAll("td").item(0).innerHTML);
   }
