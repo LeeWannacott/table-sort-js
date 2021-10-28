@@ -94,7 +94,7 @@ function createTestTableMissingBodyTag(testTableData, classTags = "") {
     testTableTdRows.push(testTableTdRow);
   }
 
-  const tableWithMissingHeadTag = new JSDOM(`<!DOCTYPE html>
+  const tablewithMissingBodyTag = new JSDOM(`<!DOCTYPE html>
   <html>
     <head>
     </head>
@@ -103,18 +103,16 @@ function createTestTableMissingBodyTag(testTableData, classTags = "") {
       <thead>
         ${getClassTagsForTH}
       </thead>
-    <tbody>
     ${testTableTdRows}
-    </tbody>
   </table> 
   </body>
   </html>`);
 
   // Call tablesort and make table sortable and simulate click from a user.
-  tableSortJs((test = true), tableWithMissingHeadTag.window.document);
-  tableWithMissingHeadTag.window.document.querySelector("table th").click();
+  tableSortJs((test = true), tablewithMissingBodyTag.window.document);
+  tablewithMissingBodyTag.window.document.querySelector("table th").click();
   // Make an array from table contents to test if sorted correctly.
-  let table = tableWithMissingHeadTag.window.document.querySelector("table");
+  let table = tablewithMissingBodyTag.window.document.querySelector("table");
   const tableBody = table.querySelector("tbody");
   const tableRows = tableBody.querySelectorAll("tr");
   const testIfSortedList = [];
