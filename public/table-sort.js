@@ -16,18 +16,16 @@ Instructions:
 */
 
 function tableSortJs(test = false, domDocumentWindow = document) {
-  function checkIfTesting() {
+  function getHTMLTables() {
     if (test === true) {
       const getTagTable = domDocumentWindow.getElementsByTagName("table");
-      const createTableHead = domDocumentWindow.createElement("thead");
-      return [getTagTable, createTableHead];
-    } else {
+      return [getTagTable];
+    } else if (test === false) {
       const getTagTable = document.getElementsByTagName("table");
-      const createTableHead = document.createElement("thead");
-      return [getTagTable, createTableHead];
+      return [getTagTable];
     }
   }
-  const [getTagTable, createTableHead] = checkIfTesting();
+  const [getTagTable] = getHTMLTables();
   const columnIndexAndTableRow = {};
   const fileSizeColumnTextAndRow = {};
   for (let table of getTagTable) {
@@ -37,14 +35,26 @@ function tableSortJs(test = false, domDocumentWindow = document) {
   }
 
   function makeTableSortable(sortableTable) {
+    let createTableHead;
+    let tableBody;
     if (sortableTable.getElementsByTagName("thead").length === 0) {
-      createTableHead;
-      the.appendChild(sortableTable.rows[0]);
-      sortableTable.insertBefore(the, sortableTable.firstChild);
+      if (test === true) {
+        createTableHead = domDocumentWindow.createElement("thead");
+      }else if (test === false) {
+        createTableHead = document.createElement("thead");
+      }
+      createTableHead.appendChild(sortableTable.rows[0]);
+      sortableTable.insertBefore(createTableHead, sortableTable.firstChild);
+      if (sortableTable.querySelectorAll("tbody").length > 1) {
+        tableBody = sortableTable.querySelectorAll("tbody")[1];
+      } else {
+        tableBody = sortableTable.querySelector("tbody");
+      }
+    } else {
+      tableBody = sortableTable.querySelector("tbody");
     }
 
     const tableHead = sortableTable.querySelector("thead");
-    const tableBody = sortableTable.querySelector("tbody");
     const tableHeadHeaders = tableHead.querySelectorAll("th");
     tableHead.style.cursor = "pointer";
 
@@ -57,17 +67,19 @@ function tableSortJs(test = false, domDocumentWindow = document) {
         const columnData = [];
 
         let isDataAttribute = th.classList.contains("data-sort");
-        if(isDataAttribute){
+        if (isDataAttribute) {
           for (let [i, tr] of tableRows.entries()) {
-            const dataAttributeTd = tr.querySelectorAll("td").item(columnIndex).dataset.sort
-            columnData.push(`${dataAttributeTd}#${i}`)
+            const dataAttributeTd = tr.querySelectorAll("td").item(columnIndex)
+              .dataset.sort;
+            columnData.push(`${dataAttributeTd}#${i}`);
             columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
           }
         }
 
         let isDayOfWeek = th.classList.contains("days-of-week");
         if (isDayOfWeek) {
-          const day = /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thur|Fri|Sat|Sun)/i;
+          const day =
+            /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thur|Fri|Sat|Sun)/i;
           const dayOfWeek = {
             Monday: 1,
             Tuesday: 2,
@@ -78,8 +90,9 @@ function tableSortJs(test = false, domDocumentWindow = document) {
             Sunday: 7,
           };
           for (let [i, tr] of tableRows.entries()) {
-            const dayOfWeekTd = tr.querySelectorAll("td").item(columnIndex)
-              .textContent;
+            const dayOfWeekTd = tr
+              .querySelectorAll("td")
+              .item(columnIndex).textContent;
             if (dayOfWeekTd.match(day)) {
               if (dayOfWeekTd.match(/Monday|Mon/i)) {
                 columnData.push(`${dayOfWeek.Monday}#${i}`);
@@ -105,8 +118,10 @@ function tableSortJs(test = false, domDocumentWindow = document) {
         // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
         let isFileSize = th.classList.contains("file-size");
         if (isFileSize) {
-          const numberWithUnitType = /[.0-9]+(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|\s?GiB|T\s?B|\s?TiB)/i;
-          const unitType = /(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|G\s?iB|\s?TB|\s?TiB)/i;
+          const numberWithUnitType =
+            /[.0-9]+(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|\s?GiB|T\s?B|\s?TiB)/i;
+          const unitType =
+            /(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|G\s?iB|\s?TB|\s?TiB)/i;
           const fileSizes = {
             Kibibyte: 1024,
             Mebibyte: 1.049e6,
@@ -129,32 +144,57 @@ function tableSortJs(test = false, domDocumentWindow = document) {
           }
 
           for (let [i, tr] of tableRows.entries()) {
-            let fileSizeTd = tr.querySelectorAll("td").item(columnIndex)
-              .textContent;
+            let fileSizeTd = tr
+              .querySelectorAll("td")
+              .item(columnIndex).textContent;
             if (fileSizeTd.match(numberWithUnitType)) {
               if (fileSizeTd.match(/\s?KB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Kilobyte')
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Kilobyte"
+                );
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?KiB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Kibibyte')
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Kibibyte"
+                );
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?MB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Megabyte')
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Megabyte"
+                );
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?MiB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Mebibyte')
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Mebibyte"
+                );
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?GB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Gigabyte')
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Gigabyte"
+                );
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?GiB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Gibibyte')
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Gibibyte"
+                );
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?TB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Terabyte')
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Terabyte"
+                );
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?TiB/i)) {
-                fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, 'Tebibyte')
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Tebibyte"
+                );
                 columnData.push(`${fileSizeTd}#${i}`);
               } else if (fileSizeTd.match(/\s?B/i)) {
                 fileSizeTd = fileSizeTd.replace(unitType, "");
@@ -249,9 +289,8 @@ function tableSortJs(test = false, domDocumentWindow = document) {
                   "NaN"
                 );
               }
-              tr
-                .querySelectorAll("td")
-                .item(columnIndex).innerHTML = fileSizeInBytesHTML;
+              tr.querySelectorAll("td").item(columnIndex).innerHTML =
+                fileSizeInBytesHTML;
             } else if (!isFileSize) {
               tr.innerHTML = columnIndexAndTableRow[columnData[i]];
             }
@@ -261,8 +300,9 @@ function tableSortJs(test = false, domDocumentWindow = document) {
         function getTableData() {
           for (let [i, tr] of tableRows.entries()) {
             // inner text for column we click on
-            let tdTextContent = tr.querySelectorAll("td").item(columnIndex)
-              .textContent;
+            let tdTextContent = tr
+              .querySelectorAll("td")
+              .item(columnIndex).textContent;
             if (tdTextContent.length === 0) {
               tdTextContent = "";
             }
