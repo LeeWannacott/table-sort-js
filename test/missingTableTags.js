@@ -36,11 +36,8 @@ function createTestTableNoMissingTags(testTableData, classTags = "") {
   // Make an array from table contents to test if sorted correctly.
   let table = tableWithHeadAndBody.window.document.querySelector("table");
   const tableBody = table.querySelector("tbody");
-  const tableRows = tableBody.querySelectorAll("tr");
-  const testIfSortedList = [];
-  for (let [i, tr] of tableRows.entries()) {
-    testIfSortedList.push(tr.querySelectorAll("td").item(0).innerHTML);
-  }
+  const tableRows = [...tableBody.querySelectorAll("tr")];
+  const testIfSortedList = tableRows.map(tr => tr.querySelectorAll("td").item(0).innerHTML);
   return testIfSortedList;
 }
 
@@ -75,11 +72,8 @@ function createTestTableMissingHeadTag(testTableData, classTags = "") {
   // Make an array from table contents to test if sorted correctly.
   let table = tableWithMissingHeadTag.window.document.querySelector("table");
   const tableBody = table.querySelector("tbody");
-  const tableRows = tableBody.querySelectorAll("tr");
-  const testIfSortedList = [];
-  for (let [i, tr] of tableRows.entries()) {
-    testIfSortedList.push(tr.querySelectorAll("td").item(0).innerHTML);
-  }
+  const tableRows = [...tableBody.querySelectorAll("tr")];
+  const testIfSortedList = tableRows.map(tr => tr.querySelectorAll("td").item(0).innerHTML);
   return testIfSortedList;
 }
 
@@ -114,11 +108,8 @@ function createTestTableMissingBodyTag(testTableData, classTags = "") {
   // Make an array from table contents to test if sorted correctly.
   let table = tablewithMissingBodyTag.window.document.querySelector("table");
   const tableBody = table.querySelector("tbody");
-  const tableRows = tableBody.querySelectorAll("tr");
-  const testIfSortedList = [];
-  for (let [i, tr] of tableRows.entries()) {
-    testIfSortedList.push(tr.querySelectorAll("td").item(0).innerHTML);
-  }
+  const tableRows = [...tableBody.querySelectorAll("tr")];
+  const testIfSortedList = tableRows.map(tr => tr.querySelectorAll("td").item(0).innerHTML);
   return testIfSortedList;
 }
 
@@ -154,11 +145,8 @@ function createTestTableMissingBodyAndHeadTag(testTableData, classTags = "") {
   let table =
     tableWithMissingBodyAndHeadTag.window.document.querySelector("table");
   const tableBody = table.querySelector("tbody");
-  const tableRows = tableBody.querySelectorAll("tr");
-  const testIfSortedList = [];
-  for (let [i, tr] of tableRows.entries()) {
-    testIfSortedList.push(tr.querySelectorAll("td").item(0).innerHTML);
-  }
+  const tableRows = [...tableBody.querySelectorAll("tr")];
+  const testIfSortedList = tableRows.map(tr => tr.querySelectorAll("td").item(0).innerHTML);
   return testIfSortedList;
 }
 
