@@ -6,173 +6,412 @@ Licence: MIT License Copyright (c) 2021 Lee Wannacott
 GitHub Repository: https://github.com/LeeWannacott/table-sort-js
 npm package: https://www.npmjs.com/package/table-sort-js
 Demo: https://leewannacott.github.io/Portfolio/#/GitHub
-
 Install:
 Frontend: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script> or
 Download this file and add <script src="table-sort.js"></script> to your HTML 
-
 Backend: npm install table-sort-js and use require("../node_modules/table-sort-js/table-sort.js") 
-
 Instructions:
   Add class="table-sort" to tables you'd like to make sortable
   Click on the table headers to sort them.
 */
 
-function tableSortJs() {
-    const columnData = [];
-    const dictOfColumnIndexAndTableRow = {};
-    for (let sortableTable of document.getElementsByTagName("table")) {
-        if (sortableTable.classList.contains("table-sort")) {
-            if (sortableTable.getElementsByTagName("thead").length === 0) {
-                const the = document.createElement("thead");
-                the.appendChild(sortableTable.rows[0]);
-                sortableTable.insertBefore(the, sortableTable.firstChild);
-            }
-
-            const tableHead = sortableTable.querySelector("thead");
-            const tableBody = sortableTable.querySelector("tbody");
-            const tableHeadHeaders = tableHead.querySelectorAll("th");
-
-
-            // Display a mouse pointer on hover over table headers.
-            tableHead.addEventListener("mouseover", function (event) {
-                setCursor(tableHead, "pointer");
-            });
-            function setCursor(tag, cursorStyle) {
-                var elem;
-                if (sortableTable.getElementsByTagName && (elem = tag)) {
-                    if (elem.style) {
-                        elem.style.cursor = cursorStyle;
-                    }
-                }
-            }
-
-            for (let [columnIndex, th] of tableHeadHeaders.entries("table")) {
-                let timesClickedColumn = 0;
-
-                th.addEventListener("click", function () {
-                    timesClickedColumn += 1;
-
-                    function getTableDataOnClick() {
-                        const tableRows = tableBody.querySelectorAll("tr");
-                        for (let [i, tr] of tableRows.entries()) {
-                            if (
-                                tr.querySelectorAll("td").item(columnIndex)
-                                    .innerHTML !== ""
-                            ) {
-                                columnData.push(
-                                    tr.querySelectorAll("td").item(columnIndex)
-                                        .innerHTML +
-                                        "#" +
-                                        i
-                                );
-                                dictOfColumnIndexAndTableRow[
-                                    tr.querySelectorAll("td").item(columnIndex)
-                                        .innerHTML +
-                                        "#" +
-                                        i
-                                ] = tr.innerHTML;
-                            } else {
-                                // Fill in blank table cells with the highest
-                                // value replacement character that works.
-                                columnData.push("ӿ#" + i);
-                                dictOfColumnIndexAndTableRow["ӿ#" + i] =
-                                    tr.innerHTML;
-                            }
-                        }
-                        function naturalSortAescending(a, b) {
-                            return a.localeCompare(
-                                b,
-                                navigator.languages[0] || navigator.language,
-                                { numeric: true, ignorePunctuation: true }
-                            );
-                        }
-                        function naturalSortDescending(a, b) {
-                            return naturalSortAescending(b, a);
-                        }
-
-                        function clearArrows(arrowUp="▲",arrowDown="▼") {
-                                let ifDownArrow = th.innerText.includes(arrowDown);
-                                let ifUpArrow = th.innerText.includes(arrowUp);
-                                if ((ifDownArrow) === true || (ifUpArrow) === true) {
-                                    th.innerText = th.innerText.replace(arrowUp,"")
-                                    th.innerText = th.innerText.replace(arrowDown,"")
-                                }
-                        }
-
-
-                        let arrowUp=" ▲";
-                        let arrowDown=" ▼";
-
-                        // Sort naturally; default aescending unless th contains 'order-by-desc' as className.
-                        if (typeof columnData[0] !== "undefined") {
-                                originalColumnText = th.innerText
-                            if (
-                                th.classList.contains("order-by-desc")  &&
-                                timesClickedColumn === 1
-                            ) {
-                                if (sortableTable.classList.contains("table-arrows")){
-                                clearArrows(arrowUp,arrowDown)
-                                th.insertAdjacentText("beforeend",arrowDown);
-                                }
-                                columnData.sort(naturalSortDescending, {
-                                    numeric: true,
-                                    ignorePunctuation: true,
-                                });
-
-                            } else if (
-                                th.classList.contains("order-by-desc")  &&
-                                timesClickedColumn === 2
-                            ) {
-                                if (sortableTable.classList.contains("table-arrows")){
-                                clearArrows(arrowUp,arrowDown)
-                                th.insertAdjacentText("beforeend",arrowUp);
-                                }
-                                columnData.sort(naturalSortAescending, {
-                                    numeric: true,
-                                    ignorePunctuation: true,
-                                });
-                                timesClickedColumn = 0;
-
-                            } else if (timesClickedColumn === 1) {
-                                if (sortableTable.classList.contains("table-arrows")){
-                                clearArrows(arrowUp,arrowDown)
-                                th.insertAdjacentText("beforeend",arrowUp);
-                                }
-                                columnData.sort(naturalSortAescending);
-                                
-                            } else if (timesClickedColumn === 2) {
-                                if (sortableTable.classList.contains("table-arrows")){
-                                clearArrows(arrowUp,arrowDown)
-                                th.insertAdjacentText("beforeend",arrowDown);
-                                }
-                                columnData.sort(naturalSortDescending);
-                                timesClickedColumn = 0;
-                            }
-                        }
-                    }
-                    getTableDataOnClick();
-
-                    function returnSortedTable() {
-                        const tableRows = tableBody.querySelectorAll("tr");
-                        for (let [i, tr] of tableRows.entries()) {
-                            tr.innerHTML =
-                                dictOfColumnIndexAndTableRow[columnData[i]];
-                        }
-                        columnData.length = 0;
-                    }
-                    returnSortedTable();
-                });
-            }
-        }
+function tableSortJs(test = false, domDocumentWindow = document) {
+  function getHTMLTables() {
+    if (test === true) {
+      const getTagTable = domDocumentWindow.getElementsByTagName("table");
+      return [getTagTable];
+    } else {
+      const getTagTable = document.getElementsByTagName("table");
+      return [getTagTable];
     }
+  }
+  const [getTagTable] = getHTMLTables();
+  const columnIndexAndTableRow = {};
+  const fileSizeColumnTextAndRow = {};
+  for (let table of getTagTable) {
+    if (table.classList.contains("table-sort")) {
+      makeTableSortable(table);
+    }
+  }
+
+  function makeTableSortable(sortableTable) {
+    let createTableHead;
+    let tableBody;
+    if (sortableTable.getElementsByTagName("thead").length === 0) {
+      if (test === true) {
+        createTableHead = domDocumentWindow.createElement("thead");
+      } else {
+        createTableHead = document.createElement("thead");
+      }
+      createTableHead.appendChild(sortableTable.rows[0]);
+      sortableTable.insertBefore(createTableHead, sortableTable.firstChild);
+      if (sortableTable.querySelectorAll("tbody").length > 1) {
+        tableBody = sortableTable.querySelectorAll("tbody")[1];
+      } else {
+        tableBody = sortableTable.querySelector("tbody");
+      }
+    } else {
+      tableBody = sortableTable.querySelector("tbody");
+    }
+
+    const tableHead = sortableTable.querySelector("thead");
+    const tableHeadHeaders = tableHead.querySelectorAll("th");
+    tableHead.style.cursor = "pointer";
+
+    let columnIndexesClicked = [];
+    for (let [columnIndex, th] of tableHeadHeaders.entries()) {
+      let timesClickedColumn = 0;
+      let desc = th.classList.contains("order-by-desc");
+      let tableArrows = sortableTable.classList.contains("table-arrows");
+      let arrowUp = " ▲";
+      let arrowDown = " ▼";
+
+      if (desc && tableArrows) {
+        th.insertAdjacentText("beforeend", arrowDown);
+      } else if (tableArrows){
+        th.insertAdjacentText("beforeend", arrowUp);
+      }
+
+      th.addEventListener("click", function () {
+        const tableRows = tableBody.querySelectorAll("tr");
+        const columnData = [];
+
+        let isDataAttribute = th.classList.contains("data-sort");
+        if (isDataAttribute) {
+          for (let [i, tr] of tableRows.entries()) {
+            const dataAttributeTd = tr.querySelectorAll("td").item(columnIndex)
+              .dataset.sort;
+            columnData.push(`${dataAttributeTd}#${i}`);
+            columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
+          }
+        }
+
+        let isDayOfWeek = th.classList.contains("days-of-week");
+        if (isDayOfWeek) {
+          const day =
+            /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thur|Fri|Sat|Sun)/i;
+          const dayOfWeek = {
+            Monday: 1,
+            Tuesday: 2,
+            Wednesday: 3,
+            Thursday: 4,
+            Friday: 5,
+            Saturday: 6,
+            Sunday: 7,
+          };
+          for (let [i, tr] of tableRows.entries()) {
+            const dayOfWeekTd = tr
+              .querySelectorAll("td")
+              .item(columnIndex).textContent;
+            if (dayOfWeekTd.match(day)) {
+              if (dayOfWeekTd.match(/Monday|Mon/i)) {
+                columnData.push(`${dayOfWeek.Monday}#${i}`);
+              } else if (dayOfWeekTd.match(/Tuesday|Tue/i)) {
+                columnData.push(`${dayOfWeek.Tuesday}#${i}`);
+              } else if (dayOfWeekTd.match(/Wednesday|Wed/i)) {
+                columnData.push(`${dayOfWeek.Wednesday}#${i}`);
+              } else if (dayOfWeekTd.match(/Thursday|Thur/i)) {
+                columnData.push(`${dayOfWeek.Thursday}#${i}`);
+              } else if (dayOfWeekTd.match(/Friday|Fri/i)) {
+                columnData.push(`${dayOfWeek.Friday}#${i}`);
+              } else if (dayOfWeekTd.match(/Saturday|Sat/i)) {
+                columnData.push(`${dayOfWeek.Saturday}#${i}`);
+              } else if (dayOfWeekTd.match(/Sunday|Sun/i)) {
+                columnData.push(`${dayOfWeek.Sunday}#${i}`);
+              }
+            } else {
+              columnData.push(`!X!Y!Z!#${i}`);
+            }
+          }
+        }
+
+        // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
+        let isFileSize = th.classList.contains("file-size");
+        if (isFileSize) {
+          const numberWithUnitType =
+            /[.0-9]+(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|\s?GiB|T\s?B|\s?TiB)/i;
+          const unitType =
+            /(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|G\s?iB|\s?TB|\s?TiB)/i;
+          const fileSizes = {
+            Kibibyte: 1024,
+            Mebibyte: 1.049e6,
+            Gibibyte: 1.074e9,
+            Tebibyte: 1.1e12,
+            Pebibyte: 1.126e15,
+            Kilobyte: 1000,
+            Megabyte: 1e6,
+            Gigabyte: 1e9,
+            Terabyte: 1e12,
+          };
+
+          function removeUnitTypeConvertToBytes(fileSizeTd, _replace) {
+            fileSizeTd = fileSizeTd.replace(unitType, "");
+            fileSizeTd = fileSizeTd.replace(
+              fileSizeTd,
+              fileSizeTd * fileSizes[_replace]
+            );
+            return fileSizeTd;
+          }
+
+          for (let [i, tr] of tableRows.entries()) {
+            let fileSizeTd = tr
+              .querySelectorAll("td")
+              .item(columnIndex).textContent;
+            if (fileSizeTd.match(numberWithUnitType)) {
+              if (fileSizeTd.match(/\s?KB/i)) {
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Kilobyte"
+                );
+                columnData.push(`${fileSizeTd}#${i}`);
+              } else if (fileSizeTd.match(/\s?KiB/i)) {
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Kibibyte"
+                );
+                columnData.push(`${fileSizeTd}#${i}`);
+              } else if (fileSizeTd.match(/\s?MB/i)) {
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Megabyte"
+                );
+                columnData.push(`${fileSizeTd}#${i}`);
+              } else if (fileSizeTd.match(/\s?MiB/i)) {
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Mebibyte"
+                );
+                columnData.push(`${fileSizeTd}#${i}`);
+              } else if (fileSizeTd.match(/\s?GB/i)) {
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Gigabyte"
+                );
+                columnData.push(`${fileSizeTd}#${i}`);
+              } else if (fileSizeTd.match(/\s?GiB/i)) {
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Gibibyte"
+                );
+                columnData.push(`${fileSizeTd}#${i}`);
+              } else if (fileSizeTd.match(/\s?TB/i)) {
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Terabyte"
+                );
+                columnData.push(`${fileSizeTd}#${i}`);
+              } else if (fileSizeTd.match(/\s?TiB/i)) {
+                fileSizeTd = removeUnitTypeConvertToBytes(
+                  fileSizeTd,
+                  "Tebibyte"
+                );
+                columnData.push(`${fileSizeTd}#${i}`);
+              } else if (fileSizeTd.match(/\s?B/i)) {
+                fileSizeTd = fileSizeTd.replace(unitType, "");
+                columnData.push(`${fileSizeTd}#${i}`);
+              }
+            } else {
+              columnData.push(`!X!Y!Z!#${i}`);
+            }
+          }
+        }
+
+        let isRememberSort = sortableTable.classList.contains("remember-sort");
+        // Checking if user has clicked different column from the first column if yes reset times clicked.
+        if (!isRememberSort) {
+          columnIndexesClicked.push(columnIndex);
+          if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
+            const lastColumnClicked =
+              columnIndexesClicked[columnIndexesClicked.length - 1];
+            const secondLastColumnClicked =
+              columnIndexesClicked[columnIndexesClicked.length - 2];
+            if (lastColumnClicked !== secondLastColumnClicked) {
+              timesClickedColumn = 0;
+              columnIndexesClicked.shift();
+            }
+          }
+        }
+
+        timesClickedColumn += 1;
+
+        getTableData();
+        updateTable();
+
+        function updateTable() {
+          for (let [i, tr] of tableRows.entries()) {
+            if (isFileSize) {
+              tr.innerHTML = fileSizeColumnTextAndRow[columnData[i]];
+              let fileSizeInBytesHTML = tr
+                .querySelectorAll("td")
+                .item(columnIndex).innerHTML;
+              let fileSizeInBytesText = tr
+                .querySelectorAll("td")
+                .item(columnIndex).textContent;
+              const fileSizes = {
+                Kibibyte: 1024,
+                Mebibyte: 1.049e6,
+                Gibibyte: 1.074e9,
+                Tebibyte: 1.1e12,
+                Pebibyte: 1.126e15,
+              };
+              // Remove the unique identifyer for duplicate values(#number).
+              columnData[i] = columnData[i].replace(/#[0-9]*/, "");
+              if (columnData[i] < fileSizes.Kibibyte) {
+                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                  fileSizeInBytesText,
+                  `${parseFloat(columnData[i]).toFixed(2)} B`
+                );
+              } else if (
+                columnData[i] >= fileSizes.Kibibyte &&
+                columnData[i] < fileSizes.Mebibyte
+              ) {
+                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                  fileSizeInBytesText,
+                  `${(columnData[i] / fileSizes.Kibibyte).toFixed(2)} KiB`
+                );
+              } else if (
+                columnData[i] >= fileSizes.Mebibyte &&
+                columnData[i] < fileSizes.Gibibyte
+              ) {
+                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                  fileSizeInBytesText,
+                  `${(columnData[i] / fileSizes.Mebibyte).toFixed(2)} MiB`
+                );
+              } else if (
+                columnData[i] >= fileSizes.Gibibyte &&
+                columnData[i] < fileSizes.Tebibyte
+              ) {
+                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                  fileSizeInBytesText,
+                  `${(columnData[i] / fileSizes.Gibibyte).toFixed(2)} GiB`
+                );
+              } else if (
+                columnData[i] >= fileSizes.Tebibyte &&
+                columnData[i] < fileSizes.Pebibyte
+              ) {
+                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                  fileSizeInBytesText,
+                  `${(columnData[i] / fileSizes.Tebibyte).toFixed(2)} TiB`
+                );
+              } else {
+                fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                  fileSizeInBytesText,
+                  "NaN"
+                );
+              }
+              tr.querySelectorAll("td").item(columnIndex).innerHTML =
+                fileSizeInBytesHTML;
+            } else if (!isFileSize) {
+              tr.innerHTML = columnIndexAndTableRow[columnData[i]];
+            }
+          }
+        }
+
+        function getTableData() {
+          for (let [i, tr] of tableRows.entries()) {
+            // inner text for column we click on
+            let tdTextContent = tr
+              .querySelectorAll("td")
+              .item(columnIndex).textContent;
+            if (tdTextContent.length === 0) {
+              tdTextContent = "";
+            }
+            if (tdTextContent.trim() !== "") {
+              if (isFileSize) {
+                fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
+              }
+              if (isDayOfWeek) {
+                columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
+              }
+              if (!isFileSize && !isDayOfWeek && !isDataAttribute) {
+                columnData.push(`${tdTextContent}#${i}`);
+                columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
+              }
+            } else {
+              // Fill in blank table cells dict key with filler value.
+              columnData.push(`!X!Y!Z!#${i}`);
+              columnIndexAndTableRow[`!X!Y!Z!#${i}`] = tr.innerHTML;
+            }
+          }
+
+          function naturalSortAescending(a, b) {
+            if (a.includes("X!Y!Z!#")) {
+              return 1;
+            } else if (b.includes("X!Y!Z!#")) {
+              return -1;
+            } else {
+              return a.localeCompare(
+                b,
+                navigator.languages[0] || navigator.language,
+                { numeric: true, ignorePunctuation: true }
+              );
+            }
+          }
+
+          function naturalSortDescending(a, b) {
+            return naturalSortAescending(b, a);
+          }
+
+          function clearArrows(arrowUp = "▲", arrowDown = "▼") {
+            th.innerText = th.innerText.replace(arrowUp, "");
+            th.innerText = th.innerText.replace(arrowDown, "");
+          }
+
+          // Sort naturally; default aescending unless th contains 'order-by-desc' as className.
+          if (columnData[0] === undefined) {
+            return;
+          }
+
+          if (timesClickedColumn === 1) {
+            if (desc) {
+              if (tableArrows) {
+                clearArrows(arrowUp, arrowDown);
+                th.insertAdjacentText("beforeend", arrowDown);
+              }
+              columnData.sort(naturalSortDescending, {
+                numeric: true,
+                ignorePunctuation: true,
+              });
+            } else {
+              if (tableArrows) {
+                clearArrows(arrowUp, arrowDown);
+                th.insertAdjacentText("beforeend", arrowUp);
+              }
+              columnData.sort(naturalSortAescending);
+            }
+          } else if (timesClickedColumn === 2) {
+            timesClickedColumn = 0;
+            if (desc) {
+              if (tableArrows) {
+                clearArrows(arrowUp, arrowDown);
+                th.insertAdjacentText("beforeend", arrowUp);
+              }
+              columnData.sort(naturalSortAescending, {
+                numeric: true,
+                ignorePunctuation: true,
+              });
+            } else {
+              if (tableArrows) {
+                clearArrows(arrowUp, arrowDown);
+                th.insertAdjacentText("beforeend", arrowDown);
+              }
+              columnData.sort(naturalSortDescending);
+            }
+          }
+        }
+      });
+    }
+  }
 }
 
 if (
-    document.readyState === "complete" ||
-    document.readyState === "interactive"
+  document.readyState === "complete" ||
+  document.readyState === "interactive"
 ) {
-    tableSortJs();
+  tableSortJs();
 } else if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", tableSortJs, false);
+  document.addEventListener("DOMContentLoaded", tableSortJs, false);
+}
+if (typeof module == "object") {
+  module.exports = tableSortJs;
 }

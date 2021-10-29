@@ -1,69 +1,52 @@
-![table-sort-js](https://img.shields.io/npm/v/table-sort-js) : https://www.npmjs.com/package/table-sort-js
+![table-sort-js](https://img.shields.io/npm/v/table-sort-js)
+![table-sort-js](https://img.shields.io/npm/dm/table-sort-js)
+![table-sort-js](https://img.shields.io/github/repo-size/leewannacott/table-sort-js)
+![table-sort-js](https://img.shields.io/github/license/LeeWannacott/table-sort-js)
+![table-sort-js](https://img.shields.io/github/workflow/status/leewannacott/table-sort-js/Jest%20CI%20-%20Automated%20testing%20of%20table%20sorting.?label=tests)
 
-* Description: A JavaScript client-side HTML table sorting library with no dependencies required. 
+## TABLE-SORT-JS.
 
-* Demo: https://leewannacott.github.io/Portfolio/#/GitHub
+- Description: A JavaScript client-side HTML table sorting library with no dependencies required.
 
-* Backend: `npm install table-sort-js` and require("../node_modules/table-sort-js/table-sort.js") 
+- [Demo](https://leewannacott.github.io/Portfolio/#/GitHub)
+- [Documentation.](https://leewannacott.github.io/table-sort-js/docs/about.html)
+  (work in progress)
+- [npm package.](https://www.npmjs.com/package/table-sort-js)
+## Install instructions.
 
-* Frontend: `<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>`
+<b>Option 1.</b> Install from npm: ` npm install table-sort-js` 
 
-* Instructions: Add class "table-sort" to HTML table tags. Click on column headers to sort.
-
-Example:
-```html
-<script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script>
-<table class="table-sort">
-        <thead>
-          <tr>
-            <th>Last Name</th>
-            <th>First Name</th>
-            <th class="order-by-desc">Birth Date</th>
-            <th>Employee ID</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Smith</td>
-            <td>John</td>
-            <td>1977/12/4</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>Bach</td>
-            <td>Frank</td>
-            <td>1976/10/27</td>
-            <td>10</td>
-          </tr>
-          <tr>
-            <td>Doe</td>
-            <td>Jason</td>
-            <td>1978/4/6</td>
-            <td>100</td>
-          </tr>
-          <tr>
-            <td>Michael</td>
-            <td>Jackson</td>
-            <td>1958/8/29</td>
-            <td>54</td>
-          </tr>
-
-          <tr>
-            <td>Ben</td>
-            <td>Tenison</td>
-            <td>1994/7/21</td>
-            <td>134</td>
-          </tr>
-        </tbody>
-</table>
+```javascript
+import tableSort from "table-sort-js/table-sort.js";
 ```
-Notes:
-* Makes use of natural sorting to sort numerical values correctly. Sorts numbers, Dates, alphanumeric, etc.
+Refer to the documentation for examples on using table-sort-js with frontend frameworks such as
+[ReactJS.](https://leewannacott.github.io/table-sort-js/docs/react.html)
 
-* `class="order-by-desc"` on `<th>` to change default sort to descending order on first click.
- 
-* If `<thead>` does not exist it will be created by using data from first row. `<tbody>` is optional.
+<b>Option 2.</b> [Download table-sort.js](https://leewannacott.github.io/table-sort-js/table-sort.js) (Select save as.)
 
-* Example of use: https://www.cssscript.com/minimal-table-sorter/
+Then add the following script before your HTML table: 
+```html
+<script src="table-sort.js"></script>
+```
+Refer to the documenation for examples how to use table-sort-js with [HTML.](https://leewannacott.github.io/table-sort-js/docs/html5.html)
+#### To make tables sortable: 
 
-* Add `table-arrows` class to display ascending or descending triangle.
+- Add `class="table-sort"` to HTML &lt;table&gt; tags.
+- Click on table headers to sort columns.
+
+#### Classes:
+
+| &lt;table&gt; classes   | Description                                                                             |
+| -------------- | ------------------------------------------------                                        |
+| "table-sort"   | Make the table sortable! (Words, numbers, dates)                                        |
+| "table-arrows" | Display ascending or descending triangles.                                              |
+| "remember-sort"| If clicking on different columns remembers sort of the original column.                 |
+
+| &lt;th&gt; classes      | Description                                                 |
+| --------------- | ----------------------------------------------------------- |
+| "order-by-desc" | Order by descending on first click. (default is aescending) |
+| "file-size"     | Sort file sizes(B->TiB) uses the binary prefix. (e.g KiB)   |
+| "data-sort"     | Sort by [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes), e.g &lt;td data-sort="42"&gt; |
+
+#### Development:
+If you wish to contribute, install instructions can be found [here.](https://leewannacott.github.io/table-sort-js/docs/development.html)
