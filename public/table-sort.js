@@ -20,7 +20,7 @@ function tableSortJs(test = false, domDocumentWindow = document) {
     if (test === true) {
       const getTagTable = domDocumentWindow.getElementsByTagName("table");
       return [getTagTable];
-    } else if (test === false) {
+    } else {
       const getTagTable = document.getElementsByTagName("table");
       return [getTagTable];
     }
@@ -40,7 +40,7 @@ function tableSortJs(test = false, domDocumentWindow = document) {
     if (sortableTable.getElementsByTagName("thead").length === 0) {
       if (test === true) {
         createTableHead = domDocumentWindow.createElement("thead");
-      } else if (test === false) {
+      } else {
         createTableHead = document.createElement("thead");
       }
       createTableHead.appendChild(sortableTable.rows[0]);
