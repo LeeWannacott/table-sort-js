@@ -40,7 +40,7 @@ function tableSortJs(test = false, domDocumentWindow = document) {
     if (sortableTable.getElementsByTagName("thead").length === 0) {
       if (test === true) {
         createTableHead = domDocumentWindow.createElement("thead");
-      }else if (test === false) {
+      } else if (test === false) {
         createTableHead = document.createElement("thead");
       }
       createTableHead.appendChild(sortableTable.rows[0]);
@@ -61,6 +61,16 @@ function tableSortJs(test = false, domDocumentWindow = document) {
     let columnIndexesClicked = [];
     for (let [columnIndex, th] of tableHeadHeaders.entries()) {
       let timesClickedColumn = 0;
+      let desc = th.classList.contains("order-by-desc");
+      let tableArrows = sortableTable.classList.contains("table-arrows");
+      let arrowUp = " ▲";
+      let arrowDown = " ▼";
+
+      if (desc && tableArrows) {
+        th.insertAdjacentText("beforeend", arrowDown);
+      } else if (tableArrows){
+        th.insertAdjacentText("beforeend", arrowUp);
+      }
 
       th.addEventListener("click", function () {
         const tableRows = tableBody.querySelectorAll("tr");
@@ -347,16 +357,10 @@ function tableSortJs(test = false, domDocumentWindow = document) {
             th.innerText = th.innerText.replace(arrowDown, "");
           }
 
-          let arrowUp = " ▲";
-          let arrowDown = " ▼";
-
           // Sort naturally; default aescending unless th contains 'order-by-desc' as className.
           if (columnData[0] === undefined) {
             return;
           }
-
-          let desc = th.classList.contains("order-by-desc");
-          let tableArrows = sortableTable.classList.contains("table-arrows");
 
           if (timesClickedColumn === 1) {
             if (desc) {
