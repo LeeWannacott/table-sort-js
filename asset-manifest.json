@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/table-sort-js/static/css/main.f5de738c.chunk.css",
+    "main.css": "/table-sort-js/static/css/main.7db5f7a6.chunk.css",
     "main.js": "/table-sort-js/static/js/main.e3ce6484.chunk.js",
     "main.js.map": "/table-sort-js/static/js/main.e3ce6484.chunk.js.map",
     "runtime-main.js": "/table-sort-js/static/js/runtime-main.0ab85869.js",
@@ -8,13 +8,13 @@
     "static/js/2.e45c14fc.chunk.js": "/table-sort-js/static/js/2.e45c14fc.chunk.js",
     "static/js/2.e45c14fc.chunk.js.map": "/table-sort-js/static/js/2.e45c14fc.chunk.js.map",
     "index.html": "/table-sort-js/index.html",
-    "static/css/main.f5de738c.chunk.css.map": "/table-sort-js/static/css/main.f5de738c.chunk.css.map",
+    "static/css/main.7db5f7a6.chunk.css.map": "/table-sort-js/static/css/main.7db5f7a6.chunk.css.map",
     "static/js/2.e45c14fc.chunk.js.LICENSE.txt": "/table-sort-js/static/js/2.e45c14fc.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.0ab85869.js",
     "static/js/2.e45c14fc.chunk.js",
-    "static/css/main.f5de738c.chunk.css",
+    "static/css/main.7db5f7a6.chunk.css",
     "static/js/main.e3ce6484.chunk.js"
   ]
 }
