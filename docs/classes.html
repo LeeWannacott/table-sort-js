@@ -3,11 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <title>table-sort-js : documentation</title>
-    <link rel="stylesheet" href="index.css" />
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
+    <link rel="stylesheet" href="index.css" />
     <script src="../table-sort.js"></script>
+    <link href="assets/solarized-dark.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
+    <script src="./assets/rainbow.js"></script>
     <div class="wrapper">
       <div class="sidebar">
         <h2>table-sort-js</h2>
@@ -63,48 +65,145 @@
       <div class="main_content">
         <div class="header">Classes that can be used with table-sort-js.</div>
         <div class="info">
-          <table class="table table-sort" id="classes-table" style="width: 100%">
+          <table
+            class="table table-sort"
+            id="classes-table"
+            style="width: 100%"
+          >
             <thead>
-            <tr>
-              <th>&lt;table class=""&gt;</th>
-              <th>Description</th>
-            </tr>
+              <tr>
+                <th>&lt;table class=""&gt;</th>
+                <th>Description</th>
+              </tr>
             </thead>
             <tr>
               <td>table-sort</td>
-              <td>Make tables sortable!. Sorts: Words, Numbers(naturally) and Dates
-              out of the box without any config.</td>
+              <td>
+                Make tables sortable!. Sorts: Words, Numbers(naturally) and
+                Dates out of the box without any config.
+              </td>
             </tr>
             <tr>
               <td>table-arrows</td>
-              <td>Adds up or down arrows to indicate whether column is sorted in aescending
-              or descending order.</td>
+              <td>
+                Adds up or down arrows to indicate whether column is sorted in
+                aescending or descending order.
+              </td>
             </tr>
           </table>
-          <br>
-          <table class="table table-sort" id="classes-table" style="width: 100%">
+          <br />
+          <table
+            class="table table-sort"
+            id="classes-table"
+            style="width: 100%"
+          >
             <thead>
-            <tr>
-              <th>&lt;th class=""></th>
-              <th>Description</th>
-            </tr>
+              <tr>
+                <th>&lt;th class=""></th>
+                <th>Description</th>
+              </tr>
             </thead>
             <tr>
               <td>order-by-desc</td>
-              <td>Orders by descending on the first click of a column (default
-                aescending). Naming inspired by
-                SQL.</td>
+              <td>
+                Orders by descending on the first click of a column (default
+                aescending). Naming inspired by SQL.
+              </td>
             </tr>
             <tr>
               <td>file-size</td>
-              <td>Supports sorting files sizes from bytes to Tebibytes (B -> TiB). Can be Metric prefix (e.g 10KB), or Binary
-                prefix(e.g 25KiB) and can contain a space or no space
-                between number and unit type (e.g 25KB or 25 KB). It converts
-                units into numbers (bytes) does 
-              conversion and then outputs to the binary prefix rounded to two
-              decimal places. (e.g 25.00 KiB).</td>
+              <td>
+                Supports sorting files sizes from bytes to Tebibytes (B -> TiB).
+                Can be Metric prefix (e.g 10KB), or Binary prefix(e.g 25KiB) and
+                can contain a space or no space between number and unit type
+                (e.g 25KB or 25 KB). It converts units into numbers (bytes) does
+                conversion and then outputs to the binary prefix rounded to two
+                decimal places. (e.g 25.00 KiB).
+              </td>
+            </tr>
+            <tr>
+              <td>data-sort</td>
+              <td>
+                Sort by data <a
+                  href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes"
+                  target="blank">attributes<a/>, e.g &lt;td
+                    data-sort="42"&gt;&lt;/td&gt; useful when you want to sort
+                    by the values inside of data-sort="" rather than values between
+                    td tags. For example:<br/><br/>  
+                      <li>&lt;td data-sort="1"&gt;table&lt;/td&gt;</li>
+                      <li>&lt;td data-sort="2"&gt;sort&lt;/td&gt; </li>
+                      <li>&lt;td data-sort="3"&gt;js&lt;/td&gt; </li>
+                      <br/>
+                      Will end up sorting in the order 1, 2 ,3 which spells out:
+                      <mark><i>table sort
+                      js</i></mark>. As opposed to sorting what is inside the
+                  &lt;td&gt; tags alphabetically which would spell: <mark
+                    ><i>js sort
+                      table</i></mark>. This is useful for making custom sorts
+                  not supported by table-sort-js.
+              </td>
             </tr>
           </table>
+        <br>
+        <h3>Example using tags:</h3>
+
+        <pre>
+        <code style="font-size:1.3em" data-language="html">
+&lt;script src="table-sort.js"&gt;&lt;/script&gt;
+&lt;table class="table-sort table-arrows"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th class="data-sort"&gt;data&lt;/th&gt;
+      &lt;th class="file-size"&gt;file sizes&lt;/th&gt;
+      &lt;th class="order-by-desc"&gt;birth date&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td data-sort="2"&gt;sort&lt;/td&gt;
+      &lt;td&gt;10KiB&lt;/td&gt;
+      &lt;td&gt;1706/1/17&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td data-sort="3"&gt;js&lt;/td&gt;
+      &lt;td&gt;1MB&lt;/td&gt;
+      &lt;td&gt;1835/11/25&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td data-sort="1"&gt;table&lt;/td&gt;
+      &lt;td&gt;1TB&lt;/td&gt;
+      &lt;td&gt;1835/11/30&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+        </code>
+        </pre>
+<table class="table-sort table-arrows" id="classes-table">
+  <thead>
+    <tr>
+      <th class="data-sort">data</th>
+      <th class="file-size">file sizes</th>
+      <th class="order-by-desc">birth date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td data-sort="2">sort</td>
+      <td>10KiB</td>
+      <td>1706/1/17</td>
+    </tr>
+    <tr>
+      <td data-sort="3">js</td>
+      <td>1 MB</td>
+      <td>1835/11/25</td>
+    </tr>
+    <tr>
+      <td data-sort="1">table</td>
+      <td>1TB</td>
+      <td>1835/11/30</td>
+    </tr>
+  </tbody>
+</table>
         </div>
       </div>
     </div>
