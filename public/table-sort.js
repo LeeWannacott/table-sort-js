@@ -68,7 +68,7 @@ function tableSortJs(test = false, domDocumentWindow = document) {
 
       if (desc && tableArrows) {
         th.insertAdjacentText("beforeend", arrowDown);
-      } else if (tableArrows){
+      } else if (tableArrows) {
         th.insertAdjacentText("beforeend", arrowUp);
       }
 
@@ -83,45 +83,6 @@ function tableSortJs(test = false, domDocumentWindow = document) {
               .dataset.sort;
             columnData.push(`${dataAttributeTd}#${i}`);
             columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
-          }
-        }
-
-        let isDayOfWeek = th.classList.contains("days-of-week");
-        if (isDayOfWeek) {
-          const day =
-            /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thur|Fri|Sat|Sun)/i;
-          const dayOfWeek = {
-            Monday: 1,
-            Tuesday: 2,
-            Wednesday: 3,
-            Thursday: 4,
-            Friday: 5,
-            Saturday: 6,
-            Sunday: 7,
-          };
-          for (let [i, tr] of tableRows.entries()) {
-            const dayOfWeekTd = tr
-              .querySelectorAll("td")
-              .item(columnIndex).textContent;
-            if (dayOfWeekTd.match(day)) {
-              if (dayOfWeekTd.match(/Monday|Mon/i)) {
-                columnData.push(`${dayOfWeek.Monday}#${i}`);
-              } else if (dayOfWeekTd.match(/Tuesday|Tue/i)) {
-                columnData.push(`${dayOfWeek.Tuesday}#${i}`);
-              } else if (dayOfWeekTd.match(/Wednesday|Wed/i)) {
-                columnData.push(`${dayOfWeek.Wednesday}#${i}`);
-              } else if (dayOfWeekTd.match(/Thursday|Thur/i)) {
-                columnData.push(`${dayOfWeek.Thursday}#${i}`);
-              } else if (dayOfWeekTd.match(/Friday|Fri/i)) {
-                columnData.push(`${dayOfWeek.Friday}#${i}`);
-              } else if (dayOfWeekTd.match(/Saturday|Sat/i)) {
-                columnData.push(`${dayOfWeek.Saturday}#${i}`);
-              } else if (dayOfWeekTd.match(/Sunday|Sun/i)) {
-                columnData.push(`${dayOfWeek.Sunday}#${i}`);
-              }
-            } else {
-              columnData.push(`!X!Y!Z!#${i}`);
-            }
           }
         }
 
@@ -320,10 +281,7 @@ function tableSortJs(test = false, domDocumentWindow = document) {
               if (isFileSize) {
                 fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
               }
-              if (isDayOfWeek) {
-                columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
-              }
-              if (!isFileSize && !isDayOfWeek && !isDataAttribute) {
+              if (!isFileSize && !isDataAttribute) {
                 columnData.push(`${tdTextContent}#${i}`);
                 columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
               }

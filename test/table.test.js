@@ -230,7 +230,7 @@ test("Release Versions: order-by-desc", () => {
   ).toStrictEqual(["4.2.0", "4.1.0", "4.0.1", "3.0.4", "3.0.2"]);
 });
 
-test("Expects week begins at Monday.", () => {
+test("data-sort: example days of week", () => {
   expect(
     createTestTable(
       [
@@ -241,20 +241,21 @@ test("Expects week begins at Monday.", () => {
         "Thursday",
         "Tuesday",
         "Monday",
-      ], "days-of-week"
+      ],
+      "data-sort"
     )
   ).toStrictEqual([
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+        "Saturday",
+        "Wednesday",
+        "Sunday",
+        "Friday",
+        "Thursday",
+        "Tuesday",
+        "Monday",
   ]);
 });
 
-test("Expects week begins at Monday: order-by-desc", () => {
+test("data-sort: example days of week  - reversed", () => {
   expect(
     createTestTable(
       [
@@ -265,49 +266,16 @@ test("Expects week begins at Monday: order-by-desc", () => {
         "Thursday",
         "Tuesday",
         "Monday",
-      ], "days-of-week order-by-desc"
+      ],
+      "data-sort order-by-desc"
     )
   ).toStrictEqual([
-    "Sunday",
-    "Saturday",
-    "Friday",
-    "Thursday",
-    "Wednesday",
-    "Tuesday",
-    "Monday",
+        "Monday",
+        "Tuesday",
+        "Thursday",
+        "Friday",
+        "Sunday",
+        "Wednesday",
+        "Saturday",
   ]);
 });
-
-// test("Day of the weeks. order-by-desc", () =
-// expect(
-// createTestTable([])
-// ).toStrictEqual([]);
-// });
-// Tests For Sorting not yet implemented
-// test("Sizes", () => {
-//    expect(createTestTable(["xs", "lg", "sm", "md", "xlg"])).toStrictEqual([
-//       "xs",
-//       "sm",
-//       "md",
-//       "lg",
-//       "xlg",
-//    ]);
-// });
-// test("Months", () => {
-//    expect(createTestTable(["March", "October", "December", "February", "January"])).toStrictEqual([
-//       "January",
-//       "February",
-//       "March",
-//       "October",
-//       "December",
-//    ]);
-// });
-// test("Weekdays (Expects week begins at Monday)", () => {
-//    expect(createTestTable(["Wednesday", "Monday", "Friday", "Thursday", "Sunday"])).toStrictEqual([
-//       "Monday",
-//       "Wednesday",
-//       "Thursday",
-//       "Friday",
-//       "Sunday",
-//    ]);
-// });

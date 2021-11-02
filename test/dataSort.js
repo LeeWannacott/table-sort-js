@@ -3,7 +3,7 @@ const { JSDOM } = jsdom;
 require("iconv-lite").encodingExists("foo");
 const tableSortJs = require("../public/table-sort");
 
-function createTestTable(testTableData, classTags="") {
+function createDataSortTestTable(testTableData, classTags="") {
 
   let getClassTagsForTH = [];
   let testTableThRow = `<tr><th class="${classTags}">Testing Column</th></tr>`;
@@ -11,12 +11,8 @@ function createTestTable(testTableData, classTags="") {
 
   let testTableTdRows = [];
   for (let i = 0; i < testTableData.length; i++) {
-    let testTableTdRow;
-    if(classTags.includes("data-sort")){
-      testTableTdRow = `<tr><td data-sort="${i}">${testTableData[i]}</td></tr>`;
-    }else{
-      testTableTdRow = `<tr><td>${testTableData[i]}</td></tr>`;
-    }
+    let testTableTdRow = `<tr><td data-sort="${i}">${testTableData[i]}</td></tr>`;
+    console.log(testTableTdRow)
     testTableTdRows.push(testTableTdRow);
   }
 
@@ -51,4 +47,4 @@ function createTestTable(testTableData, classTags="") {
   return testIfSortedList;
 }
 
-module.exports = createTestTable;
+module.exports = createDataSortTestTable;
