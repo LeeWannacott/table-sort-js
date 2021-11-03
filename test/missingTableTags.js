@@ -31,13 +31,15 @@ function createTestTableNoMissingTags(testTableData, classTags = "") {
   </html>`);
 
   // Call tablesort and make table sortable and simulate click from a user.
-  tableSortJs((test = true), tableWithHeadAndBody.window.document);
+  tableSortJs((testing = true), tableWithHeadAndBody.window.document);
   tableWithHeadAndBody.window.document.querySelector("table th").click();
   // Make an array from table contents to test if sorted correctly.
   let table = tableWithHeadAndBody.window.document.querySelector("table");
   const tableBody = table.querySelector("tbody");
   const tableRows = [...tableBody.querySelectorAll("tr")];
-  const testIfSortedList = tableRows.map(tr => tr.querySelectorAll("td").item(0).innerHTML);
+  const testIfSortedList = tableRows.map(
+    (tr) => tr.querySelectorAll("td").item(0).innerHTML
+  );
   return testIfSortedList;
 }
 
@@ -67,13 +69,15 @@ function createTestTableMissingHeadTag(testTableData, classTags = "") {
   </html>`);
 
   // Call tablesort and make table sortable and simulate click from a user.
-  tableSortJs((test = true), tableWithMissingHeadTag.window.document);
+  tableSortJs((testing = true), tableWithMissingHeadTag.window.document);
   tableWithMissingHeadTag.window.document.querySelector("table th").click();
   // Make an array from table contents to test if sorted correctly.
   let table = tableWithMissingHeadTag.window.document.querySelector("table");
   const tableBody = table.querySelector("tbody");
   const tableRows = [...tableBody.querySelectorAll("tr")];
-  const testIfSortedList = tableRows.map(tr => tr.querySelectorAll("td").item(0).innerHTML);
+  const testIfSortedList = tableRows.map(
+    (tr) => tr.querySelectorAll("td").item(0).innerHTML
+  );
   return testIfSortedList;
 }
 
@@ -103,13 +107,15 @@ function createTestTableMissingBodyTag(testTableData, classTags = "") {
   </html>`);
 
   // Call tablesort and make table sortable and simulate click from a user.
-  tableSortJs((test = true), tablewithMissingBodyTag.window.document);
+  tableSortJs((testing = true), tablewithMissingBodyTag.window.document);
   tablewithMissingBodyTag.window.document.querySelector("table th").click();
   // Make an array from table contents to test if sorted correctly.
   let table = tablewithMissingBodyTag.window.document.querySelector("table");
   const tableBody = table.querySelector("tbody");
   const tableRows = [...tableBody.querySelectorAll("tr")];
-  const testIfSortedList = tableRows.map(tr => tr.querySelectorAll("td").item(0).innerHTML);
+  const testIfSortedList = tableRows.map(
+    (tr) => tr.querySelectorAll("td").item(0).innerHTML
+  );
   return testIfSortedList;
 }
 
@@ -137,7 +143,7 @@ function createTestTableMissingBodyAndHeadTag(testTableData, classTags = "") {
   </html>`);
 
   // Call tablesort and make table sortable and simulate click from a user.
-  tableSortJs((test = true), tableWithMissingBodyAndHeadTag.window.document);
+  tableSortJs((testing = true), tableWithMissingBodyAndHeadTag.window.document);
   tableWithMissingBodyAndHeadTag.window.document
     .querySelector("table th")
     .click();
@@ -146,7 +152,9 @@ function createTestTableMissingBodyAndHeadTag(testTableData, classTags = "") {
     tableWithMissingBodyAndHeadTag.window.document.querySelector("table");
   const tableBody = table.querySelector("tbody");
   const tableRows = [...tableBody.querySelectorAll("tr")];
-  const testIfSortedList = tableRows.map(tr => tr.querySelectorAll("td").item(0).innerHTML);
+  const testIfSortedList = tableRows.map(
+    (tr) => tr.querySelectorAll("td").item(0).innerHTML
+  );
   return testIfSortedList;
 }
 
