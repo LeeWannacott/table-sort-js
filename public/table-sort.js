@@ -328,7 +328,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     th.addEventListener("click", function () {
       const columnData = [];
-      const tableRows = tableBody.querySelectorAll("tr");
+      const tableRows = Array.prototype.filter.call(tableBody.querySelectorAll("tr"), e => {
+        return e.style.display != 'none';
+      });
 
       let isDataAttribute = th.classList.contains("data-sort");
       // Check if using data-sort attribute; if so sort by value of data-sort
