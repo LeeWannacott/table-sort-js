@@ -328,19 +328,22 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     th.addEventListener("click", function () {
       const columnData = [];
-      const tableRows = tableBody.querySelectorAll("tr");
+      // To make it work even if there is a tr with display: none; in the table, only the tr that is currently displayed is subject to sorting.
+      const visibleTableRows = Array.prototype.filter.call(tableBody.querySelectorAll("tr"), tr => {
+        return tr.style.display !== 'none';
+      });
 
       let isDataAttribute = th.classList.contains("data-sort");
       // Check if using data-sort attribute; if so sort by value of data-sort
       // attribute.
       if (isDataAttribute) {
-        sortDataAttributes(tableRows, columnData);
+        sortDataAttributes(visibleTableRows, columnData);
       }
 
       let isFileSize = th.classList.contains("file-size");
       // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
       if (isFileSize) {
-        sortFileSize(tableRows, columnData);
+        sortFileSize(visibleTableRows, columnData);
       }
 
       // Checking if user has clicked different column from the first column if
@@ -352,8 +355,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
       timesClickedColumn += 1;
 
-      getTableData(tableRows, columnData, isFileSize, isDataAttribute);
-      updateTable(tableRows, columnData, isFileSize);
+      getTableData(visibleTableRows, columnData, isFileSize, isDataAttribute);
+      updateTable(visibleTableRows, columnData, isFileSize);
     });
   }
 }

@@ -279,3 +279,23 @@ test("data-sort: example days of week  - reversed", () => {
         "Saturday",
   ]);
 });
+
+test("visible-tr-sort: example sort only visible trs", () => {
+  expect(
+    createTestTable(
+      [
+        "row1", // invisible
+        "row2",
+        "row3", // invisible
+        "row4",
+        "row5",
+      ],
+      "order-by-desc",
+      [0, 2]
+    )
+  ).toStrictEqual([
+        "row5",
+        "row4",
+        "row2",
+  ]);
+});
