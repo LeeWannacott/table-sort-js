@@ -245,13 +245,13 @@ test("data-sort: example days of week", () => {
       "data-sort"
     )
   ).toStrictEqual([
-        "Saturday",
-        "Wednesday",
-        "Sunday",
-        "Friday",
-        "Thursday",
-        "Tuesday",
-        "Monday",
+    "Saturday",
+    "Wednesday",
+    "Sunday",
+    "Friday",
+    "Thursday",
+    "Tuesday",
+    "Monday",
   ]);
 });
 
@@ -270,13 +270,13 @@ test("data-sort: example days of week  - reversed", () => {
       "data-sort order-by-desc"
     )
   ).toStrictEqual([
-        "Monday",
-        "Tuesday",
-        "Thursday",
-        "Friday",
-        "Sunday",
-        "Wednesday",
-        "Saturday",
+    "Monday",
+    "Tuesday",
+    "Thursday",
+    "Friday",
+    "Sunday",
+    "Wednesday",
+    "Saturday",
   ]);
 });
 
@@ -293,9 +293,5 @@ test("visible-tr-sort: example sort only visible trs", () => {
       "order-by-desc",
       [0, 2]
     )
-  ).toStrictEqual([
-        "row5",
-        "row4",
-        "row2",
-  ]);
+  ).toStrictEqual(["row5", "row4", "row2"]);
 });

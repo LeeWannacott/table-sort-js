@@ -329,9 +329,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     th.addEventListener("click", function () {
       const columnData = [];
       // To make it work even if there is a tr with display: none; in the table, only the tr that is currently displayed is subject to sorting.
-      const visibleTableRows = Array.prototype.filter.call(tableBody.querySelectorAll("tr"), tr => {
-        return tr.style.display !== 'none';
-      });
+      const visibleTableRows = Array.prototype.filter.call(
+        tableBody.querySelectorAll("tr"),
+        (tr) => {
+          return tr.style.display !== "none";
+        }
+      );
 
       let isDataAttribute = th.classList.contains("data-sort");
       // Check if using data-sort attribute; if so sort by value of data-sort

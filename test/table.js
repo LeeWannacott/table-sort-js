@@ -3,8 +3,7 @@ const { JSDOM } = jsdom;
 require("iconv-lite").encodingExists("foo");
 const tableSortJs = require("../public/table-sort");
 
-function createTestTable(testTableData, classTags="", invisibleIndex=[]) {
-
+function createTestTable(testTableData, classTags = "", invisibleIndex = []) {
   let getClassTagsForTH = [];
   let testTableThRow = `<tr><th class="${classTags}">Testing Column</th></tr>`;
   getClassTagsForTH.push(testTableThRow);
@@ -12,11 +11,11 @@ function createTestTable(testTableData, classTags="", invisibleIndex=[]) {
   let testTableTdRows = [];
   for (let i = 0; i < testTableData.length; i++) {
     let testTableTdRow;
-    if(classTags.includes("data-sort")){
+    if (classTags.includes("data-sort")) {
       testTableTdRow = `<tr><td data-sort="${i}">${testTableData[i]}</td></tr>`;
-    }else if(invisibleIndex.includes(i)) {
+    } else if (invisibleIndex.includes(i)) {
       testTableTdRow = `<tr style="display: none;"><td>${testTableData[i]}</td></tr>`;
-    }else{
+    } else {
       testTableTdRow = `<tr><td>${testTableData[i]}</td></tr>`;
     }
     testTableTdRows.push(testTableTdRow);
@@ -39,7 +38,7 @@ function createTestTable(testTableData, classTags="", invisibleIndex=[]) {
   </html>`);
 
   // Call tablesort and make table sortable and simulate click from a user.
-  tableSortJs(testing=true,dom.window.document);
+  tableSortJs((testing = true), dom.window.document);
   dom.window.document.querySelector("table th").click();
 
   // Make an array from table contents to test if sorted correctly.
@@ -48,7 +47,7 @@ function createTestTable(testTableData, classTags="", invisibleIndex=[]) {
   const tableRows = tableBody.querySelectorAll("tr");
   const testIfSortedList = [];
   for (let [i, tr] of tableRows.entries()) {
-    if(tr.style.display !== 'none'){
+    if (tr.style.display !== "none") {
       testIfSortedList.push(tr.querySelectorAll("td").item(0).innerHTML);
     }
   }

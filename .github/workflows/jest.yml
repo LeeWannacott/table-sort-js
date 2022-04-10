@@ -5,16 +5,16 @@ name: Jest CI - Automated testing of table sorting.
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Install modules
-      run: npm ci
-    - name: Run tests
-      run: npm test
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm ci
+      - name: Run tests
+        run: npm test
