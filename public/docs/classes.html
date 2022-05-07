@@ -87,7 +87,13 @@
               <td>table-arrows</td>
               <td>
                 Adds up or down arrows to indicate whether column is sorted in
-                aescending or descending order.
+                ascending or descending order.
+              </td>
+            </tr>
+            <tr>
+              <td>remember-sort</td>
+              <td>
+                If clicking on different columns remembers sort of the original column.
               </td>
             </tr>
           </table>
@@ -99,7 +105,7 @@
           >
             <thead>
               <tr>
-                <th>&lt;th class=""></th>
+                <th>&lt;th class=""&gt;</th>
                 <th>Description</th>
               </tr>
             </thead>
@@ -113,7 +119,7 @@
             <tr>
               <td>file-size</td>
               <td>
-                Supports sorting files sizes from bytes to Tebibytes (B -> TiB).
+                Supports sorting files sizes from bytes to Tebibytes (B -&gt; TiB).
                 Can be Metric prefix (e.g 10KB), or Binary prefix(e.g 25KiB) and
                 can contain a space or no space between number and unit type
                 (e.g 25KB or 25 KB). It converts units into numbers (bytes) does
@@ -143,6 +149,12 @@
                   not supported by table-sort-js.
               </td>
             </tr>
+            <tr>
+              <td>disable-sort</td>
+              <td>
+                Disallow sorting the table by this specific column.
+              </td>
+            </tr>
           </table>
         <br>
         <h3>Example using tags:</h3>
@@ -156,6 +168,7 @@
       &lt;th class="data-sort"&gt;data&lt;/th&gt;
       &lt;th class="file-size"&gt;file sizes&lt;/th&gt;
       &lt;th class="order-by-desc"&gt;birth date&lt;/th&gt;
+      &lt;th class="disable-sort"&gt;unsortable&lt;/th&gt;
     &lt;/tr&gt;
   &lt;/thead&gt;
   &lt;tbody&gt;
@@ -163,16 +176,19 @@
       &lt;td data-sort="2"&gt;sort&lt;/td&gt;
       &lt;td&gt;10KiB&lt;/td&gt;
       &lt;td&gt;1706/1/17&lt;/td&gt;
+      &lt;td&gt;1&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td data-sort="3"&gt;js&lt;/td&gt;
       &lt;td&gt;1MB&lt;/td&gt;
       &lt;td&gt;1835/11/25&lt;/td&gt;
+      &lt;td&gt;2&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td data-sort="1"&gt;table&lt;/td&gt;
       &lt;td&gt;1TB&lt;/td&gt;
       &lt;td&gt;1835/11/30&lt;/td&gt;
+      &lt;td&gt;3&lt;/td&gt;
     &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
@@ -184,6 +200,7 @@
       <th class="data-sort">data</th>
       <th class="file-size">file sizes</th>
       <th class="order-by-desc">birth date</th>
+      <th class="disable-sort">unsortable</th>
     </tr>
   </thead>
   <tbody>
@@ -191,16 +208,19 @@
       <td data-sort="2">sort</td>
       <td>10KiB</td>
       <td>1706/1/17</td>
+      <td>1</td>
     </tr>
     <tr>
       <td data-sort="3">js</td>
       <td>1 MB</td>
       <td>1835/11/25</td>
+      <td>2</td>
     </tr>
     <tr>
       <td data-sort="1">table</td>
       <td>1TB</td>
       <td>1835/11/30</td>
+      <td>3</td>
     </tr>
   </tbody>
 </table>

@@ -295,3 +295,18 @@ test("visible-tr-sort: example sort only visible trs", () => {
     )
   ).toStrictEqual(["row5", "row4", "row2"]);
 });
+
+test("disable-sort: disable sorting on a column", () => {
+  expect(
+    createTestTable(
+      [
+        "row2",
+        "row1",
+        "row4",
+        "row3",
+      ],
+      "disable-sort"
+    )
+  ).toStrictEqual(["row2", "row1", "row4", "row3"]);
+});
+
