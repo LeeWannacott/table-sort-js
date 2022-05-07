@@ -57,10 +57,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     const tableHead = sortableTable.querySelector("thead");
     const tableHeadHeaders = tableHead.querySelectorAll("th");
-    tableHead.style.cursor = "pointer";
 
     for (let [columnIndex, th] of tableHeadHeaders.entries()) {
-      makeEachColumnSortable(th, columnIndex, tableBody, sortableTable);
+      if (!th.classList.contains("disable-sort")) {
+        th.style.cursor = "pointer";
+        makeEachColumnSortable(th, columnIndex, tableBody, sortableTable);
+      }
     }
   }
 
