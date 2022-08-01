@@ -1,17 +1,22 @@
 const jsdom = require("jsdom");
+
 const { JSDOM } = jsdom;
 require("iconv-lite").encodingExists("foo");
 const tableSortJs = require("../public/table-sort");
 
-function createTestTable(testTableData, classTags = "", invisibleIndex = []) {
+function createTestTable(
+  testTableData,
+  thAttributes = { classTags: "" },
+  invisibleIndex = []
+) {
   let getClassTagsForTH = [];
-  let testTableThRow = `<tr><th class="${classTags}">Testing Column</th></tr>`;
+  let testTableThRow = `<tr><th class="${thAttributes.classTags}">Testing Column</th></tr>`;
   getClassTagsForTH.push(testTableThRow);
 
   let testTableTdRows = [];
   for (let i = 0; i < testTableData.length; i++) {
     let testTableTdRow;
-    if (classTags.includes("data-sort")) {
+    if (thAttributes.classTags.includes("data-sort")) {
       testTableTdRow = `<tr><td data-sort="${i}">${testTableData[i]}</td></tr>`;
     } else if (invisibleIndex.includes(i)) {
       testTableTdRow = `<tr style="display: none;"><td>${testTableData[i]}</td></tr>`;
