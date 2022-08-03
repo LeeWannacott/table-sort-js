@@ -167,12 +167,29 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
-    function getTableData(tableRows, columnData, isFileSize, isDataAttribute) {
+    function getColSpanData(sortableTable, colSpanData, colSpanSum){
+      sortableTable.querySelectorAll("th").forEach(
+        (th,index) => {
+          colSpanData[index] = th.colSpan
+          if(index===0)
+            colSpanSum[index] = th.colSpan
+          else
+            colSpanSum[index] = colSpanSum[index-1] + th.colSpan
+        })
+    }
+
+
+    function getTableData(tableRows, columnData, isFileSize, isDataAttribute, colSpanData, colSpanSum) {
       for (let [i, tr] of tableRows.entries()) {
         // inner text for column we click on
         let tdTextContent = tr
           .querySelectorAll("td")
-          .item(columnIndex).textContent;
+          .item(
+            colSpanData[columnIndex] === 1 ? 
+              colSpanSum[columnIndex]-1 : 
+              colSpanSum[columnIndex]-colSpanData[columnIndex])
+            .textContent;
+
         if (tdTextContent.length === 0) {
           tdTextContent = "";
         }
@@ -330,6 +347,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     th.addEventListener("click", function () {
       const columnData = [];
+      const colSpanData = {};
+      const colSpanSum = {};
+
       // To make it work even if there is a tr with display: none; in the table, only the tr that is currently displayed is subject to sorting.
       const visibleTableRows = Array.prototype.filter.call(
         tableBody.querySelectorAll("tr"),
@@ -360,7 +380,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
       timesClickedColumn += 1;
 
-      getTableData(visibleTableRows, columnData, isFileSize, isDataAttribute);
+      getColSpanData(sortableTable, colSpanData, colSpanSum)
+      getTableData(visibleTableRows, columnData, isFileSize, isDataAttribute, colSpanData, colSpanSum);
       updateTable(visibleTableRows, columnData, isFileSize);
     });
   }
