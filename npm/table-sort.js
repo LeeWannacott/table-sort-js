@@ -57,10 +57,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     const tableHead = sortableTable.querySelector("thead");
     const tableHeadHeaders = tableHead.querySelectorAll("th");
-    tableHead.style.cursor = "pointer";
 
     for (let [columnIndex, th] of tableHeadHeaders.entries()) {
-      makeEachColumnSortable(th, columnIndex, tableBody, sortableTable);
+      if (!th.classList.contains("disable-sort")) {
+        th.style.cursor = "pointer";
+        makeEachColumnSortable(th, columnIndex, tableBody, sortableTable);
+      }
     }
   }
 
@@ -86,6 +88,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function sortFileSize(tableRows, columnData) {
+      // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
       const numberWithUnitType =
         /[.0-9]+(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|\s?GiB|T\s?B|\s?TiB)/i;
       const unitType =
@@ -152,6 +155,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     let columnIndexesClicked = [];
 
     function rememberSort(timesClickedColumn, columnIndexesClicked) {
+      // Check if user has clicked different column from the first column if
+      // yes reset times clicked.
       columnIndexesClicked.push(columnIndex);
       if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
         const lastColumnClicked =
@@ -165,12 +170,32 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
-    function getTableData(tableRows, columnData, isFileSize, isDataAttribute) {
+    function getColSpanData(sortableTable, colSpanData, colSpanSum) {
+      sortableTable.querySelectorAll("th").forEach((th, index) => {
+        colSpanData[index] = th.colSpan;
+        if (index === 0) colSpanSum[index] = th.colSpan;
+        else colSpanSum[index] = colSpanSum[index - 1] + th.colSpan;
+      });
+    }
+
+    function getTableData(
+      tableRows,
+      columnData,
+      isFileSize,
+      isDataAttribute,
+      colSpanData,
+      colSpanSum
+    ) {
       for (let [i, tr] of tableRows.entries()) {
         // inner text for column we click on
         let tdTextContent = tr
           .querySelectorAll("td")
-          .item(columnIndex).textContent;
+          .item(
+            colSpanData[columnIndex] === 1
+              ? colSpanSum[columnIndex] - 1
+              : colSpanSum[columnIndex] - colSpanData[columnIndex]
+          ).textContent;
+
         if (tdTextContent.length === 0) {
           tdTextContent = "";
         }
@@ -328,7 +353,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     th.addEventListener("click", function () {
       const columnData = [];
-      // To make it work even if there is a tr with display: none; in the table, only the tr that is currently displayed is subject to sorting.
+      const colSpanData = {};
+      const colSpanSum = {};
+
       const visibleTableRows = Array.prototype.filter.call(
         tableBody.querySelectorAll("tr"),
         (tr) => {
@@ -337,20 +364,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       );
 
       let isDataAttribute = th.classList.contains("data-sort");
-      // Check if using data-sort attribute; if so sort by value of data-sort
-      // attribute.
       if (isDataAttribute) {
         sortDataAttributes(visibleTableRows, columnData);
       }
 
       let isFileSize = th.classList.contains("file-size");
-      // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
       if (isFileSize) {
         sortFileSize(visibleTableRows, columnData);
       }
 
-      // Checking if user has clicked different column from the first column if
-      // yes reset times clicked.
       let isRememberSort = sortableTable.classList.contains("remember-sort");
       if (!isRememberSort) {
         rememberSort(timesClickedColumn, columnIndexesClicked);
@@ -358,7 +380,16 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
       timesClickedColumn += 1;
 
-      getTableData(visibleTableRows, columnData, isFileSize, isDataAttribute);
+      getColSpanData(sortableTable, colSpanData, colSpanSum);
+      // TODO: refactor function to take object.
+      getTableData(
+        visibleTableRows,
+        columnData,
+        isFileSize,
+        isDataAttribute,
+        colSpanData,
+        colSpanSum
+      );
       updateTable(visibleTableRows, columnData, isFileSize);
     });
   }
