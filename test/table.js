@@ -9,21 +9,40 @@ function createTestTable(
   thAttributes = { classTags: "" },
   invisibleIndex = []
 ) {
-  let getClassTagsForTH = [];
-  let testTableThRow = `<tr><th class="${thAttributes.classTags}">Testing Column</th></tr>`;
-  getClassTagsForTH.push(testTableThRow);
+  const numberOfTableColumns = Object.keys(testTableData).length;
+  let testTableHeaders = "";
+  for (let i = 0; i < numberOfTableColumns; i++) {
+    testTableHeaders += `<th class="${thAttributes.classTags}">Testing Column</th>`;
+  }
+  testTableHeaders = `<tr> ${testTableHeaders} </tr>`;
+
+  function getRowsOfTd(index, type) {
+    let rowsOfTd = "";
+    for (let key in testTableData) {
+      if (testTableData[key]) {
+        if (type === "data-sort") {
+          rowsOfTd += `<td data-sort="${index}">${testTableData[key][index]}</td>`;
+        } else {
+          rowsOfTd += `<td>${testTableData[key][index]}</td>`;
+        }
+      }
+    }
+    return rowsOfTd;
+  }
 
   let testTableTdRows = [];
-  for (let i = 0; i < testTableData.length; i++) {
+  for (let i = 0; i < testTableData["col1"].length; i++) {
     let testTableTdRow;
     if (thAttributes.classTags.includes("data-sort")) {
-      testTableTdRow = `<tr><td data-sort="${i}">${testTableData[i]}</td></tr>`;
-    } else if (invisibleIndex.includes(i)) {
-      testTableTdRow = `<tr style="display: none;"><td>${testTableData[i]}</td></tr>`;
+      testTableTdRow = `${getRowsOfTd(i, "data-sort")}`;
     } else {
-      testTableTdRow = `<tr><td>${testTableData[i]}</td></tr>`;
+      testTableTdRow = `${getRowsOfTd(i)}`;
     }
-    testTableTdRows.push(testTableTdRow);
+    if (invisibleIndex.includes(i)) {
+      testTableTdRows.push(`<tr style="display: none;">${testTableTdRow}</tr>`);
+    } else {
+      testTableTdRows.push(`<tr> ${testTableTdRow}</tr>`);
+    }
   }
 
   const dom = new JSDOM(`<!DOCTYPE html>
@@ -33,7 +52,7 @@ function createTestTable(
     <body>
       <table class="table-sort">
       <thead>
-      ${getClassTagsForTH}
+      ${testTableHeaders}
       </thead>
     <tbody>
     ${testTableTdRows}
@@ -42,18 +61,30 @@ function createTestTable(
   </body>
   </html>`);
 
-  // Call tablesort and make table sortable and simulate click from a user.
+  // Call tablesort and make table sortable and simulate clicks from a user.
   tableSortJs((testing = true), dom.window.document);
-  dom.window.document.querySelector("table th").click();
+
+  for (let i = 0; i < numberOfTableColumns; i++) {
+    dom.window.document.querySelectorAll("table th")[i].click();
+  }
 
   // Make an array from table contents to test if sorted correctly.
   let table = dom.window.document.querySelector("table");
   const tableBody = table.querySelector("tbody");
   const tableRows = tableBody.querySelectorAll("tr");
-  const testIfSortedList = [];
+  const testIfSortedList = {};
+
+  for (let i = 0; i < numberOfTableColumns; i++) {
+    testIfSortedList[`col${i + 1}`] = [];
+  }
+
   for (let [i, tr] of tableRows.entries()) {
     if (tr.style.display !== "none") {
-      testIfSortedList.push(tr.querySelectorAll("td").item(0).innerHTML);
+      for (let i = 0; i < numberOfTableColumns; i++)
+        testIfSortedList[`col${i + 1}`].push(
+          tr.querySelectorAll("td").item(i).innerHTML
+        );
+      // console.log(tr.querySelectorAll("td").item(i).innerHTML)
     }
   }
   return testIfSortedList;
