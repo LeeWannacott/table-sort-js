@@ -2,7 +2,7 @@
 ![table-sort-js](https://img.shields.io/npm/dm/table-sort-js)
 ![table-sort-js](https://img.shields.io/github/repo-size/leewannacott/table-sort-js)
 ![table-sort-js](https://img.shields.io/github/license/LeeWannacott/table-sort-js)
-![table-sort-js](https://img.shields.io/github/workflow/status/leewannacott/table-sort-js/Jest%20CI%20-%20Automated%20testing%20of%20table%20sorting.?label=tests)
+![table-sort-js](https://img.shields.io/github/actions/workflow/status/leewannacott/table-sort-js/jest.yml?branch=master)
 
 ## TABLE-SORT-JS.
 
