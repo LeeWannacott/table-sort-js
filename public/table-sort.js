@@ -214,17 +214,33 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         }
       }
 
+      // remove the unique identifier from a number string value, so it
+      // can be coerced to a Number
+      function strippedNumberString(numberWithUniqueIdentifier) {
+        return numberWithUniqueIdentifier.replace(/#[0-9]*/, "");
+      }
+
       function naturalSortAescending(a, b) {
         if (a.includes("X!Y!Z!#")) {
           return 1;
         } else if (b.includes("X!Y!Z!#")) {
           return -1;
         } else {
-          return a.localeCompare(
-            b,
-            navigator.languages[0] || navigator.language,
-            { numeric: true, ignorePunctuation: true }
-          );
+          if (th.classList.contains("bare-numbers")) {
+            return Number(strippedNumberString(a)) <=
+              Number(strippedNumberString(b))
+              ? -1
+              : 1;
+          } else {
+            return a.localeCompare(
+              b,
+              navigator.languages[0] || navigator.language,
+              {
+                numeric: true,
+                ignorePunctuation: true,
+              }
+            );
+          }
         }
       }
 
