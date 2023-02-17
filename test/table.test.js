@@ -163,7 +163,6 @@ test("Empty cells sort at the end: order-by-desc", () => {
   ).toStrictEqual({ col1: ["", "", "Echo", "Bravo", "Alpha"] });
 });
 
-// Disabled while implementing file-size
 test("Order by file-size: file-size", () => {
   expect(
     createTestTable(
