@@ -175,13 +175,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function getTableData(
-      tableRows,
-      columnData,
-      isFileSize,
-      isDataAttribute,
-      colSpanData,
-      colSpanSum
+      tableProperties
     ) {
+      const { tableRows, columnData, isFileSize, isDataAttribute, colSpanData, colSpanSum } = tableProperties;
       for (let [i, tr] of tableRows.entries()) {
         let tdTextContent = tr
           .querySelectorAll("td")
@@ -190,7 +186,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
               ? colSpanSum[columnIndex] - 1
               : colSpanSum[columnIndex] - colSpanData[columnIndex]
           ).textContent;
-
         if (tdTextContent.length === 0) {
           tdTextContent = "";
         }
@@ -209,7 +204,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         }
       }
 
-      function naturalSortAescending(a, b) {
+      function naturalSortAscending(a, b) {
         if (a.includes(`${fillerValue}#`)) {
           return 1;
         } else if (b.includes(`${fillerValue}#`)) {
@@ -224,7 +219,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
 
       function naturalSortDescending(a, b) {
-        return naturalSortAescending(b, a);
+        return naturalSortAscending(b, a);
       }
 
       function clearArrows(arrowUp = "▲", arrowDown = "▼") {
@@ -243,28 +238,29 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         }
       }
 
-      if (timesClickedColumn === 1) {
-        if (desc) {
-          changeTableArrow(arrowDown)
-          columnData.sort(naturalSortDescending, {
+      function sortColumn(sortDirection){
+          columnData.sort(sortDirection, {
             numeric: true,
             ignorePunctuation: true,
           });
+      }
+
+      if (timesClickedColumn === 1) {
+        if (desc) {
+          changeTableArrow(arrowDown)
+          sortColumn(naturalSortDescending)
         } else {
           changeTableArrow(arrowUp)
-          columnData.sort(naturalSortAescending);
+          sortColumn(naturalSortAscending)
         }
       } else if (timesClickedColumn === 2) {
         timesClickedColumn = 0;
         if (desc) {
           changeTableArrow(arrowUp)
-          columnData.sort(naturalSortAescending, {
-            numeric: true,
-            ignorePunctuation: true,
-          });
+          sortColumn(naturalSortAscending)
         } else {
           changeTableArrow(arrowDown)
-          columnData.sort(naturalSortDescending);
+          sortColumn(naturalSortDescending)
         }
       }
     }
@@ -369,15 +365,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       timesClickedColumn += 1;
 
       getColSpanData(sortableTable, colSpanData, colSpanSum);
-      // TODO: refactor function to take object.
-      getTableData(
-        visibleTableRows,
+      const tableProperties = {
+        tableRows: visibleTableRows,
         columnData,
         isFileSize,
         isDataAttribute,
         colSpanData,
         colSpanSum
-      );
+      }
+      getTableData(tableProperties);
       updateTable(visibleTableRows, columnData, isFileSize);
     });
   }
