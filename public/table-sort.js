@@ -67,10 +67,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function makeEachColumnSortable(th, columnIndex, tableBody, sortableTable) {
-    let desc = th.classList.contains("order-by-desc");
+    const desc = th.classList.contains("order-by-desc");
     let tableArrows = sortableTable.classList.contains("table-arrows");
-    const arrowUp = " ▲";
-    const arrowDown = " ▼";
+    const [arrowUp, arrowDown] = [" ▲", " ▼"];
+    const fillValue = "!X!Y!Z!";
 
     if (desc && tableArrows) {
       th.insertAdjacentText("beforeend", arrowDown);
@@ -87,7 +87,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
-    const fillerValue = "!X!Y!Z!";
     function sortFileSize(tableRows, columnData) {
       const numberWithUnitType =
         /[.0-9]+(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|\s?GiB|T\s?B|\s?TiB)/i;
@@ -143,13 +142,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
             columnData.push(`${fileSizeTd}#${i}`);
           }
         } else {
-          columnData.push(`${fillerValue}#${i}`);
+          columnData.push(`${fillValue}#${i}`);
         }
       }
     }
 
-    let timesClickedColumn = 0;
-    let columnIndexesClicked = [];
+    let [timesClickedColumn, columnIndexesClicked] = [0, []];
 
     function rememberSort(timesClickedColumn, columnIndexesClicked) {
       // if user clicked different column from first column reset times clicked.
@@ -204,15 +202,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           }
         } else {
           // Fill in blank table cells dict key with filler value.
-          columnData.push(`${fillerValue}#${i}`);
-          columnIndexAndTableRow[`${fillerValue}#${i}`] = tr.innerHTML;
+          columnData.push(`${fillValue}#${i}`);
+          columnIndexAndTableRow[`${fillValue}#${i}`] = tr.innerHTML;
         }
       }
 
       function naturalSortAscending(a, b) {
-        if (a.includes(`${fillerValue}#`)) {
+        if (a.includes(`${fillValue}#`)) {
           return 1;
-        } else if (b.includes(`${fillerValue}#`)) {
+        } else if (b.includes(`${fillValue}#`)) {
           return -1;
         } else {
           return a.localeCompare(
@@ -270,14 +268,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
-    function updateTable(tableRows, columnData, isFileSize) {
+    function updateTable(tableProperties) {
+      const { tableRows, columnData, isFileSize } = tableProperties;
       for (let [i, tr] of tableRows.entries()) {
         if (isFileSize) {
           tr.innerHTML = fileSizeColumnTextAndRow[columnData[i]];
           let fileSizeInBytesHTML = tr
             .querySelectorAll("td")
             .item(columnIndex).innerHTML;
-          let fileSizeInBytesText = tr
+          const fileSizeInBytesText = tr
             .querySelectorAll("td")
             .item(columnIndex).textContent;
           const fileSizes = {
@@ -289,42 +288,43 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           };
           // Remove the unique identifyer for duplicate values(#number).
           columnData[i] = columnData[i].replace(/#[0-9]*/, "");
-          if (columnData[i] < fileSizes.Kibibyte) {
+          const fileSize = columnData[i];
+          if (fileSize < fileSizes.Kibibyte) {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
               fileSizeInBytesText,
-              `${parseFloat(columnData[i]).toFixed(2)} B`
+              `${parseFloat(fileSize).toFixed(2)} B`
             );
           } else if (
-            columnData[i] >= fileSizes.Kibibyte &&
-            columnData[i] < fileSizes.Mebibyte
+            fileSize >= fileSizes.Kibibyte &&
+            fileSize < fileSizes.Mebibyte
           ) {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
               fileSizeInBytesText,
-              `${(columnData[i] / fileSizes.Kibibyte).toFixed(2)} KiB`
+              `${(fileSize / fileSizes.Kibibyte).toFixed(2)} KiB`
             );
           } else if (
-            columnData[i] >= fileSizes.Mebibyte &&
-            columnData[i] < fileSizes.Gibibyte
+            fileSize >= fileSizes.Mebibyte &&
+            fileSize < fileSizes.Gibibyte
           ) {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
               fileSizeInBytesText,
-              `${(columnData[i] / fileSizes.Mebibyte).toFixed(2)} MiB`
+              `${(fileSize / fileSizes.Mebibyte).toFixed(2)} MiB`
             );
           } else if (
-            columnData[i] >= fileSizes.Gibibyte &&
-            columnData[i] < fileSizes.Tebibyte
+            fileSize >= fileSizes.Gibibyte &&
+            fileSize < fileSizes.Tebibyte
           ) {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
               fileSizeInBytesText,
-              `${(columnData[i] / fileSizes.Gibibyte).toFixed(2)} GiB`
+              `${(fileSize / fileSizes.Gibibyte).toFixed(2)} GiB`
             );
           } else if (
-            columnData[i] >= fileSizes.Tebibyte &&
-            columnData[i] < fileSizes.Pebibyte
+            fileSize >= fileSizes.Tebibyte &&
+            fileSize < fileSizes.Pebibyte
           ) {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
               fileSizeInBytesText,
-              `${(columnData[i] / fileSizes.Tebibyte).toFixed(2)} TiB`
+              `${(fileSize / fileSizes.Tebibyte).toFixed(2)} TiB`
             );
           } else {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
@@ -341,9 +341,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     th.addEventListener("click", function () {
-      const columnData = [];
-      const colSpanData = {};
-      const colSpanSum = {};
+      const [columnData, colSpanData, colSpanSum] = [[], {}, {}];
 
       const visibleTableRows = Array.prototype.filter.call(
         tableBody.querySelectorAll("tr"),
@@ -352,17 +350,17 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         }
       );
 
-      let isDataAttribute = th.classList.contains("data-sort");
+      const isDataAttribute = th.classList.contains("data-sort");
       if (isDataAttribute) {
         sortDataAttributes(visibleTableRows, columnData);
       }
 
-      let isFileSize = th.classList.contains("file-size");
+      const isFileSize = th.classList.contains("file-size");
       if (isFileSize) {
         sortFileSize(visibleTableRows, columnData);
       }
 
-      let isRememberSort = sortableTable.classList.contains("remember-sort");
+      const isRememberSort = sortableTable.classList.contains("remember-sort");
       if (!isRememberSort) {
         rememberSort(timesClickedColumn, columnIndexesClicked);
       }
@@ -379,7 +377,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         colSpanSum,
       };
       getTableData(tableProperties);
-      updateTable(visibleTableRows, columnData, isFileSize);
+      updateTable(tableProperties);
     });
   }
 }
