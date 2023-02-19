@@ -174,10 +174,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       });
     }
 
-    function getTableData(
-      tableProperties
-    ) {
-      const { tableRows, columnData, isFileSize, isDataAttribute, colSpanData, colSpanSum } = tableProperties;
+    function getTableData(tableProperties) {
+      const {
+        tableRows,
+        columnData,
+        isFileSize,
+        isDataAttribute,
+        colSpanData,
+        colSpanSum,
+      } = tableProperties;
       for (let [i, tr] of tableRows.entries()) {
         let tdTextContent = tr
           .querySelectorAll("td")
@@ -238,29 +243,29 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         }
       }
 
-      function sortColumn(sortDirection){
-          columnData.sort(sortDirection, {
-            numeric: true,
-            ignorePunctuation: true,
-          });
+      function sortColumn(sortDirection) {
+        columnData.sort(sortDirection, {
+          numeric: true,
+          ignorePunctuation: true,
+        });
       }
 
       if (timesClickedColumn === 1) {
         if (desc) {
-          changeTableArrow(arrowDown)
-          sortColumn(naturalSortDescending)
+          changeTableArrow(arrowDown);
+          sortColumn(naturalSortDescending);
         } else {
-          changeTableArrow(arrowUp)
-          sortColumn(naturalSortAscending)
+          changeTableArrow(arrowUp);
+          sortColumn(naturalSortAscending);
         }
       } else if (timesClickedColumn === 2) {
         timesClickedColumn = 0;
         if (desc) {
-          changeTableArrow(arrowUp)
-          sortColumn(naturalSortAscending)
+          changeTableArrow(arrowUp);
+          sortColumn(naturalSortAscending);
         } else {
-          changeTableArrow(arrowDown)
-          sortColumn(naturalSortDescending)
+          changeTableArrow(arrowDown);
+          sortColumn(naturalSortDescending);
         }
       }
     }
@@ -371,8 +376,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         isFileSize,
         isDataAttribute,
         colSpanData,
-        colSpanSum
-      }
+        colSpanSum,
+      };
       getTableData(tableProperties);
       updateTable(visibleTableRows, columnData, isFileSize);
     });
