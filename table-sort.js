@@ -67,10 +67,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function makeEachColumnSortable(th, columnIndex, tableBody, sortableTable) {
-    let desc = th.classList.contains("order-by-desc");
+    const desc = th.classList.contains("order-by-desc");
     let tableArrows = sortableTable.classList.contains("table-arrows");
-    const arrowUp = " ▲";
-    const arrowDown = " ▼";
+    const [arrowUp, arrowDown] = [" ▲", " ▼"];
+    const fillValue = "!X!Y!Z!";
 
     if (desc && tableArrows) {
       th.insertAdjacentText("beforeend", arrowDown);
@@ -88,7 +88,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function sortFileSize(tableRows, columnData) {
-      // Handle filesize sorting (e.g KB, MB, GB, TB) - Turns data into KiB.
       const numberWithUnitType =
         /[.0-9]+(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|\s?GiB|T\s?B|\s?TiB)/i;
       const unitType =
@@ -104,12 +103,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         Gigabyte: 1e9,
         Terabyte: 1e12,
       };
-      function removeUnitTypeConvertToBytes(fileSizeTd, _replace) {
+      function removeUnitTypeConvertToBytes(fileSizeTd, _replace, i) {
         fileSizeTd = fileSizeTd.replace(unitType, "");
         fileSizeTd = fileSizeTd.replace(
           fileSizeTd,
           fileSizeTd * fileSizes[_replace]
         );
+        if (i) {
+          columnData.push(`${fileSizeTd}#${i}`);
+        }
         return fileSizeTd;
       }
       for (let [i, tr] of tableRows.entries()) {
@@ -118,45 +120,37 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           .item(columnIndex).textContent;
         if (fileSizeTd.match(numberWithUnitType)) {
           if (fileSizeTd.match(/\s?KB/i)) {
-            fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, "Kilobyte");
-            columnData.push(`${fileSizeTd}#${i}`);
+            removeUnitTypeConvertToBytes(fileSizeTd, "Kilobyte", i);
           } else if (fileSizeTd.match(/\s?KiB/i)) {
-            fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, "Kibibyte");
-            columnData.push(`${fileSizeTd}#${i}`);
+            removeUnitTypeConvertToBytes(fileSizeTd, "Kibibyte", i);
           } else if (fileSizeTd.match(/\s?MB/i)) {
+            // TODO: figure out why refactoring this line breaks test.
             fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, "Megabyte");
             columnData.push(`${fileSizeTd}#${i}`);
           } else if (fileSizeTd.match(/\s?MiB/i)) {
-            fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, "Mebibyte");
-            columnData.push(`${fileSizeTd}#${i}`);
+            removeUnitTypeConvertToBytes(fileSizeTd, "Mebibyte", i);
           } else if (fileSizeTd.match(/\s?GB/i)) {
-            fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, "Gigabyte");
-            columnData.push(`${fileSizeTd}#${i}`);
+            removeUnitTypeConvertToBytes(fileSizeTd, "Gigabyte", i);
           } else if (fileSizeTd.match(/\s?GiB/i)) {
-            fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, "Gibibyte");
-            columnData.push(`${fileSizeTd}#${i}`);
+            removeUnitTypeConvertToBytes(fileSizeTd, "Gibibyte", i);
           } else if (fileSizeTd.match(/\s?TB/i)) {
-            fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, "Terabyte");
-            columnData.push(`${fileSizeTd}#${i}`);
+            removeUnitTypeConvertToBytes(fileSizeTd, "Terabyte", i);
           } else if (fileSizeTd.match(/\s?TiB/i)) {
-            fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, "Tebibyte");
-            columnData.push(`${fileSizeTd}#${i}`);
+            removeUnitTypeConvertToBytes(fileSizeTd, "Tebibyte", i);
           } else if (fileSizeTd.match(/\s?B/i)) {
             fileSizeTd = fileSizeTd.replace(unitType, "");
             columnData.push(`${fileSizeTd}#${i}`);
           }
         } else {
-          columnData.push(`!X!Y!Z!#${i}`);
+          columnData.push(`${fillValue}#${i}`);
         }
       }
     }
 
-    let timesClickedColumn = 0;
-    let columnIndexesClicked = [];
+    let [timesClickedColumn, columnIndexesClicked] = [0, []];
 
     function rememberSort(timesClickedColumn, columnIndexesClicked) {
-      // Check if user has clicked different column from the first column if
-      // yes reset times clicked.
+      // if user clicked different column from first column reset times clicked.
       columnIndexesClicked.push(columnIndex);
       if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
         const lastColumnClicked =
@@ -178,16 +172,16 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       });
     }
 
-    function getTableData(
-      tableRows,
-      columnData,
-      isFileSize,
-      isDataAttribute,
-      colSpanData,
-      colSpanSum
-    ) {
+    function getTableData(tableProperties) {
+      const {
+        tableRows,
+        columnData,
+        isFileSize,
+        isDataAttribute,
+        colSpanData,
+        colSpanSum,
+      } = tableProperties;
       for (let [i, tr] of tableRows.entries()) {
-        // inner text for column we click on
         let tdTextContent = tr
           .querySelectorAll("td")
           .item(
@@ -195,7 +189,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
               ? colSpanSum[columnIndex] - 1
               : colSpanSum[columnIndex] - colSpanData[columnIndex]
           ).textContent;
-
         if (tdTextContent.length === 0) {
           tdTextContent = "";
         }
@@ -209,15 +202,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           }
         } else {
           // Fill in blank table cells dict key with filler value.
-          columnData.push(`!X!Y!Z!#${i}`);
-          columnIndexAndTableRow[`!X!Y!Z!#${i}`] = tr.innerHTML;
+          columnData.push(`${fillValue}#${i}`);
+          columnIndexAndTableRow[`${fillValue}#${i}`] = tr.innerHTML;
         }
       }
 
-      function naturalSortAescending(a, b) {
-        if (a.includes("X!Y!Z!#")) {
+      function naturalSortAscending(a, b) {
+        if (a.includes(`${fillValue}#`)) {
           return 1;
-        } else if (b.includes("X!Y!Z!#")) {
+        } else if (b.includes(`${fillValue}#`)) {
           return -1;
         } else {
           return a.localeCompare(
@@ -229,7 +222,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
 
       function naturalSortDescending(a, b) {
-        return naturalSortAescending(b, a);
+        return naturalSortAscending(b, a);
       }
 
       function clearArrows(arrowUp = "▲", arrowDown = "▼") {
@@ -237,58 +230,53 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         th.innerText = th.innerText.replace(arrowDown, "");
       }
 
-      // Sort naturally; default aescending unless th contains 'order-by-desc'
-      // as className.
       if (columnData[0] === undefined) {
         return;
       }
 
+      function changeTableArrow(arrowDirection) {
+        if (tableArrows) {
+          clearArrows(arrowUp, arrowDown);
+          th.insertAdjacentText("beforeend", arrowDirection);
+        }
+      }
+
+      function sortColumn(sortDirection) {
+        columnData.sort(sortDirection, {
+          numeric: true,
+          ignorePunctuation: true,
+        });
+      }
+
       if (timesClickedColumn === 1) {
         if (desc) {
-          if (tableArrows) {
-            clearArrows(arrowUp, arrowDown);
-            th.insertAdjacentText("beforeend", arrowDown);
-          }
-          columnData.sort(naturalSortDescending, {
-            numeric: true,
-            ignorePunctuation: true,
-          });
+          changeTableArrow(arrowDown);
+          sortColumn(naturalSortDescending);
         } else {
-          if (tableArrows) {
-            clearArrows(arrowUp, arrowDown);
-            th.insertAdjacentText("beforeend", arrowUp);
-          }
-          columnData.sort(naturalSortAescending);
+          changeTableArrow(arrowUp);
+          sortColumn(naturalSortAscending);
         }
       } else if (timesClickedColumn === 2) {
         timesClickedColumn = 0;
         if (desc) {
-          if (tableArrows) {
-            clearArrows(arrowUp, arrowDown);
-            th.insertAdjacentText("beforeend", arrowUp);
-          }
-          columnData.sort(naturalSortAescending, {
-            numeric: true,
-            ignorePunctuation: true,
-          });
+          changeTableArrow(arrowUp);
+          sortColumn(naturalSortAscending);
         } else {
-          if (tableArrows) {
-            clearArrows(arrowUp, arrowDown);
-            th.insertAdjacentText("beforeend", arrowDown);
-          }
-          columnData.sort(naturalSortDescending);
+          changeTableArrow(arrowDown);
+          sortColumn(naturalSortDescending);
         }
       }
     }
 
-    function updateTable(tableRows, columnData, isFileSize) {
+    function updateTable(tableProperties) {
+      const { tableRows, columnData, isFileSize } = tableProperties;
       for (let [i, tr] of tableRows.entries()) {
         if (isFileSize) {
           tr.innerHTML = fileSizeColumnTextAndRow[columnData[i]];
           let fileSizeInBytesHTML = tr
             .querySelectorAll("td")
             .item(columnIndex).innerHTML;
-          let fileSizeInBytesText = tr
+          const fileSizeInBytesText = tr
             .querySelectorAll("td")
             .item(columnIndex).textContent;
           const fileSizes = {
@@ -300,42 +288,43 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           };
           // Remove the unique identifyer for duplicate values(#number).
           columnData[i] = columnData[i].replace(/#[0-9]*/, "");
-          if (columnData[i] < fileSizes.Kibibyte) {
+          const fileSize = columnData[i];
+          if (fileSize < fileSizes.Kibibyte) {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
               fileSizeInBytesText,
-              `${parseFloat(columnData[i]).toFixed(2)} B`
+              `${parseFloat(fileSize).toFixed(2)} B`
             );
           } else if (
-            columnData[i] >= fileSizes.Kibibyte &&
-            columnData[i] < fileSizes.Mebibyte
+            fileSize >= fileSizes.Kibibyte &&
+            fileSize < fileSizes.Mebibyte
           ) {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
               fileSizeInBytesText,
-              `${(columnData[i] / fileSizes.Kibibyte).toFixed(2)} KiB`
+              `${(fileSize / fileSizes.Kibibyte).toFixed(2)} KiB`
             );
           } else if (
-            columnData[i] >= fileSizes.Mebibyte &&
-            columnData[i] < fileSizes.Gibibyte
+            fileSize >= fileSizes.Mebibyte &&
+            fileSize < fileSizes.Gibibyte
           ) {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
               fileSizeInBytesText,
-              `${(columnData[i] / fileSizes.Mebibyte).toFixed(2)} MiB`
+              `${(fileSize / fileSizes.Mebibyte).toFixed(2)} MiB`
             );
           } else if (
-            columnData[i] >= fileSizes.Gibibyte &&
-            columnData[i] < fileSizes.Tebibyte
+            fileSize >= fileSizes.Gibibyte &&
+            fileSize < fileSizes.Tebibyte
           ) {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
               fileSizeInBytesText,
-              `${(columnData[i] / fileSizes.Gibibyte).toFixed(2)} GiB`
+              `${(fileSize / fileSizes.Gibibyte).toFixed(2)} GiB`
             );
           } else if (
-            columnData[i] >= fileSizes.Tebibyte &&
-            columnData[i] < fileSizes.Pebibyte
+            fileSize >= fileSizes.Tebibyte &&
+            fileSize < fileSizes.Pebibyte
           ) {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
               fileSizeInBytesText,
-              `${(columnData[i] / fileSizes.Tebibyte).toFixed(2)} TiB`
+              `${(fileSize / fileSizes.Tebibyte).toFixed(2)} TiB`
             );
           } else {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
@@ -352,9 +341,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     th.addEventListener("click", function () {
-      const columnData = [];
-      const colSpanData = {};
-      const colSpanSum = {};
+      const [columnData, colSpanData, colSpanSum] = [[], {}, {}];
 
       const visibleTableRows = Array.prototype.filter.call(
         tableBody.querySelectorAll("tr"),
@@ -363,17 +350,17 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         }
       );
 
-      let isDataAttribute = th.classList.contains("data-sort");
+      const isDataAttribute = th.classList.contains("data-sort");
       if (isDataAttribute) {
         sortDataAttributes(visibleTableRows, columnData);
       }
 
-      let isFileSize = th.classList.contains("file-size");
+      const isFileSize = th.classList.contains("file-size");
       if (isFileSize) {
         sortFileSize(visibleTableRows, columnData);
       }
 
-      let isRememberSort = sortableTable.classList.contains("remember-sort");
+      const isRememberSort = sortableTable.classList.contains("remember-sort");
       if (!isRememberSort) {
         rememberSort(timesClickedColumn, columnIndexesClicked);
       }
@@ -381,16 +368,16 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       timesClickedColumn += 1;
 
       getColSpanData(sortableTable, colSpanData, colSpanSum);
-      // TODO: refactor function to take object.
-      getTableData(
-        visibleTableRows,
+      const tableProperties = {
+        tableRows: visibleTableRows,
         columnData,
         isFileSize,
         isDataAttribute,
         colSpanData,
-        colSpanSum
-      );
-      updateTable(visibleTableRows, columnData, isFileSize);
+        colSpanSum,
+      };
+      getTableData(tableProperties);
+      updateTable(tableProperties);
     });
   }
 }
