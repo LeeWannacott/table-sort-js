@@ -357,7 +357,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         sortDataAttributes(visibleTableRows, columnData);
       }
 
-      const isFileSize = th.classList.contains("file-size");
+      const isFileSize = th.classList.contains("file-size-sort");
       if (isFileSize) {
         sortFileSize(visibleTableRows, columnData);
       }
