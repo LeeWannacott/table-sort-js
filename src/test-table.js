@@ -71,11 +71,11 @@ export class App extends Component {
                 </p>
               </span>
             </div>
-              <img
-                src="https://media.xconomy.com/wordpress/wp-content/images/2016/06/06161811/github-logo.jpg"
-                className="GithubOcto"
-                alt="GitHub Icon"
-              ></img>
+            <img
+              src="https://media.xconomy.com/wordpress/wp-content/images/2016/06/06161811/github-logo.jpg"
+              className="GithubOcto"
+              alt="GitHub Icon"
+            ></img>
           </div>
           <hr></hr>
           <h6 style={{ textAlign: "left", marginTop: "0.25em" }}>

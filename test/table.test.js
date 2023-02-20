@@ -105,7 +105,7 @@ test("Order by file-size: file-size", () => {
           "10GiB",
         ],
       },
-      { classTags: "file-size" }
+      { classTags: "file-size-sort" }
     )
   ).toStrictEqual({
     col1: [
@@ -195,12 +195,12 @@ test("disable-sort: disable sorting on a column", () => {
 test("alpha-sort: sort alphabetically as opposed to natural sorting", () => {
   expect(
     createTestTable(
-      { col1: ["z2", "z11", "z89", "z82","z8"] },
+      { col1: ["z2", "z11", "z89", "z82", "z8"] },
       {
         classTags: "alpha-sort",
       }
     )
-  ).toStrictEqual({ col1: ["z11", "z2", "z82","z8", "z89"] });
+  ).toStrictEqual({ col1: ["z11", "z2", "z82", "z8", "z89"] });
 });
 
 test("punc-sort: sort involving punctuation - nat sort", () => {

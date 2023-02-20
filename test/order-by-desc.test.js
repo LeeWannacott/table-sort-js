@@ -1,4 +1,3 @@
-
 const createTestTable = require("./table");
 
 test("Alpha - Capitalized: order-by-desc", () => {
@@ -11,7 +10,6 @@ test("Alpha - Capitalized: order-by-desc", () => {
     )
   ).toStrictEqual({ col1: ["Echo", "Delta", "Charlie", "Bravo", "Alpha"] });
 });
-
 
 test("Alpha - Lowercase: order-by-desc ", () => {
   expect(
@@ -92,7 +90,7 @@ test("Order by file-size: file-size order-by-desc", () => {
           "10GiB",
         ],
       },
-      { classTags: "order-by-desc file-size" }
+      { classTags: "order-by-desc file-size-sort" }
     )
   ).toStrictEqual({
     col1: [
