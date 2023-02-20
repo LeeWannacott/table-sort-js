@@ -53,7 +53,7 @@ Refer to the documenation for examples how to use table-sort-js with [HTML.](htt
 | "data-sort"        | Sort by [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes), e.g &lt;td data-sort="42"&gt; |
 | "file-size"        | Sort file sizes(B->TiB) uses the binary prefix. (e.g KiB)                                                                               |
 | "alpha-sort"       | Sort alphabetically (z11,z2); default is [natural sort](https://en.wikipedia.org/wiki/Natural_sort_order) (z2,z11).                     |
-| "punc-sort"        | Sort punctuation; default ignores punctuation.                                                                                          |
+| "punct-sort"        | Sort punctuation; default ignores punctuation.                                                                                          |
 | "disable-sort"     | Disallow sorting the table by this specific column.                                                                                     |
 
 #### Development:
