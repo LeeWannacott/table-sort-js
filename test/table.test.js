@@ -41,13 +41,11 @@ test("Alpha - Lowercase", () => {
   ).toStrictEqual({ col1: ["alpha", "bravo", "charlie", "delta", "echo"] });
 });
 
-
 test("Numerical", () => {
   expect(
     createTestTable({ col1: [5, 3, 4, 1, 2] }, { classTags: "" })
   ).toStrictEqual({ col1: ["1", "2", "3", "4", "5"] });
 });
-
 
 test("Alphanumeric", () => {
   expect(
@@ -62,7 +60,6 @@ test("Alphanumeric", () => {
   });
 });
 
-
 test("Dates", () => {
   expect(
     createTestTable(
@@ -74,7 +71,6 @@ test("Dates", () => {
   });
 });
 
-
 test("Money", () => {
   expect(
     createTestTable(
@@ -84,7 +80,6 @@ test("Money", () => {
   ).toStrictEqual({ col1: ["$20", "$29", "$58", "$84", "$93"] });
 });
 
-
 test("Empty cells sort at the end.", () => {
   expect(
     createTestTable(
@@ -93,7 +88,6 @@ test("Empty cells sort at the end.", () => {
     )
   ).toStrictEqual({ col1: ["Alpha", "Bravo", "Echo", "", ""] });
 });
-
 
 test("Order by file-size: file-size", () => {
   expect(
@@ -128,7 +122,6 @@ test("Order by file-size: file-size", () => {
   });
 });
 
-
 //New tests
 
 test("Alpha - lower & upper", () => {
@@ -148,7 +141,6 @@ test("Floating point numbers", () => {
   ).toStrictEqual({ col1: ["0.25", "0.35", "3.15", "6.23", "9.09"] });
 });
 
-
 test("Release Versions", () => {
   expect(
     createTestTable(
@@ -159,7 +151,6 @@ test("Release Versions", () => {
     )
   ).toStrictEqual({ col1: ["3.0.2", "3.0.4", "4.0.1", "4.1.0", "4.2.0"] });
 });
-
 
 test("data-sort: example days of week", () => {
   expect(
@@ -199,4 +190,26 @@ test("disable-sort: disable sorting on a column", () => {
       }
     )
   ).toStrictEqual({ col1: ["row2", "row1", "row4", "row3"] });
+});
+
+test("alpha-sort: sort alphabetically as opposed to natural sorting", () => {
+  expect(
+    createTestTable(
+      { col1: ["z2", "z11", "z89", "z82","z8"] },
+      {
+        classTags: "alpha-sort",
+      }
+    )
+  ).toStrictEqual({ col1: ["z11", "z2", "z82","z8", "z89"] });
+});
+
+test("punc-sort: sort involving punctuation - nat sort", () => {
+  expect(
+    createTestTable(
+      { col1: ["row2", "*row1", "-row4", "-row3", "#row3"] },
+      {
+        classTags: "punct-sort",
+      }
+    )
+  ).toStrictEqual({ col1: ["-row3", "-row4", "*row1", "#row3", "row2"] });
 });

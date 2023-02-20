@@ -50,9 +50,11 @@ Refer to the documenation for examples how to use table-sort-js with [HTML.](htt
 | &lt;th&gt; classes | Description                                                                                                                             |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
 | "order-by-desc"    | Order by descending on first click. (default is aescending)                                                                             |
-| "file-size"        | Sort file sizes(B->TiB) uses the binary prefix. (e.g KiB)                                                                               |
 | "data-sort"        | Sort by [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes), e.g &lt;td data-sort="42"&gt; |
-| "disable-sort"     | Disallow sorting the table by this specific column
+| "file-size"        | Sort file sizes(B->TiB) uses the binary prefix. (e.g KiB)                                                                               |
+| "alpha-sort"       | Sort alphabetically (z11,z2); default is [natural sort](https://en.wikipedia.org/wiki/Natural_sort_order) (z2,z11).                     |
+| "punc-sort"        | Sort punctuation; default ignores punctuation.                                                                                          |
+| "disable-sort"     | Disallow sorting the table by this specific column.                                                                                     |
 
 #### Development:
 
