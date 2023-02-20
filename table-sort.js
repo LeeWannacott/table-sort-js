@@ -207,7 +207,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         }
       }
 
-      function naturalSortAscending(a, b) {
+      const isPunctSort = th.classList.contains("punct-sort");
+      const isAlphaSort = th.classList.contains("alpha-sort");
+      function sortAscending(a, b) {
         if (a.includes(`${fillValue}#`)) {
           return 1;
         } else if (b.includes(`${fillValue}#`)) {
@@ -216,13 +218,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           return a.localeCompare(
             b,
             navigator.languages[0] || navigator.language,
-            { numeric: true, ignorePunctuation: true }
+            { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
           );
         }
       }
 
-      function naturalSortDescending(a, b) {
-        return naturalSortAscending(b, a);
+      function sortDescending(a, b) {
+        return sortAscending(b, a);
       }
 
       function clearArrows(arrowUp = "▲", arrowDown = "▼") {
@@ -243,27 +245,27 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
       function sortColumn(sortDirection) {
         columnData.sort(sortDirection, {
-          numeric: true,
-          ignorePunctuation: true,
+          numeric: !isAlphaSort,
+          ignorePunctuation: !isPunctSort,
         });
       }
 
       if (timesClickedColumn === 1) {
         if (desc) {
           changeTableArrow(arrowDown);
-          sortColumn(naturalSortDescending);
+          sortColumn(sortDescending);
         } else {
           changeTableArrow(arrowUp);
-          sortColumn(naturalSortAscending);
+          sortColumn(sortAscending);
         }
       } else if (timesClickedColumn === 2) {
         timesClickedColumn = 0;
         if (desc) {
           changeTableArrow(arrowUp);
-          sortColumn(naturalSortAscending);
+          sortColumn(sortAscending);
         } else {
           changeTableArrow(arrowDown);
-          sortColumn(naturalSortDescending);
+          sortColumn(sortDescending);
         }
       }
     }
@@ -355,7 +357,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         sortDataAttributes(visibleTableRows, columnData);
       }
 
-      const isFileSize = th.classList.contains("file-size");
+      const isFileSize = th.classList.contains("file-size-sort");
       if (isFileSize) {
         sortFileSize(visibleTableRows, columnData);
       }

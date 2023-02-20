@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/table-sort-js/static/css/main.66443dc7.chunk.css",
-    "main.js": "/table-sort-js/static/js/main.93b96cab.chunk.js",
-    "main.js.map": "/table-sort-js/static/js/main.93b96cab.chunk.js.map",
+    "main.js": "/table-sort-js/static/js/main.acaa2315.chunk.js",
+    "main.js.map": "/table-sort-js/static/js/main.acaa2315.chunk.js.map",
     "runtime-main.js": "/table-sort-js/static/js/runtime-main.0ab85869.js",
     "runtime-main.js.map": "/table-sort-js/static/js/runtime-main.0ab85869.js.map",
-    "static/js/2.252c26e1.chunk.js": "/table-sort-js/static/js/2.252c26e1.chunk.js",
-    "static/js/2.252c26e1.chunk.js.map": "/table-sort-js/static/js/2.252c26e1.chunk.js.map",
+    "static/js/2.fc7e1ff2.chunk.js": "/table-sort-js/static/js/2.fc7e1ff2.chunk.js",
+    "static/js/2.fc7e1ff2.chunk.js.map": "/table-sort-js/static/js/2.fc7e1ff2.chunk.js.map",
     "index.html": "/table-sort-js/index.html",
     "static/css/main.66443dc7.chunk.css.map": "/table-sort-js/static/css/main.66443dc7.chunk.css.map",
-    "static/js/2.252c26e1.chunk.js.LICENSE.txt": "/table-sort-js/static/js/2.252c26e1.chunk.js.LICENSE.txt"
+    "static/js/2.fc7e1ff2.chunk.js.LICENSE.txt": "/table-sort-js/static/js/2.fc7e1ff2.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.0ab85869.js",
-    "static/js/2.252c26e1.chunk.js",
+    "static/js/2.fc7e1ff2.chunk.js",
     "static/css/main.66443dc7.chunk.css",
-    "static/js/main.93b96cab.chunk.js"
+    "static/js/main.acaa2315.chunk.js"
   ]
 }
