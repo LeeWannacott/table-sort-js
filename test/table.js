@@ -6,13 +6,13 @@ const tableSortJs = require("../public/table-sort");
 
 function createTestTable(
   testTableData,
-  thAttributes = { classTags: "" },
-  invisibleIndex = []
+  thAttributes = { classTags: "", colspan: "" },
+  props = { colsToClick: [], invisibleIndex: [] }
 ) {
   const numberOfTableColumns = Object.keys(testTableData).length;
   let testTableHeaders = "";
   for (let i = 0; i < numberOfTableColumns; i++) {
-    testTableHeaders += `<th class="${thAttributes.classTags}">Testing Column</th>`;
+    testTableHeaders += `<th colspan="${thAttributes.colspan}" class="${thAttributes.classTags}">Testing Column</th>`;
   }
   testTableHeaders = `<tr> ${testTableHeaders} </tr>`;
 
@@ -31,14 +31,17 @@ function createTestTable(
   }
 
   let testTableTdRows = [];
-  for (let i = 0; i < testTableData["col1"].length; i++) {
+  for (let i = 0; i < testTableData["col0"].length; i++) {
     let testTableTdRow;
     if (thAttributes.classTags.includes("data-sort")) {
       testTableTdRow = `${getRowsOfTd(i, "data-sort")}`;
     } else {
       testTableTdRow = `${getRowsOfTd(i)}`;
     }
-    if (invisibleIndex.includes(i)) {
+    if (
+      props.invisibleIndex !== undefined &&
+      props.invisibleIndex.includes(i)
+    ) {
       testTableTdRows.push(`<tr style="display: none;">${testTableTdRow}</tr>`);
     } else {
       testTableTdRows.push(`<tr> ${testTableTdRow}</tr>`);
@@ -62,10 +65,21 @@ function createTestTable(
   </html>`);
 
   // Call tablesort and make table sortable and simulate clicks from a user.
-  tableSortJs((testing = true), dom.window.document);
+  tableSortJs(true, dom.window.document);
 
-  for (let i = 0; i < numberOfTableColumns; i++) {
-    dom.window.document.querySelectorAll("table th")[i].click();
+  if (
+    typeof props.colsToClick !== "undefined" &&
+    props.colsToClick.length > 0
+  ) {
+    for (let i = 0; i < props.colsToClick.length; i++) {
+      dom.window.document
+        .querySelectorAll("table th")
+        [props.colsToClick[i]].click();
+    }
+  } else {
+    for (let i = 0; i < numberOfTableColumns; i++) {
+      dom.window.document.querySelectorAll("table th")[i].click();
+    }
   }
 
   // Make an array from table contents to test if sorted correctly.
@@ -75,16 +89,15 @@ function createTestTable(
   const testIfSortedList = {};
 
   for (let i = 0; i < numberOfTableColumns; i++) {
-    testIfSortedList[`col${i + 1}`] = [];
+    testIfSortedList[`col${i}`] = [];
   }
 
   for (let [i, tr] of tableRows.entries()) {
     if (tr.style.display !== "none") {
       for (let i = 0; i < numberOfTableColumns; i++)
-        testIfSortedList[`col${i + 1}`].push(
+        testIfSortedList[`col${i}`].push(
           tr.querySelectorAll("td").item(i).innerHTML
         );
-      // console.log(tr.querySelectorAll("td").item(i).innerHTML)
     }
   }
   return testIfSortedList;
