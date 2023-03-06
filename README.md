@@ -24,7 +24,7 @@ import tableSort from "table-sort-js/table-sort.js";
 Refer to the documentation for examples on using table-sort-js with frontend frameworks such as
 [React.js](https://leewannacott.github.io/table-sort-js/docs/react.html) and [Vue.js](https://leewannacott.github.io/table-sort-js/docs/vue.html)
 
-<b>Option 2.</b> Download [table-sort.js](https://leewannacott.github.io/table-sort-js/table-sort.js)      (Select save as.), or download a [minified version](https://cdn.jsdelivr.net/npm/table-sort-js) (~5kB)
+<b>Option 2.</b> Download [table-sort.js](https://leewannacott.github.io/table-sort-js/table-sort.js) (Select save as.), or download a [minified version](https://cdn.jsdelivr.net/npm/table-sort-js) (~5kB)
 
 Then add the following script before your HTML table:
 
