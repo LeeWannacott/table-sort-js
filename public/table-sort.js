@@ -228,8 +228,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
 
       function clearArrows(arrowUp = "▲", arrowDown = "▼") {
-        th.innerText = th.innerText.replace(arrowUp, "");
-        th.innerText = th.innerText.replace(arrowDown, "");
+        th.innerHTML = th.innerHTML.replace(arrowUp, "");
+        th.innerHTML = th.innerHTML.replace(arrowDown, "");
       }
 
       if (columnData[0] === undefined) {
