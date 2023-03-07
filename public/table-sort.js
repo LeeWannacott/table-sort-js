@@ -88,11 +88,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function sortFileSize(tableRows, columnData) {
-      const numberWithUnitType = /[.0-9]+\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-      const unitType = /\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-      function removeUnitTypeConvertToBytes(fileSizeTd, multiplier, i) {
-        fileSizeTd = fileSizeTd.replace(unitType, "");
-        fileSizeTd = fileSizeTd * multiplier;
+      const numberWithUnitType = /([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+      function removeUnitTypeConvertToBytes(number, fileSizeTd, multiplier, i) {
+        fileSizeTd = number * multiplier;
         columnData.push(`${fileSizeTd}#${i}`);
         return fileSizeTd;
       }
@@ -100,25 +98,27 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         let fileSizeTd = tr
           .querySelectorAll("td")
           .item(columnIndex).textContent;
-        if (fileSizeTd.match(numberWithUnitType)) {
+        let match = fileSizeTd.match(numberWithUnitType);
+        if (match) {
+          let number = parseFloat(match[1]);
           if (fileSizeTd.match(/\s?KB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, 1000, i);
+            removeUnitTypeConvertToBytes(number, fileSizeTd, 1000, i);
           } else if (fileSizeTd.match(/\s?KiB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, 2 ** 10, i);
+            removeUnitTypeConvertToBytes(number, fileSizeTd, 2 ** 10, i);
           } else if (fileSizeTd.match(/\s?MB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, 1e6, i);
+            removeUnitTypeConvertToBytes(number, fileSizeTd, 1e6, i);
           } else if (fileSizeTd.match(/\s?MiB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, 2 ** 20, i);
+            removeUnitTypeConvertToBytes(number, fileSizeTd, 2 ** 20, i);
           } else if (fileSizeTd.match(/\s?GB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, 1e9, i);
+            removeUnitTypeConvertToBytes(number, fileSizeTd, 1e9, i);
           } else if (fileSizeTd.match(/\s?GiB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, 2 ** 30, i);
+            removeUnitTypeConvertToBytes(number, fileSizeTd, 2 ** 30, i);
           } else if (fileSizeTd.match(/\s?TB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, 1e12, i);
+            removeUnitTypeConvertToBytes(number, fileSizeTd, 1e12, i);
           } else if (fileSizeTd.match(/\s?TiB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, 2 ** 40, i);
+            removeUnitTypeConvertToBytes(number, fileSizeTd, 2 ** 40, i);
           } else if (fileSizeTd.match(/\s?B/i)) {
-            fileSizeTd = fileSizeTd.replace(unitType, "");
+            fileSizeTd = number;
             columnData.push(`${fileSizeTd}#${i}`);
           }
         } else {
