@@ -281,54 +281,24 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           const fileSizeInBytesText = tr
             .querySelectorAll("td")
             .item(columnIndex).textContent;
-          const fileSizes = {
-            Kibibyte: 2 ** 10,
-            Mebibyte: 2 ** 20,
-            Gibibyte: 2 ** 30,
-            Tebibyte: 2 ** 40,
-            Pebibyte: 2 ** 50,
-          };
           // Remove the unique identifyer for duplicate values(#number).
           columnData[i] = columnData[i].replace(/#[0-9]*/, "");
-          const fileSize = columnData[i];
-          if (fileSize < fileSizes.Kibibyte) {
-            fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-              fileSizeInBytesText,
-              `${parseFloat(fileSize).toFixed(2)} B`
-            );
-          } else if (
-            fileSize >= fileSizes.Kibibyte &&
-            fileSize < fileSizes.Mebibyte
-          ) {
-            fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-              fileSizeInBytesText,
-              `${(fileSize / fileSizes.Kibibyte).toFixed(2)} KiB`
-            );
-          } else if (
-            fileSize >= fileSizes.Mebibyte &&
-            fileSize < fileSizes.Gibibyte
-          ) {
-            fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-              fileSizeInBytesText,
-              `${(fileSize / fileSizes.Mebibyte).toFixed(2)} MiB`
-            );
-          } else if (
-            fileSize >= fileSizes.Gibibyte &&
-            fileSize < fileSizes.Tebibyte
-          ) {
-            fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-              fileSizeInBytesText,
-              `${(fileSize / fileSizes.Gibibyte).toFixed(2)} GiB`
-            );
-          } else if (
-            fileSize >= fileSizes.Tebibyte &&
-            fileSize < fileSizes.Pebibyte
-          ) {
-            fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-              fileSizeInBytesText,
-              `${(fileSize / fileSizes.Tebibyte).toFixed(2)} TiB`
-            );
-          } else {
+          const fileSize = parseFloat(columnData[i]);
+          let prefixes = ["", "Ki", "Mi", "Gi", "Ti", "Pi"];
+          let replaced = false;
+          for (let i = 0; i < prefixes.length; ++i) {
+            let nextPrefixMultiplier = 2 ** (10 * (i + 1));
+            if (fileSize < nextPrefixMultiplier) {
+              let prefixMultiplier = 2 ** (10 * i);
+              fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                fileSizeInBytesText,
+                `${(fileSize / prefixMultiplier).toFixed(2)} ${prefixes[i]}B`
+              );
+              replaced = true;
+              break;
+            }
+          }
+          if (!replaced) {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
               fileSizeInBytesText,
               "NaN"
