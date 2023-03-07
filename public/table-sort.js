@@ -93,11 +93,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       const unitType =
         /(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|G\s?iB|\s?TB|\s?TiB)/i;
       const fileSizes = {
-        Kibibyte: 1024,
-        Mebibyte: 1.049e6,
-        Gibibyte: 1.074e9,
-        Tebibyte: 1.1e12,
-        Pebibyte: 1.126e15,
+        Kibibyte: 2 ** 10,
+        Mebibyte: 2 ** 20,
+        Gibibyte: 2 ** 30,
+        Tebibyte: 2 ** 40,
+        Pebibyte: 2 ** 50,
         Kilobyte: 1000,
         Megabyte: 1e6,
         Gigabyte: 1e9,
@@ -282,11 +282,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
             .querySelectorAll("td")
             .item(columnIndex).textContent;
           const fileSizes = {
-            Kibibyte: 1024,
-            Mebibyte: 1.049e6,
-            Gibibyte: 1.074e9,
-            Tebibyte: 1.1e12,
-            Pebibyte: 1.126e15,
+            Kibibyte: 2 ** 10,
+            Mebibyte: 2 ** 20,
+            Gibibyte: 2 ** 30,
+            Tebibyte: 2 ** 40,
+            Pebibyte: 2 ** 50,
           };
           // Remove the unique identifyer for duplicate values(#number).
           columnData[i] = columnData[i].replace(/#[0-9]*/, "");

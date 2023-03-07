@@ -99,7 +99,7 @@ test("Order by file-size: file-size order-by-desc", () => {
       "10.00 GiB",
       "9.31 GiB",
       "10.00 MiB",
-      "9.53 MiB",
+      "9.54 MiB",
       "10.00 KiB",
       "9.77 KiB",
       "10.00 B",
