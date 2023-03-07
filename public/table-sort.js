@@ -94,7 +94,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         /(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|G\s?iB|\s?TB|\s?TiB)/i;
       function removeUnitTypeConvertToBytes(fileSizeTd, multiplier, i) {
         fileSizeTd = fileSizeTd.replace(unitType, "");
-        fileSizeTd = fileSizeTd.replace(fileSizeTd, fileSizeTd * multiplier);
+        fileSizeTd = fileSizeTd * multiplier;
         columnData.push(`${fileSizeTd}#${i}`);
         return fileSizeTd;
       }
