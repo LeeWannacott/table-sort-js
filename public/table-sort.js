@@ -88,59 +88,28 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function sortFileSize(tableRows, columnData) {
-      const numberWithUnitType =
-        /[.0-9]+(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|\s?GiB|T\s?B|\s?TiB)/i;
-      const unitType =
-        /(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|G\s?iB|\s?TB|\s?TiB)/i;
-      const fileSizes = {
-        Kibibyte: 1024,
-        Mebibyte: 1.049e6,
-        Gibibyte: 1.074e9,
-        Tebibyte: 1.1e12,
-        Pebibyte: 1.126e15,
-        Kilobyte: 1000,
-        Megabyte: 1e6,
-        Gigabyte: 1e9,
-        Terabyte: 1e12,
+      let unitToMultiplier = {
+        b: 1,
+        kb: 1000,
+        kib: 2 ** 10,
+        mb: 1e6,
+        mib: 2 ** 20,
+        gb: 1e9,
+        gib: 2 ** 30,
+        tb: 1e12,
+        tib: 2 ** 40,
       };
-      function removeUnitTypeConvertToBytes(fileSizeTd, _replace, i) {
-        fileSizeTd = fileSizeTd.replace(unitType, "");
-        fileSizeTd = fileSizeTd.replace(
-          fileSizeTd,
-          fileSizeTd * fileSizes[_replace]
-        );
-        if (i) {
-          columnData.push(`${fileSizeTd}#${i}`);
-        }
-        return fileSizeTd;
-      }
+      const numberWithUnitType = /([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
       for (let [i, tr] of tableRows.entries()) {
         let fileSizeTd = tr
           .querySelectorAll("td")
           .item(columnIndex).textContent;
-        if (fileSizeTd.match(numberWithUnitType)) {
-          if (fileSizeTd.match(/\s?KB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, "Kilobyte", i);
-          } else if (fileSizeTd.match(/\s?KiB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, "Kibibyte", i);
-          } else if (fileSizeTd.match(/\s?MB/i)) {
-            // TODO: figure out why refactoring this line breaks test.
-            fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, "Megabyte");
-            columnData.push(`${fileSizeTd}#${i}`);
-          } else if (fileSizeTd.match(/\s?MiB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, "Mebibyte", i);
-          } else if (fileSizeTd.match(/\s?GB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, "Gigabyte", i);
-          } else if (fileSizeTd.match(/\s?GiB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, "Gibibyte", i);
-          } else if (fileSizeTd.match(/\s?TB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, "Terabyte", i);
-          } else if (fileSizeTd.match(/\s?TiB/i)) {
-            removeUnitTypeConvertToBytes(fileSizeTd, "Tebibyte", i);
-          } else if (fileSizeTd.match(/\s?B/i)) {
-            fileSizeTd = fileSizeTd.replace(unitType, "");
-            columnData.push(`${fileSizeTd}#${i}`);
-          }
+        let match = fileSizeTd.match(numberWithUnitType);
+        if (match) {
+          let number = parseFloat(match[1]);
+          let unit = match[2].toLowerCase();
+          let multiplier = unitToMultiplier[unit];
+          columnData.push(`${number * multiplier}#${i}`);
         } else {
           columnData.push(`${fillValue}#${i}`);
         }
@@ -281,54 +250,24 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           const fileSizeInBytesText = tr
             .querySelectorAll("td")
             .item(columnIndex).textContent;
-          const fileSizes = {
-            Kibibyte: 1024,
-            Mebibyte: 1.049e6,
-            Gibibyte: 1.074e9,
-            Tebibyte: 1.1e12,
-            Pebibyte: 1.126e15,
-          };
           // Remove the unique identifyer for duplicate values(#number).
           columnData[i] = columnData[i].replace(/#[0-9]*/, "");
-          const fileSize = columnData[i];
-          if (fileSize < fileSizes.Kibibyte) {
-            fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-              fileSizeInBytesText,
-              `${parseFloat(fileSize).toFixed(2)} B`
-            );
-          } else if (
-            fileSize >= fileSizes.Kibibyte &&
-            fileSize < fileSizes.Mebibyte
-          ) {
-            fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-              fileSizeInBytesText,
-              `${(fileSize / fileSizes.Kibibyte).toFixed(2)} KiB`
-            );
-          } else if (
-            fileSize >= fileSizes.Mebibyte &&
-            fileSize < fileSizes.Gibibyte
-          ) {
-            fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-              fileSizeInBytesText,
-              `${(fileSize / fileSizes.Mebibyte).toFixed(2)} MiB`
-            );
-          } else if (
-            fileSize >= fileSizes.Gibibyte &&
-            fileSize < fileSizes.Tebibyte
-          ) {
-            fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-              fileSizeInBytesText,
-              `${(fileSize / fileSizes.Gibibyte).toFixed(2)} GiB`
-            );
-          } else if (
-            fileSize >= fileSizes.Tebibyte &&
-            fileSize < fileSizes.Pebibyte
-          ) {
-            fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-              fileSizeInBytesText,
-              `${(fileSize / fileSizes.Tebibyte).toFixed(2)} TiB`
-            );
-          } else {
+          const fileSize = parseFloat(columnData[i]);
+          let prefixes = ["", "Ki", "Mi", "Gi", "Ti", "Pi"];
+          let replaced = false;
+          for (let i = 0; i < prefixes.length; ++i) {
+            let nextPrefixMultiplier = 2 ** (10 * (i + 1));
+            if (fileSize < nextPrefixMultiplier) {
+              let prefixMultiplier = 2 ** (10 * i);
+              fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+                fileSizeInBytesText,
+                `${(fileSize / prefixMultiplier).toFixed(2)} ${prefixes[i]}B`
+              );
+              replaced = true;
+              break;
+            }
+          }
+          if (!replaced) {
             fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
               fileSizeInBytesText,
               "NaN"
