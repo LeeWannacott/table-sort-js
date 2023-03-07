@@ -89,10 +89,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     function sortFileSize(tableRows, columnData) {
       const numberWithUnitType = /([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-      function removeUnitTypeConvertToBytes(number, fileSizeTd, multiplier, i) {
-        fileSizeTd = number * multiplier;
-        columnData.push(`${fileSizeTd}#${i}`);
-        return fileSizeTd;
+      function removeUnitTypeConvertToBytes(number, multiplier, i) {
+        columnData.push(`${number * multiplier}#${i}`);
       }
       for (let [i, tr] of tableRows.entries()) {
         let fileSizeTd = tr
@@ -103,21 +101,21 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           let number = parseFloat(match[1]);
           let unit = match[2].toLowerCase();
           if (unit === "kb") {
-            removeUnitTypeConvertToBytes(number, fileSizeTd, 1000, i);
+            removeUnitTypeConvertToBytes(number, 1000, i);
           } else if (unit === "kib") {
-            removeUnitTypeConvertToBytes(number, fileSizeTd, 2 ** 10, i);
+            removeUnitTypeConvertToBytes(number, 2 ** 10, i);
           } else if (unit === "mb") {
-            removeUnitTypeConvertToBytes(number, fileSizeTd, 1e6, i);
+            removeUnitTypeConvertToBytes(number, 1e6, i);
           } else if (unit === "mib") {
-            removeUnitTypeConvertToBytes(number, fileSizeTd, 2 ** 20, i);
+            removeUnitTypeConvertToBytes(number, 2 ** 20, i);
           } else if (unit === "gb") {
-            removeUnitTypeConvertToBytes(number, fileSizeTd, 1e9, i);
+            removeUnitTypeConvertToBytes(number, 1e9, i);
           } else if (unit === "gib") {
-            removeUnitTypeConvertToBytes(number, fileSizeTd, 2 ** 30, i);
+            removeUnitTypeConvertToBytes(number, 2 ** 30, i);
           } else if (unit === "tb") {
-            removeUnitTypeConvertToBytes(number, fileSizeTd, 1e12, i);
+            removeUnitTypeConvertToBytes(number, 1e12, i);
           } else if (unit === "tib") {
-            removeUnitTypeConvertToBytes(number, fileSizeTd, 2 ** 40, i);
+            removeUnitTypeConvertToBytes(number, 2 ** 40, i);
           } else if (unit === "b") {
             fileSizeTd = number;
             columnData.push(`${fileSizeTd}#${i}`);
