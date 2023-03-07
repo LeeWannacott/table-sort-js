@@ -100,9 +100,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         tib: 2 ** 40,
       };
       const numberWithUnitType = /([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-      function removeUnitTypeConvertToBytes(number, multiplier, i) {
-        columnData.push(`${number * multiplier}#${i}`);
-      }
       for (let [i, tr] of tableRows.entries()) {
         let fileSizeTd = tr
           .querySelectorAll("td")
@@ -112,7 +109,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           let number = parseFloat(match[1]);
           let unit = match[2].toLowerCase();
           let multiplier = unitToMultiplier[unit];
-          removeUnitTypeConvertToBytes(number, multiplier, i);
+          columnData.push(`${number * multiplier}#${i}`);
         } else {
           columnData.push(`${fillValue}#${i}`);
         }
