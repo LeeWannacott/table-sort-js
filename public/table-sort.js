@@ -88,10 +88,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function sortFileSize(tableRows, columnData) {
-      const numberWithUnitType =
-        /[.0-9]+(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|\s?GiB|T\s?B|\s?TiB)/i;
-      const unitType =
-        /(\s?B|\s?KB|\s?KiB|\s?MB|\s?MiB|\s?GB|G\s?iB|\s?TB|\s?TiB)/i;
+      const numberWithUnitType = /[.0-9]+\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+      const unitType = /\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
       function removeUnitTypeConvertToBytes(fileSizeTd, multiplier, i) {
         fileSizeTd = fileSizeTd.replace(unitType, "");
         fileSizeTd = fileSizeTd * multiplier;
