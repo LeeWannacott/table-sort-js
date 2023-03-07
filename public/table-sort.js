@@ -109,9 +109,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           fileSizeTd,
           fileSizeTd * fileSizes[_replace]
         );
-        if (i) {
-          columnData.push(`${fileSizeTd}#${i}`);
-        }
+        columnData.push(`${fileSizeTd}#${i}`);
         return fileSizeTd;
       }
       for (let [i, tr] of tableRows.entries()) {
@@ -124,9 +122,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           } else if (fileSizeTd.match(/\s?KiB/i)) {
             removeUnitTypeConvertToBytes(fileSizeTd, "Kibibyte", i);
           } else if (fileSizeTd.match(/\s?MB/i)) {
-            // TODO: figure out why refactoring this line breaks test.
-            fileSizeTd = removeUnitTypeConvertToBytes(fileSizeTd, "Megabyte");
-            columnData.push(`${fileSizeTd}#${i}`);
+            removeUnitTypeConvertToBytes(fileSizeTd, "Megabyte", i);
           } else if (fileSizeTd.match(/\s?MiB/i)) {
             removeUnitTypeConvertToBytes(fileSizeTd, "Mebibyte", i);
           } else if (fileSizeTd.match(/\s?GB/i)) {
