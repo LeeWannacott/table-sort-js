@@ -88,6 +88,17 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function sortFileSize(tableRows, columnData) {
+      let unitToMultiplier = {
+        b: 1,
+        kb: 1000,
+        kib: 2 ** 10,
+        mb: 1e6,
+        mib: 2 ** 20,
+        gb: 1e9,
+        gib: 2 ** 30,
+        tb: 1e12,
+        tib: 2 ** 40,
+      };
       const numberWithUnitType = /([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
       function removeUnitTypeConvertToBytes(number, multiplier, i) {
         columnData.push(`${number * multiplier}#${i}`);
@@ -100,26 +111,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         if (match) {
           let number = parseFloat(match[1]);
           let unit = match[2].toLowerCase();
-          if (unit === "kb") {
-            removeUnitTypeConvertToBytes(number, 1000, i);
-          } else if (unit === "kib") {
-            removeUnitTypeConvertToBytes(number, 2 ** 10, i);
-          } else if (unit === "mb") {
-            removeUnitTypeConvertToBytes(number, 1e6, i);
-          } else if (unit === "mib") {
-            removeUnitTypeConvertToBytes(number, 2 ** 20, i);
-          } else if (unit === "gb") {
-            removeUnitTypeConvertToBytes(number, 1e9, i);
-          } else if (unit === "gib") {
-            removeUnitTypeConvertToBytes(number, 2 ** 30, i);
-          } else if (unit === "tb") {
-            removeUnitTypeConvertToBytes(number, 1e12, i);
-          } else if (unit === "tib") {
-            removeUnitTypeConvertToBytes(number, 2 ** 40, i);
-          } else if (unit === "b") {
-            fileSizeTd = number;
-            columnData.push(`${fileSizeTd}#${i}`);
-          }
+          let multiplier = unitToMultiplier[unit];
+          removeUnitTypeConvertToBytes(number, multiplier, i);
         } else {
           columnData.push(`${fillValue}#${i}`);
         }
