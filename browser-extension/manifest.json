@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "table-sort-js",
+  "version": "0.0",
+  "description": "Makes tables sortable using https://github.com/LeeWannacott/table-sort-js",
+
+  "icons": 
+    { "48": "icons/border-16.png" }
+  ,
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.mozilla.org/*",
+        "https://github.com/*/*/actions/runs/*/usage"
+      ],
+      "js": ["getTables.js","table-sort.js"]
+    }
+  ]
+}
