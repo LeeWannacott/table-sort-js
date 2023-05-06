@@ -5,15 +5,24 @@
   "description": "Makes tables sortable using https://github.com/LeeWannacott/table-sort-js",
 
   "icons": 
-    { "48": "icons/border-16.png" }
+    { "48": "icons/t.png" }
   ,
+
   "content_scripts": [
     {
       "matches": [
+        "<all_urls>",
         "*://*.mozilla.org/*",
         "https://github.com/*/*/actions/runs/*/usage"
       ],
-      "js": ["getTables.js","table-sort.js"]
+      "js": ["addTableSortClass.js","getTableHeaders.js","table-sort.js"]
     }
-  ]
+  ],
+
+  "browser_action": {
+    "default_icon": "./icons/t.png",
+    "default_title": "table-sort",
+    "default_popup": "popup/table-options.html"
+  }
+
 }
