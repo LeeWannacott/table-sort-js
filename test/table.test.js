@@ -200,7 +200,7 @@ test("punc-sort: sort involving punctuation - nat sort", () => {
   ).toStrictEqual({ col0: ["-row3", "-row4", "*row1", "#row3", "row2"] });
 });
 
-test("testing that multiple columns works", () => {
+test("Multiple columns works", () => {
   expect(
     createTestTable(
       {
@@ -212,6 +212,27 @@ test("testing that multiple columns works", () => {
       },
       {
         colsToClick: [0],
+      }
+    )
+  ).toStrictEqual({
+    col0: ["alpha", "beta", "charlie"],
+    col1: ["carrie", "fisher", "doris"],
+  });
+});
+
+
+test("Clicking multiple times (>2) doesn't break sorting", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["charlie", "alpha", "beta"],
+        col1: ["doris", "carrie", "fisher"],
+      },
+      {
+        classTags: "",
+      },
+      {
+        colsToClick: [0,0,0],
       }
     )
   ).toStrictEqual({
