@@ -78,7 +78,9 @@ function createTestTable(
     }
   } else {
     for (let i = 0; i < numberOfTableColumns; i++) {
-      dom.window.document.querySelectorAll("table th")[i].click();
+      if (!thAttributes.classTags.includes("onload-sort")) {
+        dom.window.document.querySelectorAll("table th")[i].click();
+      }
     }
   }
 

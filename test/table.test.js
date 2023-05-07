@@ -219,3 +219,14 @@ test("testing that multiple columns works", () => {
     col1: ["carrie", "fisher", "doris"],
   });
 });
+
+test("onload-sort: testing that it sorts without a click from user", () => {
+  expect(
+    createTestTable(
+      { col0: ["echo", "alpha", "bravo", "charlie", "delta"] },
+      {
+        classTags: "onload-sort",
+      }
+    )
+  ).toStrictEqual({ col0: ["alpha", "bravo", "charlie", "delta", "echo"] });
+});

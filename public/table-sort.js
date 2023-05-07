@@ -326,6 +326,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       getTableData(tableProperties);
       updateTable(tableProperties);
     });
+    let isOnloadSort =  th.classList.contains("onload-sort");
+    if (isOnloadSort) {
+      th.click();
+    }
   }
 }
 
