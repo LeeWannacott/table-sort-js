@@ -51,10 +51,11 @@ Refer to the documenation for examples on how to use table-sort-js with [HTML](h
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
 | "order-by-desc"    | Order by descending on first click. (default is aescending)                                                                             |
 | "data-sort"        | Sort by [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes), e.g &lt;td data-sort="42"&gt; |
+| "onload-sort"      | Sort column on loading of the page. Simulates a click from the user. (can only sort onload for one column)                              |
 | "file-size-sort"   | Sort file sizes(B->TiB) uses the binary prefix. (e.g KiB)                                                                               |
+| "disable-sort"     | Disallow sorting the table by this specific column.                                                                                     |
 | "alpha-sort"       | Sort alphabetically (z11,z2); default is [natural sort](https://en.wikipedia.org/wiki/Natural_sort_order) (z2,z11).                     |
 | "punct-sort"       | Sort punctuation; default ignores punctuation.                                                                                          |
-| "disable-sort"     | Disallow sorting the table by this specific column.                                                                                     |
 
 #### Development:
 

@@ -37,18 +37,18 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
   function createMissingTableHead(sortableTable) {
     let createTableHead;
-      if (testingTableSortJS === true) {
-        createTableHead = domDocumentWindow.createElement("thead");
-      } else {
-        createTableHead = document.createElement("thead");
-      }
-      createTableHead.appendChild(sortableTable.rows[0]);
-      sortableTable.insertBefore(createTableHead, sortableTable.firstChild);
+    if (testingTableSortJS === true) {
+      createTableHead = domDocumentWindow.createElement("thead");
+    } else {
+      createTableHead = document.createElement("thead");
+    }
+    createTableHead.appendChild(sortableTable.rows[0]);
+    sortableTable.insertBefore(createTableHead, sortableTable.firstChild);
   }
 
   function getTableBody(sortableTable) {
     if (sortableTable.getElementsByTagName("thead").length === 0) {
-      createMissingTableHead(sortableTable)
+      createMissingTableHead(sortableTable);
       if (sortableTable.querySelectorAll("tbody").length > 1) {
         return sortableTable.querySelectorAll("tbody")[1];
       } else {
@@ -326,7 +326,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       getTableData(tableProperties);
       updateTable(tableProperties);
     });
-    let isOnloadSort =  th.classList.contains("onload-sort");
+    let isOnloadSort = th.classList.contains("onload-sort");
     if (isOnloadSort) {
       th.click();
     }

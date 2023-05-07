@@ -176,9 +176,11 @@ test("visible-tr-sort: example sort only visible trs", () => {
   ).toStrictEqual({ col0: ["row5", "row4", "row2"] });
 });
 
-
 test("onload-sort: testing that it sorts without a click from user", () => {
   expect(
-    createTestTable({ col0: [5, 3, 4, 1, 2] }, { classTags: "order-by-desc onload-sort" })
+    createTestTable(
+      { col0: [5, 3, 4, 1, 2] },
+      { classTags: "order-by-desc onload-sort" }
+    )
   ).toStrictEqual({ col0: ["5", "4", "3", "2", "1"] });
 });
