@@ -82,111 +82,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
-  function getTableData(tableProperties, timesClickedColumn) {
-    const {
-      tableRows,
-      th,
-      columnData,
-      isFileSize,
-      isDataAttribute,
-      colSpanData,
-      colSpanSum,
-      columnIndex,
-      fillValue,
-      tableArrows,
-      arrowUp,
-      arrowDown,
-      desc,
-    } = tableProperties;
-    for (let [i, tr] of tableRows.entries()) {
-      let tdTextContent = tr
-        .querySelectorAll("td")
-        .item(
-          colSpanData[columnIndex] === 1
-            ? colSpanSum[columnIndex] - 1
-            : colSpanSum[columnIndex] - colSpanData[columnIndex]
-        ).textContent;
-      if (tdTextContent.length === 0) {
-        tdTextContent = "";
-      }
-      if (tdTextContent.trim() !== "") {
-        if (isFileSize) {
-          fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
-        }
-        if (!isFileSize && !isDataAttribute) {
-          columnData.push(`${tdTextContent}#${i}`);
-          columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
-        }
-      } else {
-        // Fill in blank table cells dict key with filler value.
-        columnData.push(`${fillValue}#${i}`);
-        columnIndexAndTableRow[`${fillValue}#${i}`] = tr.innerHTML;
-      }
-    }
-
-    const isPunctSort = th.classList.contains("punct-sort");
-    const isAlphaSort = th.classList.contains("alpha-sort");
-    function sortAscending(a, b) {
-      if (a.includes(`${fillValue}#`)) {
-        return 1;
-      } else if (b.includes(`${fillValue}#`)) {
-        return -1;
-      } else {
-        return a.localeCompare(
-          b,
-          navigator.languages[0] || navigator.language,
-          { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
-        );
-      }
-    }
-
-    function sortDescending(a, b) {
-      return sortAscending(b, a);
-    }
-
-    function clearArrows(arrowUp = "▲", arrowDown = "▼") {
-      th.innerHTML = th.innerHTML.replace(arrowUp, "");
-      th.innerHTML = th.innerHTML.replace(arrowDown, "");
-    }
-
-    if (columnData[0] === undefined) {
-      return;
-    }
-
-    function changeTableArrow(arrowDirection) {
-      if (tableArrows) {
-        clearArrows(arrowUp, arrowDown);
-        th.insertAdjacentText("beforeend", arrowDirection);
-      }
-    }
-
-    function sortColumn(sortDirection) {
-      columnData.sort(sortDirection, {
-        numeric: !isAlphaSort,
-        ignorePunctuation: !isPunctSort,
-      });
-    }
-
-    if (timesClickedColumn === 1) {
-      if (desc) {
-        changeTableArrow(arrowDown);
-        sortColumn(sortDescending);
-      } else {
-        changeTableArrow(arrowUp);
-        sortColumn(sortAscending);
-      }
-    } else if (timesClickedColumn === 2) {
-      timesClickedColumn = 0;
-      if (desc) {
-        changeTableArrow(arrowUp);
-        sortColumn(sortAscending);
-      } else {
-        changeTableArrow(arrowDown);
-        sortColumn(sortDescending);
-      }
-    }
-  }
-
   function updateTable(tableProperties) {
     const { tableRows, columnData, isFileSize, columnIndex } = tableProperties;
     for (let [i, tr] of tableRows.entries()) {
@@ -265,23 +160,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
-  function rememberSort(sortProperties, timesClickedColumn) {
-    const { columnIndexesClicked, columnIndex } = sortProperties;
-    // if user clicked different column from first column reset times clicked.
-    columnIndexesClicked.push(columnIndex);
-    if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
-      const lastColumnClicked =
-        columnIndexesClicked[columnIndexesClicked.length - 1];
-      const secondLastColumnClicked =
-        columnIndexesClicked[columnIndexesClicked.length - 2];
-      if (lastColumnClicked !== secondLastColumnClicked) {
-        timesClickedColumn = 0;
-        columnIndexesClicked.shift();
-      }
-    }
-  }
-
-  function getVisibleTableRoes(tableBody) {
+  function getVisibleTableRows(tableBody) {
     const visibleTableRows = Array.prototype.filter.call(
       tableBody.querySelectorAll("tr"),
       (tr) => {
@@ -303,21 +182,37 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       th.insertAdjacentText("beforeend", arrowUp);
     }
 
-    let [timesClickedColumn, columnIndexesClicked] = [0, []];
+    let timesClickedColumn = 0;
 
     th.addEventListener("click", function () {
       const [columnData, colSpanData, colSpanSum] = [[], {}, {}];
 
-      const visibleTableRows = getVisibleTableRoes(tableBody);
+      const visibleTableRows = getVisibleTableRows(tableBody);
 
       const sortProperties = {
         tableRows: visibleTableRows,
         columnData,
         columnIndex,
-        timesClickedColumn,
-        columnIndexesClicked,
         fillValue,
       };
+
+      function rememberSort() {
+        const columnIndexesClicked = [];
+        // if user clicked different column from first column reset times clicked.
+        columnIndexesClicked.push(columnIndex);
+        if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
+          console.log(1);
+          const lastColumnClicked =
+            columnIndexesClicked[columnIndexesClicked.length - 1];
+          const secondLastColumnClicked =
+            columnIndexesClicked[columnIndexesClicked.length - 2];
+          if (lastColumnClicked !== secondLastColumnClicked) {
+            console.log(2);
+            timesClickedColumn = 0;
+            columnIndexesClicked.shift();
+          }
+        }
+      }
 
       const isDataAttribute = th.classList.contains("data-sort");
       if (isDataAttribute) {
@@ -331,30 +226,110 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
       const isRememberSort = sortableTable.classList.contains("remember-sort");
       if (!isRememberSort) {
-        rememberSort(sortProperties, timesClickedColumn);
+        rememberSort();
       }
 
       timesClickedColumn += 1;
-
       getColSpanData(sortableTable, colSpanData, colSpanSum);
 
+
+      function getTableData() {
+        for (let [i, tr] of visibleTableRows.entries()) {
+          let tdTextContent = tr
+            .querySelectorAll("td")
+            .item(
+              colSpanData[columnIndex] === 1
+                ? colSpanSum[columnIndex] - 1
+                : colSpanSum[columnIndex] - colSpanData[columnIndex]
+            ).textContent;
+          if (tdTextContent.length === 0) {
+            tdTextContent = "";
+          }
+          if (tdTextContent.trim() !== "") {
+            if (isFileSize) {
+              fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
+            }
+            if (!isFileSize && !isDataAttribute) {
+              columnData.push(`${tdTextContent}#${i}`);
+              columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
+            }
+          } else {
+            // Fill in blank table cells dict key with filler value.
+            columnData.push(`${fillValue}#${i}`);
+            columnIndexAndTableRow[`${fillValue}#${i}`] = tr.innerHTML;
+          }
+        }
+
+        const isPunctSort = th.classList.contains("punct-sort");
+        const isAlphaSort = th.classList.contains("alpha-sort");
+        function sortAscending(a, b) {
+          if (a.includes(`${fillValue}#`)) {
+            return 1;
+          } else if (b.includes(`${fillValue}#`)) {
+            return -1;
+          } else {
+            return a.localeCompare(
+              b,
+              navigator.languages[0] || navigator.language,
+              { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
+            );
+          }
+        }
+
+        function sortDescending(a, b) {
+          return sortAscending(b, a);
+        }
+
+        function clearArrows(arrowUp = "▲", arrowDown = "▼") {
+          th.innerHTML = th.innerHTML.replace(arrowUp, "");
+          th.innerHTML = th.innerHTML.replace(arrowDown, "");
+        }
+
+        if (columnData[0] === undefined) {
+          return;
+        }
+
+        function changeTableArrow(arrowDirection) {
+          if (tableArrows) {
+            clearArrows(arrowUp, arrowDown);
+            th.insertAdjacentText("beforeend", arrowDirection);
+          }
+        }
+
+        function sortColumn(sortDirection) {
+          columnData.sort(sortDirection, {
+            numeric: !isAlphaSort,
+            ignorePunctuation: !isPunctSort,
+          });
+        }
+
+        if (timesClickedColumn === 1) {
+          if (desc) {
+            changeTableArrow(arrowDown);
+            sortColumn(sortDescending);
+          } else {
+            changeTableArrow(arrowUp);
+            sortColumn(sortAscending);
+          }
+        } else if (timesClickedColumn === 2) {
+          timesClickedColumn = 0;
+          if (desc) {
+            changeTableArrow(arrowUp);
+            sortColumn(sortAscending);
+          } else {
+            changeTableArrow(arrowDown);
+            sortColumn(sortDescending);
+          }
+        }
+      }
+
+      getTableData();
       const tableProperties = {
         tableRows: visibleTableRows,
-        th,
         columnData,
         isFileSize,
-        isDataAttribute,
-        colSpanData,
-        colSpanSum,
         columnIndex,
-        arrowUp,
-        arrowDown,
-        tableArrows,
-        desc,
-        fillValue,
       };
-
-      getTableData(tableProperties, timesClickedColumn);
       updateTable(tableProperties);
     });
   }
