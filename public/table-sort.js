@@ -35,10 +35,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
-  function makeTableSortable(sortableTable) {
+  function createMissingTableHead(sortableTable) {
     let createTableHead;
-    let tableBody;
-    if (sortableTable.getElementsByTagName("thead").length === 0) {
       if (testingTableSortJS === true) {
         createTableHead = domDocumentWindow.createElement("thead");
       } else {
@@ -46,15 +44,23 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
       createTableHead.appendChild(sortableTable.rows[0]);
       sortableTable.insertBefore(createTableHead, sortableTable.firstChild);
+  }
+
+  function getTableBody(sortableTable) {
+    if (sortableTable.getElementsByTagName("thead").length === 0) {
+      createMissingTableHead(sortableTable)
       if (sortableTable.querySelectorAll("tbody").length > 1) {
-        tableBody = sortableTable.querySelectorAll("tbody")[1];
+        return sortableTable.querySelectorAll("tbody")[1];
       } else {
-        tableBody = sortableTable.querySelector("tbody");
+        return sortableTable.querySelector("tbody");
       }
     } else {
-      tableBody = sortableTable.querySelector("tbody");
+      return sortableTable.querySelector("tbody");
     }
+  }
 
+  function makeTableSortable(sortableTable) {
+    const tableBody = getTableBody(sortableTable);
     const tableHead = sortableTable.querySelector("thead");
     const tableHeadHeaders = tableHead.querySelectorAll("th");
 
