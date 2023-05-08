@@ -267,13 +267,13 @@ test("time-sort class", () => {
         ],
       },
       {
-        classTags: "time-sort",
+        classTags: "runtime-sort",
       },
       {
         colsToClick: [0],
       }
     )
   ).toStrictEqual({
-    col0: ["3s", "7s", "36s", "41s", "1m 36s", "2m 52s", "9m 36s", "11m 40s"],
+    col0: ["3s", "7s", "36s", "41s", "1m 36s", "2m 52s", "9m 44s", "11m 40s"],
   });
 });

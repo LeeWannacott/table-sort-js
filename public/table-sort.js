@@ -122,29 +122,29 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
-    function sortByTime(tableRows, columnData) {
+    function sortByRuntime(tableRows, columnData) {
       for (let [i, tr] of tableRows.entries()) {
-        const minutesAndSeconds = /^(\d+m)\s?(\d+s)$/i;
-        let timeMinutesAndSeconds = tr
+        const regexMinutesAndSeconds = /^(\d+m)\s?(\d+s)$/i;
+        let columnOfTd = tr
           .querySelectorAll("td")
           .item(columnIndex).textContent;
-        let match = timeMinutesAndSeconds.match(minutesAndSeconds);
-        let minutesInSeconds = 0;
-        let secondsInSeconds = 0;
-        let timeinSeconds = 0;
-        const minutes = match[1];
-        if (minutes) {
-          minutesInSeconds = Number(minutes.replace("m", "")) * 60;
-          console.log("minutes: ", minutesInSeconds);
+        let match = columnOfTd.match(regexMinutesAndSeconds);
+        let minutesInSeconds,
+          seconds,
+          timeinSeconds = [0, 0, 0];
+        if (match) {
+          const regexMinutes = match[1];
+          if (regexMinutes) {
+            minutesInSeconds = Number(regexMinutes.replace("m", "")) * 60;
+          }
+          const regexSeconds = match[2];
+          if (regexSeconds) {
+            seconds = Number(regexSeconds.replace("s", ""));
+          }
+          timeinSeconds = minutesInSeconds + seconds;
         }
-        const seconds = match[2];
-        if (seconds) {
-          secondsInSeconds = Number(seconds.replace("s", ""));
-          console.log("seconds: ", secondsInSeconds);
-        }
-        timeinSeconds = minutesInSeconds + secondsInSeconds;
-        console.log(timeinSeconds)
         columnData.push(`${timeinSeconds}#${i}`);
+        columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
       }
     }
 
@@ -178,6 +178,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         tableRows,
         columnData,
         isFileSize,
+        isTimeSort,
         isDataAttribute,
         colSpanData,
         colSpanSum,
@@ -197,7 +198,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           if (isFileSize) {
             fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
           }
-          if (!isFileSize && !isDataAttribute) {
+          if (!isFileSize && !isDataAttribute && !isTimeSort) {
             columnData.push(`${tdTextContent}#${i}`);
             columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
           }
@@ -333,9 +334,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         sortFileSize(visibleTableRows, columnData);
       }
 
-      const isTimeSort = th.classList.contains("time-sort");
+      const isTimeSort = th.classList.contains("runtime-sort");
       if (isTimeSort) {
-        sortByTime(visibleTableRows, columnData);
+        sortByRuntime(visibleTableRows, columnData);
       }
 
       const isRememberSort = sortableTable.classList.contains("remember-sort");
@@ -351,6 +352,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         columnData,
         isFileSize,
         isDataAttribute,
+        isTimeSort,
         colSpanData,
         colSpanSum,
       };
