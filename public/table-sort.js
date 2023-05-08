@@ -183,8 +183,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     let timesClickedColumn = 0;
+    const columnIndexesClicked = [];
 
     th.addEventListener("click", function () {
+      timesClickedColumn += 1;
       const [columnData, colSpanData, colSpanSum] = [[], {}, {}];
 
       const visibleTableRows = getVisibleTableRows(tableBody);
@@ -197,19 +199,17 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       };
 
       function rememberSort() {
-        const columnIndexesClicked = [];
         // if user clicked different column from first column reset times clicked.
         columnIndexesClicked.push(columnIndex);
         if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
-          console.log(1);
           const lastColumnClicked =
             columnIndexesClicked[columnIndexesClicked.length - 1];
+
           const secondLastColumnClicked =
             columnIndexesClicked[columnIndexesClicked.length - 2];
           if (lastColumnClicked !== secondLastColumnClicked) {
-            console.log(2);
-            timesClickedColumn = 0;
             columnIndexesClicked.shift();
+            timesClickedColumn = 0;
           }
         }
       }
@@ -229,9 +229,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         rememberSort();
       }
 
-      timesClickedColumn += 1;
       getColSpanData(sortableTable, colSpanData, colSpanSum);
-
 
       function getTableData() {
         for (let [i, tr] of visibleTableRows.entries()) {
