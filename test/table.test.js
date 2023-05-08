@@ -242,11 +242,38 @@ test("Clicking multiple times (>2) doesn't break sorting", () => {
         classTags: "",
       },
       {
-        colsToClick: [0,0,0,0,0],
+        colsToClick: [0, 0, 0, 0, 0],
       }
     )
   ).toStrictEqual({
     col0: ["alpha", "beta", "charlie"],
     col1: ["carrie", "fisher", "doris"],
+  });
+});
+
+test("time-sort class", () => {
+  expect(
+    createTestTable(
+      {
+        col0: [
+          "2m 52s",
+          "3s",
+          "7s",
+          "11m 40s",
+          "36s",
+          "9m 44s",
+          "1m 36s",
+          "41s",
+        ],
+      },
+      {
+        classTags: "time-sort",
+      },
+      {
+        colsToClick: [0],
+      }
+    )
+  ).toStrictEqual({
+    col0: ["3s", "7s", "36s", "41s", "1m 36s", "2m 52s", "9m 36s", "11m 40s"],
   });
 });
