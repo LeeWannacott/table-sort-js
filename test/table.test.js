@@ -230,3 +230,23 @@ test("onload-sort: testing that it sorts without a click from user", () => {
     )
   ).toStrictEqual({ col0: ["alpha", "bravo", "charlie", "delta", "echo"] });
 });
+
+test("Clicking multiple times (>2) doesn't break sorting", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["charlie", "alpha", "beta"],
+        col1: ["doris", "carrie", "fisher"],
+      },
+      {
+        classTags: "",
+      },
+      {
+        colsToClick: [0,0,0,0,0],
+      }
+    )
+  ).toStrictEqual({
+    col0: ["alpha", "beta", "charlie"],
+    col1: ["carrie", "fisher", "doris"],
+  });
+});
