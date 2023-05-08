@@ -122,6 +122,32 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
+    function sortByTime(tableRows, columnData) {
+      for (let [i, tr] of tableRows.entries()) {
+        const minutesAndSeconds = /^(\d+m)\s?(\d+s)$/i;
+        let timeMinutesAndSeconds = tr
+          .querySelectorAll("td")
+          .item(columnIndex).textContent;
+        let match = timeMinutesAndSeconds.match(minutesAndSeconds);
+        let minutesInSeconds = 0;
+        let secondsInSeconds = 0;
+        let timeinSeconds = 0;
+        const minutes = match[1];
+        if (minutes) {
+          minutesInSeconds = Number(minutes.replace("m", "")) * 60;
+          console.log("minutes: ", minutesInSeconds);
+        }
+        const seconds = match[2];
+        if (seconds) {
+          secondsInSeconds = Number(seconds.replace("s", ""));
+          console.log("seconds: ", secondsInSeconds);
+        }
+        timeinSeconds = minutesInSeconds + secondsInSeconds;
+        console.log(timeinSeconds)
+        columnData.push(`${timeinSeconds}#${i}`);
+      }
+    }
+
     let [timesClickedColumn, columnIndexesClicked] = [0, []];
 
     function rememberSort(timesClickedColumn, columnIndexesClicked) {
@@ -305,6 +331,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       const isFileSize = th.classList.contains("file-size-sort");
       if (isFileSize) {
         sortFileSize(visibleTableRows, columnData);
+      }
+
+      const isTimeSort = th.classList.contains("time-sort");
+      if (isTimeSort) {
+        sortByTime(visibleTableRows, columnData);
       }
 
       const isRememberSort = sortableTable.classList.contains("remember-sort");
