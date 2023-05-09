@@ -161,9 +161,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       };
       const numberWithUnitType = /([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
       for (let [i, tr] of tableRows.entries()) {
-        let fileSizeTd = tr
-          .querySelectorAll("td")
-          .item(columnIndex).textContent;
+        let fileSizeTd = tr.querySelectorAll("td").item(columnIndex).innerText;
         let match = fileSizeTd.match(numberWithUnitType);
         if (match) {
           let number = parseFloat(match[1]);
@@ -179,9 +177,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     function sortByRuntime(tableRows, columnData) {
       for (let [i, tr] of tableRows.entries()) {
         const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
-        let columnOfTd = tr
-          .querySelectorAll("td")
-          .item(columnIndex).textContent;
+        let columnOfTd = tr.querySelectorAll("td").item(columnIndex).innerText;
         let match = columnOfTd.match(regexMinutesAndSeconds);
         let [minutesInSeconds, hours, seconds, timeinSeconds] = [0, 0, 0, 0];
         if (match) {
