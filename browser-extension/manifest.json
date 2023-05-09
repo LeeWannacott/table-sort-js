@@ -3,7 +3,7 @@
   "author": "Lee Wannacott",
   "name": "table-sort-js",
   "version": "0.0",
-  "description": "Makes tables sortable using https://github.com/LeeWannacott/table-sort-js",
+  "description": "Makes tables sortable using table-sort-js: https://github.com/LeeWannacott/table-sort-js",
   "icons": { "48": "icons/t.png" },
   "browser_action": {
     "default_icon": "./icons/t.png",
