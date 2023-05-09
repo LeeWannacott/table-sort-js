@@ -13,7 +13,6 @@
     {
       "matches": [
         "<all_urls>",
-        "*://*.mozilla.org/*",
         "https://github.com/*/*/actions/runs/*/usage"
       ],
       "js": ["addTableSortClass.js", "table-sort.js"]
