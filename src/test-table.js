@@ -92,8 +92,8 @@ export class App extends Component {
                   <th className="order-by-desc">Forks</th>
                   <th className="order-by-desc">Open issues</th>
                   <th className="order-by-desc">Watchers</th>
-                  <th className="order-by-desc">Stars</th>
-                  <th className="order-by-desc">Size (MB)</th>
+                  <th className="order-by-desc">Sktars</th>
+                  <th className="onload-sort">Size (MB)</th>
                 </tr>
               </thead>
               <tbody className="table-hover">
@@ -114,7 +114,7 @@ export class App extends Component {
                     <td> {repo.open_issues}</td>
                     <td> {repo.watchers}</td>
                     <td> {repo.stargazers_count}</td>
-                    <td> {Math.round(repo.size / 1000)}</td>
+                    <td> {repo.size * 1000 + "B"}</td>
                   </tr>
                 ))}
               </tbody>

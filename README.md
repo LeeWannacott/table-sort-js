@@ -41,11 +41,12 @@ Refer to the documenation for examples on how to use table-sort-js with [HTML](h
 
 #### Classes:
 
-| &lt;table&gt; classes | Description                                                             |
-| --------------------- | ----------------------------------------------------------------------- |
-| "table-sort"          | Make the table sortable! (Words, numbers, dates)                        |
-| "table-arrows"        | Display ascending or descending triangles.                              |
-| "remember-sort"       | If clicking on different columns remembers sort of the original column. |
+| &lt;table&gt; classes | Description                                                                                 |
+| --------------------- | --------------------------------------------------------------------------------------------|
+| "table-sort"          | Make the table sortable! (Words, numbers)...                                                |
+| "table-arrows"        | Display ascending or descending triangles.                                                  |
+| "no-class-infer"      | Turns off inference for adding sort classes automatically (file-size-sort and runtime-sort).|
+| "remember-sort"       | If clicking on different columns remembers sort of the original column.                     |
 
 | &lt;th&gt; classes | Description                                                                                                                             |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
