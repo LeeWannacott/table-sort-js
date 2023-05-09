@@ -1,4 +1,5 @@
 cp public/table-sort.js npm/table-sort.js
+cp public/table-sort.js browser-extension/table-sort.js
 cp README.md npm/README.md
 cp LICENSE npm/LICENSE
 cp Contributors.md npm/Contributors.md
