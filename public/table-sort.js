@@ -181,9 +181,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         for (let [i, tr] of tableRows.entries()) {
           const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
           let columnOfTd = "";
-          // TODO: github actions runtime didn't like textContent, tests didn't like innerText? 
+          // TODO: github actions runtime didn't like textContent, tests didn't like innerText?
           if (testingTableSortJS) {
-            columnOfTd = tr.querySelectorAll("td").item(columnIndex).textContent;
+            columnOfTd = tr
+              .querySelectorAll("td")
+              .item(columnIndex).textContent;
           } else {
             columnOfTd = tr.querySelectorAll("td").item(columnIndex).innerText;
           }

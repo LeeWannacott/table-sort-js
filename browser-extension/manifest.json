@@ -7,8 +7,7 @@
   "icons": { "48": "icons/t.png" },
   "browser_action": {
     "default_icon": "./icons/t.png",
-    "default_title": "table-sort",
-    "default_popup": "popup/table-options.html"
+    "default_title": "table-sort-js"
   },
   "content_scripts": [
     {
@@ -17,7 +16,7 @@
         "*://*.mozilla.org/*",
         "https://github.com/*/*/actions/runs/*/usage"
       ],
-      "js": ["addTableSortClass.js", "getTableHeaders.js", "table-sort.js"]
+      "js": ["addTableSortClass.js", "table-sort.js"]
     }
   ]
 }

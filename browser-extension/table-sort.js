@@ -177,30 +177,40 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function sortByRuntime(tableRows, columnData) {
-      for (let [i, tr] of tableRows.entries()) {
-        const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
-        let columnOfTd = tr
-          .querySelectorAll("td")
-          .item(columnIndex).textContent;
-        let match = columnOfTd.match(regexMinutesAndSeconds);
-        let [minutesInSeconds, hours, seconds, timeinSeconds] = [0, 0, 0, 0];
-        if (match) {
-          const regexHours = match[1];
-          if (regexHours) {
-            hours = Number(regexHours.replace("h", "")) * 60 * 60;
+      try {
+        for (let [i, tr] of tableRows.entries()) {
+          const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
+          let columnOfTd = "";
+          // TODO: github actions runtime didn't like textContent, tests didn't like innerText?
+          if (testingTableSortJS) {
+            columnOfTd = tr
+              .querySelectorAll("td")
+              .item(columnIndex).textContent;
+          } else {
+            columnOfTd = tr.querySelectorAll("td").item(columnIndex).innerText;
           }
-          const regexMinutes = match[2];
-          if (regexMinutes) {
-            minutesInSeconds = Number(regexMinutes.replace("m", "")) * 60;
+          let match = columnOfTd.match(regexMinutesAndSeconds);
+          let [minutesInSeconds, hours, seconds, timeinSeconds] = [0, 0, 0, 0];
+          if (match) {
+            const regexHours = match[1];
+            if (regexHours) {
+              hours = Number(regexHours.replace("h", "")) * 60 * 60;
+            }
+            const regexMinutes = match[2];
+            if (regexMinutes) {
+              minutesInSeconds = Number(regexMinutes.replace("m", "")) * 60;
+            }
+            const regexSeconds = match[3];
+            if (regexSeconds) {
+              seconds = Number(regexSeconds.replace("s", ""));
+            }
+            timeinSeconds = hours + minutesInSeconds + seconds;
           }
-          const regexSeconds = match[3];
-          if (regexSeconds) {
-            seconds = Number(regexSeconds.replace("s", ""));
-          }
-          timeinSeconds = hours + minutesInSeconds + seconds;
+          columnData.push(`${timeinSeconds}#${i}`);
+          columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
         }
-        columnData.push(`${timeinSeconds}#${i}`);
-        columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
+      } catch (e) {
+        console.log(e);
       }
     }
 
