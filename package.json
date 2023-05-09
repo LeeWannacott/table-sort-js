@@ -9,6 +9,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
+    "start:firefox": "web-ext run --source-dir ./browser-extension/",
     "coverage": "jest --collectCoverage --",
     "eject": "react-scripts eject"
   },
@@ -16,11 +17,7 @@
     "extends": "react-app"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
@@ -39,6 +36,7 @@
     "react-dom": "^17.0.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
-    "table-sort-js": "^1.2.7"
+    "table-sort-js": "^1.2.7",
+    "web-ext": "^7.6.2"
   }
 }
