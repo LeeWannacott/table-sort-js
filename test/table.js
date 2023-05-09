@@ -7,7 +7,7 @@ const tableSortJs = require("../public/table-sort");
 function createTestTable(
   testTableData,
   thAttributes = { classTags: "", colspan: "" },
-  props = { colsToClick: [], invisibleIndex: [] ,tableTags:""}
+  props = { colsToClick: [], invisibleIndex: [], tableTags: "" }
 ) {
   const numberOfTableColumns = Object.keys(testTableData).length;
   let testTableHeaders = "";

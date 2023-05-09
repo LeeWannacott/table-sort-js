@@ -59,10 +59,64 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
+  function addInferredClass(th, columnLength, currentCount, classToAdd) {
+    const threshold = columnLength / 2;
+    if (currentCount >= threshold) {
+      th.classList.add(classToAdd);
+    }
+  }
+
+  function inferSortClasses(tableRows, tableHeadHeaders) {
+    for (let [columnIndex, th] of tableHeadHeaders.entries()) {
+      const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
+      const regexFileSizeSort = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+      let runtimeSortCounter = 0,
+        fileSizeSortCounter = 0;
+
+      let tableColumnLength = th.parentElement.childElementCount;
+      for (let tr of tableRows) {
+        let runtimeSortMatch, fileSizeSortMatch;
+        const tableColumn = tr.querySelectorAll("td").item(columnIndex);
+        if (tableColumn.innerText) {
+          runtimeSortMatch = tableColumn.innerText.match(
+            regexMinutesAndSeconds
+          );
+          fileSizeSortMatch = tableColumn.innerText.match(regexFileSizeSort);
+        }
+        if (runtimeSortMatch) {
+          runtimeSortCounter++;
+        }
+        if (fileSizeSortMatch) {
+          fileSizeSortCounter++;
+        }
+      }
+      // TODO: refactor this into one function called addInferredClasses that loops over sort classes and counters
+      addInferredClass(
+        th,
+        tableColumnLength,
+        runtimeSortCounter,
+        "runtime-sort"
+      );
+      addInferredClass(
+        th,
+        tableColumnLength,
+        fileSizeSortCounter,
+        "file-size-sort"
+      );
+    }
+  }
+
   function makeTableSortable(sortableTable) {
     const tableBody = getTableBody(sortableTable);
     const tableHead = sortableTable.querySelector("thead");
     const tableHeadHeaders = tableHead.querySelectorAll("th");
+    const tableRows = tableBody.querySelectorAll("tr");
+
+    const isNoSortClassInference =
+      sortableTable.classList.contains("no-class-infer");
+    if (!isNoSortClassInference) {
+      inferSortClasses(tableRows, tableHeadHeaders);
+    }
 
     for (let [columnIndex, th] of tableHeadHeaders.entries()) {
       if (!th.classList.contains("disable-sort")) {
@@ -124,24 +178,26 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     function sortByRuntime(tableRows, columnData) {
       for (let [i, tr] of tableRows.entries()) {
-        const regexMinutesAndSeconds = /^(\d+m)\s?(\d+s)$/i;
+        const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
         let columnOfTd = tr
           .querySelectorAll("td")
           .item(columnIndex).textContent;
         let match = columnOfTd.match(regexMinutesAndSeconds);
-        let minutesInSeconds,
-          seconds,
-          timeinSeconds = [0, 0, 0];
+        let [minutesInSeconds, hours, seconds, timeinSeconds] = [0, 0, 0, 0];
         if (match) {
-          const regexMinutes = match[1];
+          const regexHours = match[1];
+          if (regexHours) {
+            hours = Number(regexHours.replace("h", "")) * 60 * 60;
+          }
+          const regexMinutes = match[2];
           if (regexMinutes) {
             minutesInSeconds = Number(regexMinutes.replace("m", "")) * 60;
           }
-          const regexSeconds = match[2];
+          const regexSeconds = match[3];
           if (regexSeconds) {
             seconds = Number(regexSeconds.replace("s", ""));
           }
-          timeinSeconds = minutesInSeconds + seconds;
+          timeinSeconds = hours + minutesInSeconds + seconds;
         }
         columnData.push(`${timeinSeconds}#${i}`);
         columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
