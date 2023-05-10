@@ -70,24 +70,31 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     for (let [columnIndex, th] of tableHeadHeaders.entries()) {
       const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
       const regexFileSizeSort = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+      const regexDates = /^(\d\d?)[\/\.-](\d\d?)[\/\.-]((\d\d)?\d\d)$/;
       let runtimeSortCounter = 0,
-        fileSizeSortCounter = 0;
+        fileSizeSortCounter = 0,
+      datesSortCounter =0
+      ;
 
       let tableColumnLength = th.parentElement.childElementCount;
       for (let tr of tableRows) {
-        let runtimeSortMatch, fileSizeSortMatch;
+        let runtimeSortMatch, fileSizeSortMatch,datesSortMatch;
         const tableColumn = tr.querySelectorAll("td").item(columnIndex);
         if (tableColumn.innerText) {
           runtimeSortMatch = tableColumn.innerText.match(
             regexMinutesAndSeconds
           );
           fileSizeSortMatch = tableColumn.innerText.match(regexFileSizeSort);
+          datesSortMatch = tableColumn.innerText.match(regexDates);
         }
         if (runtimeSortMatch) {
           runtimeSortCounter++;
         }
         if (fileSizeSortMatch) {
           fileSizeSortCounter++;
+        }
+        if(datesSortMatch){
+          datesSortCounter++;
         }
       }
       // TODO: refactor this into one function called addInferredClasses that loops over sort classes and counters
@@ -102,6 +109,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         tableColumnLength,
         fileSizeSortCounter,
         "file-size-sort"
+      );
+      addInferredClass(
+        th,
+        tableColumnLength,
+        datesSortCounter,
+        "dates-sort"
       );
     }
   }
@@ -223,60 +236,32 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           let match = columnOfTd.match(regexDate);
           let [years, days, months] = [0, 0, 0];
           let numberToSort = 0;
-          let imperialDateFormat = false;
           if (match) {
-            console.log(match);
             const regexFirstNumber = match[1];
             const regexSecondNumber = match[2];
             if (regexFirstNumber) {
               if (Number(regexFirstNumber) > 12) {
-                imperialDateFormat = true;
                 days = regexFirstNumber;
                 if (regexSecondNumber) {
                   months = regexSecondNumber;
                 }
-              } else {
+              } else if(Number(regexSecondNumber)>12){
                 months = regexFirstNumber;
                 days = regexSecondNumber;
+              }else{
+                days = regexFirstNumber;
+                  months = regexSecondNumber;
               }
             }
-            // if (regexSecondNumber) {
-            // if (Number(regexSecondNumber) > 12) {
-            // days = regexSecondNumber;
-            // } else {
-            // months = regexSecondNumber;
-            // }
-            // }
             const regexYears = match[3];
             if (regexYears) {
               years = regexYears;
-            } else {
-              const regexYears = match[4];
-              if (regexYears) years = regexYears.padEnd(2, "0");
             }
-            if (imperialDateFormat) {
               numberToSort = Number(
                 years +
                   String(months).padStart(2, "0") +
                   String(days).padStart(2, "0")
               );
-              console.log("imperial!")
-            } else {
-              console.log("met");
-              console.log(years, months, days);
-              numberToSort = Number(
-                years +
-                  String(months).padStart(2, "0") +
-                  String(days).padStart(2, "0")
-              );
-              console.log("kkkk",
-                String(months).padStart(2, "0"),
-                String(days).padStart(2, "0")
-              );
-              // console.log(numberToSort);
-            }
-            // console.log(years, months, days);
-            console.log("num", numberToSort);
           }
           columnData.push(`${numberToSort}#${i}`);
           columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
@@ -317,6 +302,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         columnData,
         isFileSize,
         isTimeSort,
+        isSortDates,
         isDataAttribute,
         colSpanData,
         colSpanSum,
@@ -336,7 +322,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           if (isFileSize) {
             fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
           }
-          if (!isFileSize && !isDataAttribute && !isTimeSort) {
+          // These classes already handle pushing to column and setting the tr html.
+          if (!isFileSize && !isDataAttribute && !isTimeSort && !isSortDates) {
             columnData.push(`${tdTextContent}#${i}`);
             columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
           }
@@ -494,6 +481,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         tableRows: visibleTableRows,
         columnData,
         isFileSize,
+        isSortDates,
         isDataAttribute,
         isTimeSort,
         colSpanData,
