@@ -292,3 +292,14 @@ test("time-sort class", () => {
     ],
   });
 });
+
+test("Dates", () => {
+  expect(
+    createTestTable(
+      { col0: ["9/6/1978", "4/9/2008", "2/3/1879", "4/6/1978", "4/6/1978"] },
+      { classTags: "dates-sort" }
+    )
+  ).toStrictEqual({
+    col0: ["2/3/1879", "4/6/1978", "9/6/1978", "4/6/1978", "4/9/2008"],
+  });
+});

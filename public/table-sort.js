@@ -214,6 +214,68 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
+    function sortDates(tableRows, columnData) {
+      try {
+        for (let [i, tr] of tableRows.entries()) {
+          let columnOfTd;
+          const regexDate = /^(\d\d?)[\/\.-](\d\d?)[\/\.-]((\d\d)?\d\d)$/;
+          columnOfTd = tr.querySelectorAll("td").item(columnIndex).textContent;
+          let match = columnOfTd.match(regexDate);
+          let [years, days, months] = [0, 0, 0];
+          let numberToSort = 0;
+          let imperialDateFormat = false;
+          if (match) {
+            console.log(match);
+            const regexFirstNumber = match[1];
+            if (regexFirstNumber) {
+              if (Number(regexFirstNumber) > 12) {
+                imperialDateFormat = true;
+                days = regexFirstNumber;
+              } else {
+                months = regexFirstNumber;
+              }
+            }
+            const regexSecondNumber = match[2];
+            if (regexSecondNumber) {
+              if (Number(regexSecondNumber) > 12) {
+                days = regexSecondNumber;
+              } else {
+                months = regexSecondNumber;
+              }
+            }
+            const regexYears = match[3];
+            if (regexYears) {
+              years = regexYears;
+            } else {
+              const regexYears = match[4];
+              if (regexYears) years = regexYears;
+            }
+            if (imperialDateFormat) {
+              console.log("imp");
+              numberToSort = Number(
+                years +
+                  String(months).padStart(2, "0") +
+                  String(days).padStart(2, "0")
+              );
+            } else {
+              console.log("met");
+              numberToSort = Number(
+                years +
+                  String(days).padStart(2, "0") +
+                  String(months).padStart(2, "0")
+              );
+            }
+            console.log(years, months, days);
+            console.log("num", numberToSort);
+          }
+          columnData.push(`${numberToSort}#${i}`);
+          columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
     let [timesClickedColumn, columnIndexesClicked] = [0, []];
 
     function rememberSort(timesClickedColumn, columnIndexesClicked) {
@@ -403,6 +465,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       const isTimeSort = th.classList.contains("runtime-sort");
       if (isTimeSort) {
         sortByRuntime(visibleTableRows, columnData);
+      }
+
+      const isSortDates = th.classList.contains("dates-sort");
+      if (isSortDates) {
+        sortDates(visibleTableRows, columnData);
       }
 
       const isRememberSort = sortableTable.classList.contains("remember-sort");
