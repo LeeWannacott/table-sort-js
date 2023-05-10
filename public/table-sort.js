@@ -227,45 +227,55 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           if (match) {
             console.log(match);
             const regexFirstNumber = match[1];
+            const regexSecondNumber = match[2];
             if (regexFirstNumber) {
               if (Number(regexFirstNumber) > 12) {
                 imperialDateFormat = true;
                 days = regexFirstNumber;
+                if (regexSecondNumber) {
+                  months = regexSecondNumber;
+                }
               } else {
                 months = regexFirstNumber;
-              }
-            }
-            const regexSecondNumber = match[2];
-            if (regexSecondNumber) {
-              if (Number(regexSecondNumber) > 12) {
                 days = regexSecondNumber;
-              } else {
-                months = regexSecondNumber;
               }
             }
+            // if (regexSecondNumber) {
+            // if (Number(regexSecondNumber) > 12) {
+            // days = regexSecondNumber;
+            // } else {
+            // months = regexSecondNumber;
+            // }
+            // }
             const regexYears = match[3];
             if (regexYears) {
               years = regexYears;
             } else {
               const regexYears = match[4];
-              if (regexYears) years = regexYears;
+              if (regexYears) years = regexYears.padEnd(2, "0");
             }
             if (imperialDateFormat) {
-              console.log("imp");
               numberToSort = Number(
                 years +
                   String(months).padStart(2, "0") +
                   String(days).padStart(2, "0")
               );
+              console.log("imperial!")
             } else {
               console.log("met");
+              console.log(years, months, days);
               numberToSort = Number(
                 years +
-                  String(days).padStart(2, "0") +
-                  String(months).padStart(2, "0")
+                  String(months).padStart(2, "0") +
+                  String(days).padStart(2, "0")
               );
+              console.log("kkkk",
+                String(months).padStart(2, "0"),
+                String(days).padStart(2, "0")
+              );
+              // console.log(numberToSort);
             }
-            console.log(years, months, days);
+            // console.log(years, months, days);
             console.log("num", numberToSort);
           }
           columnData.push(`${numberToSort}#${i}`);
