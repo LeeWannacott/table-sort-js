@@ -44,7 +44,7 @@ Refer to the documenation for examples on how to use table-sort-js with [HTML](h
 
 | &lt;table&gt; classes | Description                                                                                                   |
 | --------------------- | ------------------------------------------------------------------------------------------------------------- |
-| "table-sort"          | Make the table sortable! (Words, numbers, dates, file sizes)...                                                           |
+| "table-sort"          | Make the table sortable! (Words, numbers, dates, file sizes)...                                               |
 | "table-arrows"        | Display ascending or descending triangles.                                                                    |
 | "no-class-infer"      | Turns off inference for adding sort classes automatically i.e (file-size-sort, runtime-sort, dates-dmy-sort). |
 | "remember-sort"       | If clicking on different columns remembers sort of the original column.                                       |
@@ -57,10 +57,10 @@ Refer to the documenation for examples on how to use table-sort-js with [HTML](h
 | "dates-mdy-sort"   | Sorts dates in mm/dd/yyyy format. e.g (12/28/2023). Can use "/" or "-" or "." as separator. Overides inferred "dates-dmy-sort" class.   |
 
 | &lt;th&gt; Inferred Classes. | Description                                                                                                           |
-| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| "dates-dmy-sort"                                    | Sorts dates in dd/mm/yyyy format. e.g (18/10/1995). Can use "/" or "-" or "." as separator.                           |
-| "runtime-sort"                                      | Sorts runtime in hours minutes and seconds e.g (10h 1m 20s). Useful for sorting the GitHub actions Run time column... |
-| "file-size-sort"                                    | Sorts file sizes(B->TiB) uses the binary prefix. (e.g KiB). Input data ideally in Bytes e.g (10b or 10B)              |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| "dates-dmy-sort"             | Sorts dates in dd/mm/yyyy format. e.g (18/10/1995). Can use "/" or "-" or "." as separator.                           |
+| "runtime-sort"               | Sorts runtime in hours minutes and seconds e.g (10h 1m 20s). Useful for sorting the GitHub actions Run time column... |
+| "file-size-sort"             | Sorts file sizes(B->TiB) uses the binary prefix. (e.g KiB). Input data ideally in Bytes e.g (10b or 10B)              |
 
 | &lt;th&gt; Classes that change defaults. | Description                                                                                                         |
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
