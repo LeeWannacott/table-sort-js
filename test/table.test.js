@@ -251,7 +251,7 @@ test("Clicking multiple times (>2) doesn't break sorting", () => {
   });
 });
 
-test("time-sort class", () => {
+test("runtime-sort", () => {
   expect(
     createTestTable(
       {
@@ -289,6 +289,66 @@ test("time-sort class", () => {
       "1h 10m 10s",
       "1h 20m 10s",
       "11h 10m 10s",
+    ],
+  });
+});
+
+test("dates-dmy-sort: UK style dd/mm/yyyy; delim . or / or -", () => {
+  expect(
+    createTestTable(
+      {
+        col0: [
+          "17/6/1978",
+          "18.10.2027",
+          "10-12-2017",
+          "13/12/2017",
+          "4.9.2008",
+          "2.3.1879",
+          "22.3.1879",
+          "8/6/1978",
+          "4/6/1978",
+        ],
+      },
+      { classTags: "dates-dmy-sort" }
+    )
+  ).toStrictEqual({
+    col0: [
+      "2.3.1879",
+      "22.3.1879",
+      "4/6/1978",
+      "8/6/1978",
+      "17/6/1978",
+      "4.9.2008",
+      "10-12-2017",
+      "13/12/2017",
+      "18.10.2027",
+    ],
+  });
+});
+
+test("dates-mdy-sort: US style mm/dd/yyyy; delim . or / or -", () => {
+  expect(
+    createTestTable(
+      {
+        col0: [
+          "1-14-1992",
+          "1.13.1992",
+          "4.30.2008",
+          "1/20/1992",
+          "10-12-2017",
+          "2/14/1992",
+        ],
+      },
+      { classTags: "dates-mdy-sort" }
+    )
+  ).toStrictEqual({
+    col0: [
+      "1.13.1992",
+      "1-14-1992",
+      "1/20/1992",
+      "2/14/1992",
+      "4.30.2008",
+      "10-12-2017",
     ],
   });
 });

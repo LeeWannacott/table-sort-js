@@ -42,23 +42,31 @@ Refer to the documenation for examples on how to use table-sort-js with [HTML](h
 
 #### Classes:
 
-| &lt;table&gt; classes | Description                                                                                  |
-| --------------------- | -------------------------------------------------------------------------------------------- |
-| "table-sort"          | Make the table sortable! (Words, numbers)...                                                 |
-| "table-arrows"        | Display ascending or descending triangles.                                                   |
-| "no-class-infer"      | Turns off inference for adding sort classes automatically (file-size-sort and runtime-sort). |
-| "remember-sort"       | If clicking on different columns remembers sort of the original column.                      |
+| &lt;table&gt; classes | Description                                                                                                   |
+| --------------------- | ------------------------------------------------------------------------------------------------------------- |
+| "table-sort"          | Make the table sortable! (Words, numbers, dates, file sizes)...                                                           |
+| "table-arrows"        | Display ascending or descending triangles.                                                                    |
+| "no-class-infer"      | Turns off inference for adding sort classes automatically i.e (file-size-sort, runtime-sort, dates-dmy-sort). |
+| "remember-sort"       | If clicking on different columns remembers sort of the original column.                                       |
 
 | &lt;th&gt; classes | Description                                                                                                                             |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| "order-by-desc"    | Order by descending on first click. (default is aescending)                                                                             |
 | "data-sort"        | Sort by [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes), e.g &lt;td data-sort="42"&gt; |
 | "onload-sort"      | Sort column on loading of the page. Simulates a click from the user. (can only sort onload for one column)                              |
-| "file-size-sort"   | Sort file sizes(B->TiB) uses the binary prefix. (e.g KiB)                                                                               |
-| "runtime-sort"     | Sorts runtime in minutes and seconds e.g (1m 20s). Useful for sorting the GitHub actions Run time column...                             |
 | "disable-sort"     | Disallow sorting the table by this specific column.                                                                                     |
-| "alpha-sort"       | Sort alphabetically (z11,z2); default is [natural sort](https://en.wikipedia.org/wiki/Natural_sort_order) (z2,z11).                     |
-| "punct-sort"       | Sort punctuation; default ignores punctuation.                                                                                          |
+| "dates-mdy-sort"   | Sorts dates in mm/dd/yyyy format. e.g (12/28/2023). Can use "/" or "-" or "." as separator. Overides inferred "dates-dmy-sort" class.   |
+
+| &lt;th&gt; Inferred Classes. | Description                                                                                                           |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| "dates-dmy-sort"                                    | Sorts dates in dd/mm/yyyy format. e.g (18/10/1995). Can use "/" or "-" or "." as separator.                           |
+| "runtime-sort"                                      | Sorts runtime in hours minutes and seconds e.g (10h 1m 20s). Useful for sorting the GitHub actions Run time column... |
+| "file-size-sort"                                    | Sorts file sizes(B->TiB) uses the binary prefix. (e.g KiB). Input data ideally in Bytes e.g (10b or 10B)              |
+
+| &lt;th&gt; Classes that change defaults. | Description                                                                                                         |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| "order-by-desc"                          | Order by descending on first click. (default is aescending)                                                         |
+| "alpha-sort"                             | Sort alphabetically (z11,z2); default is [natural sort](https://en.wikipedia.org/wiki/Natural_sort_order) (z2,z11). |
+| "punct-sort"                             | Sort punctuation; default ignores punctuation.                                                                      |
 
 #### Development:
 
