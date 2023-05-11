@@ -73,12 +73,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       const regexDates = /^(\d\d?)[\/\.-](\d\d?)[\/\.-]((\d\d)?\d\d)$/;
       let runtimeSortCounter = 0,
         fileSizeSortCounter = 0,
-      datesSortCounter =0
-      ;
-
+        datesSortCounter = 0;
       let tableColumnLength = th.parentElement.childElementCount;
       for (let tr of tableRows) {
-        let runtimeSortMatch, fileSizeSortMatch,datesSortMatch;
+        let runtimeSortMatch, fileSizeSortMatch, datesSortMatch;
         const tableColumn = tr.querySelectorAll("td").item(columnIndex);
         if (tableColumn.innerText) {
           runtimeSortMatch = tableColumn.innerText.match(
@@ -93,7 +91,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         if (fileSizeSortMatch) {
           fileSizeSortCounter++;
         }
-        if(datesSortMatch){
+        if (datesSortMatch) {
           datesSortCounter++;
         }
       }
@@ -114,7 +112,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         th,
         tableColumnLength,
         datesSortCounter,
-        "dates-sort"
+        "dates-dmy-sort"
       );
     }
   }
@@ -203,7 +201,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
             columnOfTd = tr.querySelectorAll("td").item(columnIndex).innerText;
           }
           let match = columnOfTd.match(regexMinutesAndSeconds);
-          let [minutesInSeconds, hours, seconds, timeinSeconds] = [0, 0, 0, 0];
+          let [minutesInSeconds, hours, seconds] = [0, 0, 0];
+          let timeinSeconds = columnOfTd;
           if (match) {
             const regexHours = match[1];
             if (regexHours) {
@@ -227,41 +226,36 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
-    function sortDates(tableRows, columnData) {
+    function sortDates(dateFormat, tableRows, columnData) {
       try {
         for (let [i, tr] of tableRows.entries()) {
           let columnOfTd;
-          const regexDate = /^(\d\d?)[\/\.-](\d\d?)[\/\.-]((\d\d)?\d\d)$/;
+          const regexDate = /^(\d\d?)[./-](\d\d?)[./-]((\d\d)?\d\d)$/;
           columnOfTd = tr.querySelectorAll("td").item(columnIndex).textContent;
           let match = columnOfTd.match(regexDate);
           let [years, days, months] = [0, 0, 0];
-          let numberToSort = 0;
+          let numberToSort = columnOfTd;
           if (match) {
             const regexFirstNumber = match[1];
             const regexSecondNumber = match[2];
-            if (regexFirstNumber) {
-              if (Number(regexFirstNumber) > 12) {
-                days = regexFirstNumber;
-                if (regexSecondNumber) {
-                  months = regexSecondNumber;
-                }
-              } else if(Number(regexSecondNumber)>12){
-                months = regexFirstNumber;
+            const regexYears = match[3];
+            if (regexFirstNumber && regexSecondNumber) {
+              if (dateFormat === "mdy") {
                 days = regexSecondNumber;
-              }else{
+                months = regexFirstNumber;
+              } else {
                 days = regexFirstNumber;
-                  months = regexSecondNumber;
+                months = regexSecondNumber;
               }
             }
-            const regexYears = match[3];
             if (regexYears) {
               years = regexYears;
             }
-              numberToSort = Number(
-                years +
-                  String(months).padStart(2, "0") +
-                  String(days).padStart(2, "0")
-              );
+            numberToSort = Number(
+              years +
+                String(months).padStart(2, "0") +
+                String(days).padStart(2, "0")
+            );
           }
           columnData.push(`${numberToSort}#${i}`);
           columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
@@ -302,7 +296,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         columnData,
         isFileSize,
         isTimeSort,
-        isSortDates,
+        isSortDateDayMonthYear,
+        isSortDateMonthDayYear,
         isDataAttribute,
         colSpanData,
         colSpanSum,
@@ -323,7 +318,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
             fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
           }
           // These classes already handle pushing to column and setting the tr html.
-          if (!isFileSize && !isDataAttribute && !isTimeSort && !isSortDates) {
+          if (
+            !isFileSize &&
+            !isDataAttribute &&
+            !isTimeSort &&
+            !isSortDateDayMonthYear &&
+            !isSortDateMonthDayYear
+          ) {
             columnData.push(`${tdTextContent}#${i}`);
             columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
           }
@@ -464,9 +465,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         sortByRuntime(visibleTableRows, columnData);
       }
 
-      const isSortDates = th.classList.contains("dates-sort");
-      if (isSortDates) {
-        sortDates(visibleTableRows, columnData);
+      const isSortDateDayMonthYear = th.classList.contains("dates-dmy-sort");
+      const isSortDateMonthDayYear = th.classList.contains("dates-mdy-sort");
+      // pick mdy first to override the inferred default class which is dmy.
+      if (isSortDateMonthDayYear) {
+        sortDates("mdy", visibleTableRows, columnData);
+      } else if (isSortDateDayMonthYear) {
+        sortDates("dmy", visibleTableRows, columnData);
       }
 
       const isRememberSort = sortableTable.classList.contains("remember-sort");
@@ -481,7 +486,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         tableRows: visibleTableRows,
         columnData,
         isFileSize,
-        isSortDates,
+        isSortDateDayMonthYear,
+        isSortDateMonthDayYear,
         isDataAttribute,
         isTimeSort,
         colSpanData,
