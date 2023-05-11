@@ -70,7 +70,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     for (let [columnIndex, th] of tableHeadHeaders.entries()) {
       const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
       const regexFileSizeSort = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-      const regexDates = /^(\d\d?)[\/\.-](\d\d?)[\/\.-]((\d\d)?\d\d)$/;
+      // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
+      const regexDates = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)$/;
       let runtimeSortCounter = 0,
         fileSizeSortCounter = 0,
         datesSortCounter = 0;
@@ -230,9 +231,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       try {
         for (let [i, tr] of tableRows.entries()) {
           let columnOfTd;
-          const regexDate = /^(\d\d?)[./-](\d\d?)[./-]((\d\d)?\d\d)$/;
+          const regexDates = /^(\d\d?)[./-](\d\d?)[./-]((\d\d)?\d\d)$/;
           columnOfTd = tr.querySelectorAll("td").item(columnIndex).textContent;
-          let match = columnOfTd.match(regexDate);
+          let match = columnOfTd.match(regexDates);
           let [years, days, months] = [0, 0, 0];
           let numberToSort = columnOfTd;
           if (match) {
