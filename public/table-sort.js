@@ -16,6 +16,11 @@ Instructions:
 */
 
 function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
+  let startTime, endTime;
+  if (testingTableSortJS) {
+    startTime = performance.now();
+  }
+
   function getHTMLTables() {
     if (testingTableSortJS === true) {
       const getTagTable = domDocumentWindow.getElementsByTagName("table");
@@ -59,65 +64,63 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
-  function addInferredClass(th, columnLength, currentCount, classToAdd) {
-    const threshold = columnLength / 2;
-    if (currentCount >= threshold) {
-      th.classList.add(classToAdd);
+  function addInferredClasses(th, classes, thresholdToAddClass) {
+    for (let value of Object.values(classes)) {
+      if (value.count >= thresholdToAddClass) {
+        th.classList.add(value.class);
+        break;
+      }
     }
   }
 
-  function inferSortClasses(tableRows, tableHeadHeaders) {
-    for (let [columnIndex, th] of tableHeadHeaders.entries()) {
-      const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
-      const regexFileSizeSort = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-      // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
-      const datesRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
-      const regexISODates = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
-      let runtimeCounter = 0,
-        fileSizeCounter = 0,
-        datesCounter = 0,
-        isoDatesCounter = 0;
-      let tableColumnLength = th.parentElement.childElementCount;
-      for (let tr of tableRows) {
-        let runtimeSortMatch, fileSizeSortMatch, datesMatch, isoDatesMatch;
-        const tableColumn = tr.querySelectorAll("td").item(columnIndex);
-        if (tableColumn.innerText) {
-          runtimeSortMatch = tableColumn.innerText.match(
-            regexMinutesAndSeconds
-          );
-          fileSizeSortMatch = tableColumn.innerText.match(regexFileSizeSort);
-          datesMatch = tableColumn.innerText.match(datesRegex);
-          isoDatesMatch = tableColumn.innerText.match(regexISODates);
-        }
-        if (runtimeSortMatch) {
-          runtimeCounter++;
-        }
-        if (fileSizeSortMatch) {
-          fileSizeCounter++;
-        }
-        if (datesMatch) {
-          datesCounter++;
-        }
-        if (isoDatesMatch) {
-          isoDatesCounter++;
-        }
+  function inferSortClasses(tableRows, columnIndex, th) {
+    const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
+    const regexFileSizeSort = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+    // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
+    const datesRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
+    const regexISODates = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
+    let tableColumnLength = th.parentElement.childElementCount;
+    const thresholdToAddClass = tableColumnLength / 2;
+    let [runtimeCount, fileSizeCount, dmyDatesCount, isoDatesCount] = [
+      0, 0, 0, 0,
+    ];
+    for (let tr of tableRows) {
+      let runtimeSortMatch, fileSizeSortMatch, datesDmyMatch, isoDatesMatch;
+      const tableColumn = tr.querySelectorAll("td").item(columnIndex);
+      if (tableColumn.innerText) {
+        runtimeSortMatch = tableColumn.innerText.match(regexMinutesAndSeconds);
+        fileSizeSortMatch = tableColumn.innerText.match(regexFileSizeSort);
+        datesDmyMatch = tableColumn.innerText.match(datesRegex);
+        isoDatesMatch = tableColumn.innerText.match(regexISODates);
       }
-      // TODO: refactor this into one function called addInferredClasses that loops over sort classes and counters
-      addInferredClass(th, tableColumnLength, runtimeCounter, "runtime-sort");
-      addInferredClass(
-        th,
-        tableColumnLength,
-        fileSizeCounter,
-        "file-size-sort"
-      );
-      addInferredClass(th, tableColumnLength, datesCounter, "dates-dmy-sort");
-      addInferredClass(
-        th,
-        tableColumnLength,
-        isoDatesCounter,
-        "dates-ymd-sort"
-      );
+      if (runtimeSortMatch) {
+        runtimeCount++;
+      }
+      if (fileSizeSortMatch) {
+        fileSizeCount++;
+      }
+      if (datesDmyMatch) {
+        dmyDatesCount++;
+      }
+      if (isoDatesMatch) {
+        isoDatesCount++;
+      }
+      if (
+        runtimeCount >= thresholdToAddClass ||
+        fileSizeCount >= thresholdToAddClass ||
+        dmyDatesCount >= thresholdToAddClass ||
+        isoDatesMatch >= thresholdToAddClass
+      ) {
+        break;
+      }
     }
+    const classes = {
+      runtime: { class: "runtime-sort", count: runtimeCount },
+      filesize: { class: "file-size-sort", count: fileSizeCount },
+      dmyDates: { class: "dates-dmy-sort", count: dmyDatesCount },
+      ymdDates: { class: "dates-ymd-sort", count: isoDatesCount },
+    };
+    addInferredClasses(th, classes, thresholdToAddClass);
   }
 
   function makeTableSortable(sortableTable) {
@@ -128,13 +131,17 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     const isNoSortClassInference =
       sortableTable.classList.contains("no-class-infer");
-    if (!isNoSortClassInference) {
-      inferSortClasses(tableRows, tableHeadHeaders);
-    }
 
+    console.log(tableHeadHeaders);
     for (let [columnIndex, th] of tableHeadHeaders.entries()) {
       if (!th.classList.contains("disable-sort")) {
         th.style.cursor = "pointer";
+        if (!isNoSortClassInference) {
+          const inferStart = performance.now();
+          inferSortClasses(tableRows, columnIndex, th);
+          const inferEnd = performance.now();
+          console.log(inferEnd - inferStart);
+        }
         makeEachColumnSortable(th, columnIndex, tableBody, sortableTable);
       }
     }
@@ -508,6 +515,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     if (isOnloadSort) {
       th.click();
     }
+  }
+  if (testingTableSortJS === true) {
+    endTime = performance.now();
+    console.log("Time: ", (endTime - startTime).toFixed(2), " ms");
   }
 }
 
