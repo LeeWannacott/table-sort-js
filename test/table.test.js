@@ -352,3 +352,16 @@ test("dates-mdy-sort: US style mm/dd/yyyy; delim . or / or -", () => {
     ],
   });
 });
+
+test("dates-ymd-sort: ISO 8601 style yyyy/mm/dd; delim . or / or -", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["2023/09/6", "2023-03-9", "2023.12.16", "2023/4/6", "2023/4/32"],
+      },
+      { classTags: "dates-ymd-sort" }
+    )
+  ).toStrictEqual({
+    col0: ["2023-03-9", "2023/4/6", "2023/4/32", "2023/09/6", "2023.12.16"],
+  });
+});

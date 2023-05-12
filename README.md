@@ -45,22 +45,23 @@ Refer to the documenation for examples on how to use table-sort-js with [HTML](h
 | &lt;table&gt; classes | Description                                                                                                   |
 | --------------------- | ------------------------------------------------------------------------------------------------------------- |
 | "table-sort"          | Make the table sortable! (Words, numbers, dates, file sizes)...                                               |
-| "table-arrows"        | Display ascending or descending triangles.                                                                    |
 | "no-class-infer"      | Turns off inference for adding sort classes automatically i.e (file-size-sort, runtime-sort, dates-dmy-sort). |
+| "table-arrows"        | Display ascending or descending triangles.                                                                    |
 | "remember-sort"       | If clicking on different columns remembers sort of the original column.                                       |
 
-| &lt;th&gt; classes | Description                                                                                                                             |
-| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| "data-sort"        | Sort by [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes), e.g &lt;td data-sort="42"&gt; |
-| "onload-sort"      | Sort column on loading of the page. Simulates a click from the user. (can only sort onload for one column)                              |
-| "disable-sort"     | Disallow sorting the table by this specific column.                                                                                     |
-| "dates-mdy-sort"   | Sorts dates in mm/dd/yyyy format. e.g (12/28/2023). Can use "/" or "-" or "." as separator. Overides inferred "dates-dmy-sort" class.   |
+| &lt;th&gt; classes | Description                                                                                                                              |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| "data-sort"        | Sort by [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes), e.g &lt;td data-sort="42"&gt;  |
+| "dates-mdy-sort"   | Sorts dates in US style mm/dd/yyyy format;. e.g (12/28/2023). Can use "/" or "-" as separator. Overides inferred "dates-dmy-sort" class. |
+| "onload-sort"      | Sort column on loading of the page. Simulates a click from the user. (can only sort onload for one column)                               |
+| "disable-sort"     | Disallow sorting the table by this specific column.                                                                                      |
 
-| &lt;th&gt; Inferred Classes. | Description                                                                                                           |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| "dates-dmy-sort"             | Sorts dates in dd/mm/yyyy format. e.g (18/10/1995). Can use "/" or "-" or "." as separator.                           |
-| "runtime-sort"               | Sorts runtime in hours minutes and seconds e.g (10h 1m 20s). Useful for sorting the GitHub actions Run time column... |
-| "file-size-sort"             | Sorts file sizes(B->TiB) uses the binary prefix. (e.g KiB). Input data ideally in Bytes e.g (10b or 10B)              |
+| &lt;th&gt; Inferred Classes. | Description                                                                                                                         |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| "dates-dmy-sort"             | Sorts dates in dd/mm/yyyy format. e.g (18/10/1995). Can use "/" or "-" as separator.                                                |
+| "dates-ymd-sort"             | Sorts dates in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) yyyy/mm/dd format. e.g (2021/10/28). Use "/" or "-" as separator. |
+| "file-size-sort"             | Sorts file sizes(B->TiB) uses the binary prefix. (e.g KiB). Input data ideally in Bytes e.g (10b or 10B)                            |
+| "runtime-sort"               | Sorts runtime in hours minutes and seconds e.g (10h 1m 20s). Useful for sorting the GitHub actions Run time column...               |
 
 | &lt;th&gt; Classes that change defaults. | Description                                                                                                         |
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
