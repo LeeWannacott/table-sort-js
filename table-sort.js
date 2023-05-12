@@ -70,49 +70,52 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     for (let [columnIndex, th] of tableHeadHeaders.entries()) {
       const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
       const regexFileSizeSort = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-      const regexDates = /^(\d\d?)[\/\.-](\d\d?)[\/\.-]((\d\d)?\d\d)$/;
-      let runtimeSortCounter = 0,
-        fileSizeSortCounter = 0,
-        datesSortCounter = 0;
+      // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
+      const datesRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
+      const regexISODates = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
+      let runtimeCounter = 0,
+        fileSizeCounter = 0,
+        datesCounter = 0,
+        isoDatesCounter = 0;
       let tableColumnLength = th.parentElement.childElementCount;
       for (let tr of tableRows) {
-        let runtimeSortMatch, fileSizeSortMatch, datesSortMatch;
+        let runtimeSortMatch, fileSizeSortMatch, datesMatch, isoDatesMatch;
         const tableColumn = tr.querySelectorAll("td").item(columnIndex);
         if (tableColumn.innerText) {
           runtimeSortMatch = tableColumn.innerText.match(
             regexMinutesAndSeconds
           );
           fileSizeSortMatch = tableColumn.innerText.match(regexFileSizeSort);
-          datesSortMatch = tableColumn.innerText.match(regexDates);
+          datesMatch = tableColumn.innerText.match(datesRegex);
+          isoDatesMatch = tableColumn.innerText.match(regexISODates);
         }
         if (runtimeSortMatch) {
-          runtimeSortCounter++;
+          runtimeCounter++;
         }
         if (fileSizeSortMatch) {
-          fileSizeSortCounter++;
+          fileSizeCounter++;
         }
-        if (datesSortMatch) {
-          datesSortCounter++;
+        if (datesMatch) {
+          datesCounter++;
+        }
+        if (isoDatesMatch) {
+          isoDatesCounter++;
         }
       }
       // TODO: refactor this into one function called addInferredClasses that loops over sort classes and counters
+      addInferredClass(th, tableColumnLength, runtimeCounter, "runtime-sort");
       addInferredClass(
         th,
         tableColumnLength,
-        runtimeSortCounter,
-        "runtime-sort"
-      );
-      addInferredClass(
-        th,
-        tableColumnLength,
-        fileSizeSortCounter,
+        fileSizeCounter,
         "file-size-sort"
       );
+      addInferredClass(th, tableColumnLength, datesCounter, "dates-dmy-sort");
       addInferredClass(
         th,
         tableColumnLength,
-        datesSortCounter,
-        "dates-dmy-sort"
+        isoDatesCounter,
+        "dates-ymd-sort"
       );
     }
   }
@@ -226,30 +229,29 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
-    function sortDates(dateFormat, tableRows, columnData) {
+    function sortDates(datesFormat, tableRows, columnData) {
       try {
         for (let [i, tr] of tableRows.entries()) {
-          let columnOfTd;
-          const regexDate = /^(\d\d?)[./-](\d\d?)[./-]((\d\d)?\d\d)$/;
+          let columnOfTd, datesRegex;
+          if (datesFormat === "mdy" || datesFormat === "dmy") {
+            datesRegex = /^(\d\d?)[./-](\d\d?)[./-]((\d\d)?\d\d)/;
+          } else if (datesFormat === "ymd") {
+            datesRegex = /^(\d\d\d\d)[./-](\d\d?)[./-](\d\d?)/;
+          }
           columnOfTd = tr.querySelectorAll("td").item(columnIndex).textContent;
-          let match = columnOfTd.match(regexDate);
+          let match = columnOfTd.match(datesRegex);
           let [years, days, months] = [0, 0, 0];
           let numberToSort = columnOfTd;
           if (match) {
-            const regexFirstNumber = match[1];
-            const regexSecondNumber = match[2];
-            const regexYears = match[3];
-            if (regexFirstNumber && regexSecondNumber) {
-              if (dateFormat === "mdy") {
-                days = regexSecondNumber;
-                months = regexFirstNumber;
+            const [regPos1, regPos2, regPos3] = [match[1], match[2], match[3]];
+            if (regPos1 && regPos2 && regPos3) {
+              if (datesFormat === "mdy") {
+                [months, days, years] = [regPos1, regPos2, regPos3];
+              } else if (datesFormat === "ymd") {
+                [years, months, days] = [regPos1, regPos2, regPos3];
               } else {
-                days = regexFirstNumber;
-                months = regexSecondNumber;
+                [days, months, years] = [regPos1, regPos2, regPos3];
               }
-            }
-            if (regexYears) {
-              years = regexYears;
             }
             numberToSort = Number(
               years +
@@ -298,6 +300,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         isTimeSort,
         isSortDateDayMonthYear,
         isSortDateMonthDayYear,
+        isSortDateYearMonthDay,
         isDataAttribute,
         colSpanData,
         colSpanSum,
@@ -323,6 +326,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
             !isDataAttribute &&
             !isTimeSort &&
             !isSortDateDayMonthYear &&
+            !isSortDateYearMonthDay &&
             !isSortDateMonthDayYear
           ) {
             columnData.push(`${tdTextContent}#${i}`);
@@ -467,9 +471,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
       const isSortDateDayMonthYear = th.classList.contains("dates-dmy-sort");
       const isSortDateMonthDayYear = th.classList.contains("dates-mdy-sort");
+      const isSortDateYearMonthDay = th.classList.contains("dates-ymd-sort");
       // pick mdy first to override the inferred default class which is dmy.
       if (isSortDateMonthDayYear) {
         sortDates("mdy", visibleTableRows, columnData);
+      } else if (isSortDateYearMonthDay) {
+        sortDates("ymd", visibleTableRows, columnData);
       } else if (isSortDateDayMonthYear) {
         sortDates("dmy", visibleTableRows, columnData);
       }
@@ -488,6 +495,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         isFileSize,
         isSortDateDayMonthYear,
         isSortDateMonthDayYear,
+        isSortDateYearMonthDay,
         isDataAttribute,
         isTimeSort,
         colSpanData,
