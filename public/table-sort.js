@@ -71,7 +71,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
       const regexFileSizeSort = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
       // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
-      const regexDates = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
+      const datesRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
       const regexISODates = /^(\d\d\d\d)[./-](\d\d?)[./-](\d\d?)/;
       let runtimeCounter = 0,
         fileSizeCounter = 0,
@@ -86,7 +86,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
             regexMinutesAndSeconds
           );
           fileSizeSortMatch = tableColumn.innerText.match(regexFileSizeSort);
-          datesMatch = tableColumn.innerText.match(regexDates);
+          datesMatch = tableColumn.innerText.match(datesRegex);
           isoDatesMatch = tableColumn.innerText.match(regexISODates);
         }
         if (runtimeSortMatch) {
@@ -229,37 +229,28 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
-    function sortDates(dateFormat, tableRows, columnData) {
+    function sortDates(datesFormat, tableRows, columnData) {
       try {
         for (let [i, tr] of tableRows.entries()) {
-          let columnOfTd;
-          let regexDates;
-          if (dateFormat === "mdy" || dateFormat === "dmy") {
-            regexDates = /^(\d\d?)[./-](\d\d?)[./-]((\d\d)?\d\d)/;
-          } else if (dateFormat === "ymd") {
-            regexDates = /^(\d\d\d\d)[./-](\d\d?)[./-](\d\d?)/;
+          let columnOfTd, datesRegex;
+          if (datesFormat === "mdy" || datesFormat === "dmy") {
+            datesRegex = /^(\d\d?)[./-](\d\d?)[./-]((\d\d)?\d\d)/;
+          } else if (datesFormat === "ymd") {
+            datesRegex = /^(\d\d\d\d)[./-](\d\d?)[./-](\d\d?)/;
           }
           columnOfTd = tr.querySelectorAll("td").item(columnIndex).textContent;
-          let match = columnOfTd.match(regexDates);
+          let match = columnOfTd.match(datesRegex);
           let [years, days, months] = [0, 0, 0];
           let numberToSort = columnOfTd;
           if (match) {
-            const regexFirstNumber = match[1];
-            const regexSecondNumber = match[2];
-            const regexThirdNumber = match[3];
-            if (regexFirstNumber && regexSecondNumber && regexThirdNumber) {
-              if (dateFormat === "mdy") {
-                months = regexFirstNumber;
-                days = regexSecondNumber;
-                years = regexThirdNumber;
-              } else if (dateFormat === "ymd") {
-                years = regexFirstNumber;
-                months = regexSecondNumber;
-                days = regexThirdNumber;
+            const [regPos1, regPos2, regPos3] = [match[1], match[2], match[3]];
+            if (regPos1 && regPos2 && regPos3) {
+              if (datesFormat === "mdy") {
+                [months, days, years] = [regPos1, regPos2, regPos3];
+              } else if (datesFormat === "ymd") {
+                [years, months, days] = [regPos1, regPos2, regPos3];
               } else {
-                days = regexFirstNumber;
-                months = regexSecondNumber;
-                years = regexThirdNumber;
+                [days, months, years] = [regPos1, regPos2, regPos3];
               }
             }
             numberToSort = Number(
