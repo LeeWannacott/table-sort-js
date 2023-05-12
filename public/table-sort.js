@@ -72,7 +72,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       const regexFileSizeSort = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
       // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
       const datesRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
-      const regexISODates = /^(\d\d\d\d)[./-](\d\d?)[./-](\d\d?)/;
+      const regexISODates = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
       let runtimeCounter = 0,
         fileSizeCounter = 0,
         datesCounter = 0,
