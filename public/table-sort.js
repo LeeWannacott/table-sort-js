@@ -76,6 +76,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     let tableColumnLength = th.parentElement.childElementCount;
     const threshold = Math.floor(tableColumnLength / 2);
     for (let tr of tableRows) {
+      if (regexNotFoundCount >= threshold) {
+        break;
+      }
       let matches = {
         runtime: null,
         filesize: null,
@@ -88,9 +91,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         matches.filesize = tableColumn.innerText.match(regexFileSizeSort);
         matches.dmyDates = tableColumn.innerText.match(datesRegex);
         matches.ymdDates = tableColumn.innerText.match(regexISODates);
-      }
-      if (regexNotFoundCount >= threshold) {
-        break;
       }
       if (Object.values(matches).every((match) => match === null)) {
         regexNotFoundCount++;
