@@ -6,13 +6,13 @@
 
 ## TABLE-SORT-JS.
 
-- Description: [Vanilla JS](http://vanilla-js.com/) HTML table sorting with sort type inference and browser extension available. 
+- Description: HTML table sorting library with sort type inference builtin and browser extension available. [#VanillaJS](http://vanilla-js.com/) 
 
 - [Demo](https://leewannacott.github.io/Portfolio/#/GitHub)
 - [Documentation.](https://leewannacott.github.io/table-sort-js/docs/about.html)
   (work in progress)
 - [npm package.](https://www.npmjs.com/package/table-sort-js)
-- [firefox browser extension](https://addons.mozilla.org/en-US/firefox/addon/table-sort-js/) Make HTML tables of any website you visit sortable!
+- [firefox browser extension](https://addons.mozilla.org/en-US/firefox/addon/table-sort-js/): Tables of any website you visit become sortable!
 
 ## Install instructions.
 
