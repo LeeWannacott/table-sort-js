@@ -12,7 +12,7 @@
 - [Documentation.](https://leewannacott.github.io/table-sort-js/docs/about.html)
   (work in progress)
 - [npm package.](https://www.npmjs.com/package/table-sort-js)
-- [firefox browser extension](https://addons.mozilla.org/en-US/firefox/addon/table-sort-js/)
+- [firefox browser extension](https://addons.mozilla.org/en-US/firefox/addon/table-sort-js/) Make HTML tables of any website you visit sortable!
 
 ## Install instructions.
 
