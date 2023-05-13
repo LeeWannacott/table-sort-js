@@ -16,11 +16,6 @@ Instructions:
 */
 
 function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
-  let startTime, endTime;
-  if (testingTableSortJS) {
-    startTime = performance.now();
-  }
-
   function getHTMLTables() {
     if (testingTableSortJS === true) {
       const getTagTable = domDocumentWindow.getElementsByTagName("table");
@@ -64,36 +59,29 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
-  function addInferredClasses(th, match, classToAdd) {
-    let tableColumnLength = th.parentElement.childElementCount;
-    const thresholdToAddClass = Math.ceil(tableColumnLength / 2);
-    if (match) {
-      classToAdd.count++;
-      if (classToAdd.count >= thresholdToAddClass) {
-        th.classList.add(classToAdd.class);
-      return [classToAdd.count, true];
-      }
-      return [classToAdd.count, false];
-    } else {
-      return [classToAdd.count, false];
-    }
-  }
-
   function inferSortClasses(tableRows, columnIndex, th) {
     const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
     const regexFileSizeSort = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
     // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
     const datesRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
     const regexISODates = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
-    const classes = {
+    const inferableClasses = {
       runtime: { class: "runtime-sort", count: 0 },
       filesize: { class: "file-size-sort", count: 0 },
       dmyDates: { class: "dates-dmy-sort", count: 0 },
       ymdDates: { class: "dates-ymd-sort", count: 0 },
     };
     let classNameAdded = false;
+    let regexNotFoundCount = 0;
+    let tableColumnLength = th.parentElement.childElementCount;
+    const threshold = Math.floor(tableColumnLength / 2);
     for (let tr of tableRows) {
-      let matches = { runtime: "", filesize: "", dmyDates: "", ymdDates: "" };
+      let matches = {
+        runtime: null,
+        filesize: null,
+        dmyDates: null,
+        ymdDates: null,
+      };
       const tableColumn = tr.querySelectorAll("td").item(columnIndex);
       if (tableColumn.innerText) {
         matches.runtime = tableColumn.innerText.match(regexMinutesAndSeconds);
@@ -101,14 +89,26 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         matches.dmyDates = tableColumn.innerText.match(datesRegex);
         matches.ymdDates = tableColumn.innerText.match(regexISODates);
       }
-      for (let key of Object.keys(classes)) {
-        [classes[key].count, classNameAdded] = addInferredClasses( th, matches[key], classes[key]);
-        if (classNameAdded) {
-        console.log(matches[key],classes[key])
+      if (regexNotFoundCount >= threshold) {
+        break;
+      }
+      if (Object.values(matches).every((match) => match === null)) {
+        regexNotFoundCount++;
+        continue;
+      }
+      for (let key of Object.keys(inferableClasses)) {
+        if (matches[key] !== null) {
+          inferableClasses[key].count++;
+        }
+        if (inferableClasses[key].count >= threshold) {
+          th.classList.add(inferableClasses[key].class);
+          classNameAdded = true;
           break;
         }
       }
-
+      if (classNameAdded) {
+        break;
+      }
     }
   }
 
@@ -121,15 +121,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     const isNoSortClassInference =
       sortableTable.classList.contains("no-class-infer");
 
-    console.log(tableHeadHeaders);
     for (let [columnIndex, th] of tableHeadHeaders.entries()) {
       if (!th.classList.contains("disable-sort")) {
         th.style.cursor = "pointer";
         if (!isNoSortClassInference) {
-          const inferStart = performance.now();
           inferSortClasses(tableRows, columnIndex, th);
-          const inferEnd = performance.now();
-          console.log(inferEnd - inferStart);
         }
         makeEachColumnSortable(th, columnIndex, tableBody, sortableTable);
       }
@@ -500,14 +496,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       getTableData(tableProperties);
       updateTable(tableProperties);
     });
-    let isOnloadSort = th.classList.contains("onload-sort");
-    if (isOnloadSort) {
+
+    if (th.classList.contains("onload-sort")) {
       th.click();
     }
-  }
-  if (testingTableSortJS === true) {
-    endTime = performance.now();
-    console.log("Time: ", (endTime - startTime).toFixed(2), " ms");
   }
 }
 
