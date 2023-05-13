@@ -6,7 +6,7 @@
 
 ## TABLE-SORT-JS.
 
-- Description: A JavaScript client-side HTML table sorting library with no dependencies required.
+- Description: [Vanilla JS](http://vanilla-js.com/) HTML table sorting with sort type inference and browser extension available. 
 
 - [Demo](https://leewannacott.github.io/Portfolio/#/GitHub)
 - [Documentation.](https://leewannacott.github.io/table-sort-js/docs/about.html)
