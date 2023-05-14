@@ -6,7 +6,7 @@
 
 ## TABLE-SORT-JS.
 
-- Description: HTML table sorting library with sort type inference builtin and browser extension available. [#VanillaJS](http://vanilla-js.com/) 
+- Description: HTML table sorting library with sort type inference builtin and browser extension available. [#VanillaJS](http://vanilla-js.com/)
 
 - [Demo](https://leewannacott.github.io/Portfolio/#/GitHub)
 - [Documentation.](https://leewannacott.github.io/table-sort-js/docs/about.html)
@@ -60,7 +60,7 @@ Refer to the documenation for examples on how to use table-sort-js with [HTML](h
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | "dates-dmy-sort"             | Sorts dates in dd/mm/yyyy format. e.g (18/10/1995). Can use "/" or "-" as separator.                                                |
 | "dates-ymd-sort"             | Sorts dates in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) yyyy/mm/dd format. e.g (2021/10/28). Use "/" or "-" as separator. |
-| "file-size-sort"             | Sorts file sizes(B->TiB) uses the binary prefix. (e.g KiB). Input data ideally in Bytes e.g (10b or 10B)                            |
+| "file-size-sort"             | Sorts file sizes(B->TiB) uses the binary prefix. (e.g 10 B, 100 KiB, 1 MiB); optional space between number and prefix.              |
 | "runtime-sort"               | Sorts runtime in hours minutes and seconds e.g (10h 1m 20s). Useful for sorting the GitHub actions Run time column...               |
 
 | &lt;th&gt; Classes that change defaults. | Description                                                                                                         |

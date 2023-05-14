@@ -59,64 +59,48 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
-  function addInferredClass(th, columnLength, currentCount, classToAdd) {
-    const threshold = columnLength / 2;
-    if (currentCount >= threshold) {
-      th.classList.add(classToAdd);
-    }
-  }
-
-  function inferSortClasses(tableRows, tableHeadHeaders) {
-    for (let [columnIndex, th] of tableHeadHeaders.entries()) {
-      const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
-      const regexFileSizeSort = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-      // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
-      const datesRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
-      const regexISODates = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
-      let runtimeCounter = 0,
-        fileSizeCounter = 0,
-        datesCounter = 0,
-        isoDatesCounter = 0;
-      let tableColumnLength = th.parentElement.childElementCount;
-      for (let tr of tableRows) {
-        let runtimeSortMatch, fileSizeSortMatch, datesMatch, isoDatesMatch;
-        const tableColumn = tr.querySelectorAll("td").item(columnIndex);
+  function inferSortClasses(tableRows, columnIndex, th) {
+    const runtimeRegex = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
+    const fileSizeRegex = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+    // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
+    const dmyRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
+    const ymdRegex = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
+    const inferableClasses = {
+      runtime: { regexp: runtimeRegex, class: "runtime-sort", count: 0 },
+      filesize: { regexp: fileSizeRegex, class: "file-size-sort", count: 0 },
+      dmyDates: { regexp: dmyRegex, class: "dates-dmy-sort", count: 0 },
+      ymdDates: { regexp: ymdRegex, class: "dates-ymd-sort", count: 0 },
+    };
+    let classNameAdded = false;
+    let regexNotFoundCount = 0;
+    const threshold = Math.ceil(tableRows.length / 2);
+    for (let tr of tableRows) {
+      if (regexNotFoundCount >= threshold) {
+        break;
+      }
+      const tableColumn = tr.querySelectorAll("td").item(columnIndex);
+      let foundMatch = false;
+      for (let key of Object.keys(inferableClasses)) {
+        let classRegexp = inferableClasses[key].regexp;
         if (tableColumn.innerText) {
-          runtimeSortMatch = tableColumn.innerText.match(
-            regexMinutesAndSeconds
-          );
-          fileSizeSortMatch = tableColumn.innerText.match(regexFileSizeSort);
-          datesMatch = tableColumn.innerText.match(datesRegex);
-          isoDatesMatch = tableColumn.innerText.match(regexISODates);
+          if (tableColumn.innerText.match(classRegexp) !== null) {
+            foundMatch = true;
+            inferableClasses[key].count++;
+          }
         }
-        if (runtimeSortMatch) {
-          runtimeCounter++;
-        }
-        if (fileSizeSortMatch) {
-          fileSizeCounter++;
-        }
-        if (datesMatch) {
-          datesCounter++;
-        }
-        if (isoDatesMatch) {
-          isoDatesCounter++;
+        if (inferableClasses[key].count >= threshold) {
+          th.classList.add(inferableClasses[key].class);
+          classNameAdded = true;
+          break;
         }
       }
-      // TODO: refactor this into one function called addInferredClasses that loops over sort classes and counters
-      addInferredClass(th, tableColumnLength, runtimeCounter, "runtime-sort");
-      addInferredClass(
-        th,
-        tableColumnLength,
-        fileSizeCounter,
-        "file-size-sort"
-      );
-      addInferredClass(th, tableColumnLength, datesCounter, "dates-dmy-sort");
-      addInferredClass(
-        th,
-        tableColumnLength,
-        isoDatesCounter,
-        "dates-ymd-sort"
-      );
+      if (classNameAdded) {
+        break;
+      }
+      if (!foundMatch) {
+        regexNotFoundCount++;
+        continue;
+      }
     }
   }
 
@@ -128,13 +112,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     const isNoSortClassInference =
       sortableTable.classList.contains("no-class-infer");
-    if (!isNoSortClassInference) {
-      inferSortClasses(tableRows, tableHeadHeaders);
-    }
 
     for (let [columnIndex, th] of tableHeadHeaders.entries()) {
       if (!th.classList.contains("disable-sort")) {
         th.style.cursor = "pointer";
+        if (!isNoSortClassInference) {
+          inferSortClasses(tableRows, columnIndex, th);
+        }
         makeEachColumnSortable(th, columnIndex, tableBody, sortableTable);
       }
     }
@@ -504,8 +488,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       getTableData(tableProperties);
       updateTable(tableProperties);
     });
-    let isOnloadSort = th.classList.contains("onload-sort");
-    if (isOnloadSort) {
+
+    if (th.classList.contains("onload-sort")) {
       th.click();
     }
   }
