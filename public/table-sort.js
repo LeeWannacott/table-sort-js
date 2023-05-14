@@ -73,7 +73,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     };
     let classNameAdded = false;
     let regexNotFoundCount = 0;
-    const threshold = Math.ceil(tableRows.length/ 2);
+    const threshold = Math.ceil(tableRows.length / 2);
     for (let tr of tableRows) {
       if (regexNotFoundCount >= threshold) {
         break;
@@ -82,9 +82,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       let foundMatch = false;
       for (let key of Object.keys(inferableClasses)) {
         let classRegexp = inferableClasses[key].regexp;
-        if (tableColumn.innerText.match(classRegexp) !== null) {
-          foundMatch = true;
-          inferableClasses[key].count++;
+        if (tableColumn.innerText) {
+          if (tableColumn.innerText.match(classRegexp) !== null) {
+            foundMatch = true;
+            inferableClasses[key].count++;
+          }
         }
         if (inferableClasses[key].count >= threshold) {
           th.classList.add(inferableClasses[key].class);
