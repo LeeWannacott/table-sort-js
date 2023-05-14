@@ -60,44 +60,30 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function inferSortClasses(tableRows, columnIndex, th) {
-    const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
-    const regexFileSizeSort = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+    const runtimeRegex = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
+    const fileSizeRegex = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
     // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
-    const datesRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
-    const regexISODates = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
+    const dmyRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
+    const ymdRegex = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
     const inferableClasses = {
-      runtime: { class: "runtime-sort", count: 0 },
-      filesize: { class: "file-size-sort", count: 0 },
-      dmyDates: { class: "dates-dmy-sort", count: 0 },
-      ymdDates: { class: "dates-ymd-sort", count: 0 },
+      runtime: { regexp: runtimeRegex, class: "runtime-sort", count: 0 },
+      filesize: { regexp: fileSizeRegex, class: "file-size-sort", count: 0 },
+      dmyDates: { regexp: dmyRegex, class: "dates-dmy-sort", count: 0 },
+      ymdDates: { regexp: ymdRegex, class: "dates-ymd-sort", count: 0 },
     };
     let classNameAdded = false;
     let regexNotFoundCount = 0;
-    let tableColumnLength = th.parentElement.childElementCount;
-    const threshold = Math.floor(tableColumnLength / 2);
+    const threshold = Math.ceil(tableRows.length/ 2);
     for (let tr of tableRows) {
       if (regexNotFoundCount >= threshold) {
         break;
       }
-      let matches = {
-        runtime: null,
-        filesize: null,
-        dmyDates: null,
-        ymdDates: null,
-      };
       const tableColumn = tr.querySelectorAll("td").item(columnIndex);
-      if (tableColumn.innerText) {
-        matches.runtime = tableColumn.innerText.match(regexMinutesAndSeconds);
-        matches.filesize = tableColumn.innerText.match(regexFileSizeSort);
-        matches.dmyDates = tableColumn.innerText.match(datesRegex);
-        matches.ymdDates = tableColumn.innerText.match(regexISODates);
-      }
-      if (Object.values(matches).every((match) => match === null)) {
-        regexNotFoundCount++;
-        continue;
-      }
+      let foundMatch = false;
       for (let key of Object.keys(inferableClasses)) {
-        if (matches[key] !== null) {
+        let classRegexp = inferableClasses[key].regexp;
+        if (tableColumn.innerText.match(classRegexp) !== null) {
+          foundMatch = true;
           inferableClasses[key].count++;
         }
         if (inferableClasses[key].count >= threshold) {
@@ -108,6 +94,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
       if (classNameAdded) {
         break;
+      }
+      if (!foundMatch) {
+        regexNotFoundCount++;
+        continue;
       }
     }
   }
