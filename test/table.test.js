@@ -127,12 +127,14 @@ test("Floating point numbers", () => {
 test("Release Versions", () => {
   expect(
     createTestTable(
-      { col0: ["4.0.1", "3.0.2", "4.1.0", "3.0.4", "4.2.0"] },
+      { col0: ["4.18.0", "3.0.2", "4.1.0", "3.0.18", "4.2.0", "4.17.1"] },
       {
         classTags: "",
       }
     )
-  ).toStrictEqual({ col0: ["3.0.2", "3.0.4", "4.0.1", "4.1.0", "4.2.0"] });
+  ).toStrictEqual({
+    col0: ["3.0.2", "3.0.18", "4.1.0", "4.2.0", "4.17.1", "4.18.0"],
+  });
 });
 
 test("data-sort: example days of week", () => {
@@ -340,6 +342,33 @@ test("dates-mdy-sort: US style mm/dd/yyyy; delim . or / or -", () => {
         ],
       },
       { classTags: "dates-mdy-sort" }
+    )
+  ).toStrictEqual({
+    col0: [
+      "1.13.1992",
+      "1-14-1992",
+      "1/20/1992",
+      "2/14/1992",
+      "4.30.2008",
+      "10-12-2017",
+    ],
+  });
+});
+
+test("dates-mdy-sort US style overrides inferred class dates-dmy-sort:", () => {
+  expect(
+    createTestTable(
+      {
+        col0: [
+          "1-14-1992",
+          "1.13.1992",
+          "4.30.2008",
+          "1/20/1992",
+          "10-12-2017",
+          "2/14/1992",
+        ],
+      },
+      { classTags: "dates-mdy-sort dates-dmy-sort" }
     )
   ).toStrictEqual({
     col0: [
