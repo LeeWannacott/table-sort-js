@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "author": "Lee Wannacott",
+  "name": "table-sort-js",
+  "version": "1.15.0",
+  "description": "Makes tables sortable using table-sort-js: https://github.com/LeeWannacott/table-sort-js",
+  "icons": { "48": "icons/t.png" },
+  "browser_action": {
+    "default_icon": "./icons/t.png",
+    "default_title": "table-sort-js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["addTableSortClass.js", "table-sort.js"]
+    }
+  ]
+}
