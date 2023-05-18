@@ -166,6 +166,38 @@ test("data-sort: example days of week", () => {
   });
 });
 
+test("data-sort clicked twice: example days of week", () => {
+  expect(
+    createTestTable(
+      {
+        col0: [
+          "Saturday",
+          "Wednesday",
+          "Sunday",
+          "Friday",
+          "Thursday",
+          "Tuesday",
+          "Monday",
+        ],
+      },
+      { classTags: "data-sort" },
+      {
+        colsToClick: [0, 0],
+      }
+    )
+  ).toStrictEqual({
+    col0: [
+      "Monday",
+      "Tuesday",
+      "Thursday",
+      "Friday",
+      "Sunday",
+      "Wednesday",
+      "Saturday",
+    ],
+  });
+});
+
 test("disable-sort: disable sorting on a column", () => {
   expect(
     createTestTable(
