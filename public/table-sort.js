@@ -290,9 +290,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         column,
         isFileSize,
         isTimeSort,
-        isSortDateDayMonthYear,
-        isSortDateMonthDayYear,
-        isSortDateYearMonthDay,
+        isSortDates,
         isDataAttribute,
       } = tableProperties;
       for (let [i, tr] of tableRows.entries()) {
@@ -313,9 +311,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
             !isFileSize &&
             !isDataAttribute &&
             !isTimeSort &&
-            !isSortDateDayMonthYear &&
-            !isSortDateYearMonthDay &&
-            !isSortDateMonthDayYear
+            !isSortDates.dayMonthYear &&
+            !isSortDates.yearMonthDay &&
+            !isSortDates.monthDayYear
           ) {
             column.toBeSorted.push(`${tdTextContent}#${i}`);
             columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.outerHTML;
@@ -465,15 +463,17 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         sortByRuntime(visibleTableRows, column);
       }
 
-      const isSortDateDayMonthYear = th.classList.contains("dates-dmy-sort");
-      const isSortDateMonthDayYear = th.classList.contains("dates-mdy-sort");
-      const isSortDateYearMonthDay = th.classList.contains("dates-ymd-sort");
+      const isSortDates = {
+        dayMonthYear: th.classList.contains("dates-dmy-sort"),
+        monthDayYear: th.classList.contains("dates-mdy-sort"),
+        yearMonthDay: th.classList.contains("dates-ymd-sort"),
+      };
       // pick mdy first to override the inferred default class which is dmy.
-      if (isSortDateMonthDayYear) {
+      if (isSortDates.monthDayYear) {
         sortDates("mdy", visibleTableRows, column);
-      } else if (isSortDateYearMonthDay) {
+      } else if (isSortDates.yearMonthDay) {
         sortDates("ymd", visibleTableRows, column);
-      } else if (isSortDateDayMonthYear) {
+      } else if (isSortDates.dayMonthYear) {
         sortDates("dmy", visibleTableRows, column);
       }
 
@@ -486,9 +486,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         tableRows: visibleTableRows,
         column,
         isFileSize,
-        isSortDateDayMonthYear,
-        isSortDateMonthDayYear,
-        isSortDateYearMonthDay,
+        isSortDates,
         isDataAttribute,
         isTimeSort,
       };
