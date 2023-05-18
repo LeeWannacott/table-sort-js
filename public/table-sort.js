@@ -65,7 +65,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
     const dmyRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
     const ymdRegex = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
-    const numericRegex = /^[+-]?(?:\d*[.,])?\d+$/;
+    const numericRegex = /^(?:\(\d+(?:\.\d+)?\)|-?\d+(?:\.\d+)?)$/;
     const inferableClasses = {
       runtime: { regexp: runtimeRegex, class: "runtime-sort", count: 0 },
       filesize: { regexp: fileSizeRegex, class: "file-size-sort", count: 0 },
@@ -329,12 +329,40 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       const isAlphaSort = th.classList.contains("alpha-sort");
       const isNumericSort = th.classList.contains("numeric-sort");
       function sortAscending(a, b) {
+        function handleNumbers(str1, str2) {
+          let num1, num2;
+          str1 = str1.slice(0, str1.indexOf("#"));
+          str2 = str2.slice(0, str2.indexOf("#"));
+
+          if (str1.match(/^\((\d+(?:\.\d+)?)\)$/)) {
+            num1 = -1 * Number(str1.slice(1, -1));
+          } else { 
+            num1 = Number(str1);
+          }
+
+          if (str2.match(/^\((\d+(?:\.\d+)?)\)$/)) {
+            num2 = -1 * Number(str2.slice(1, -1));
+          } else {
+            num2 = Number(str2);
+          }
+
+          if (!isNaN(num1) && !isNaN(num2)) {
+            return num1 - num2;
+          } else {
+            return str1.localeCompare(
+              str2,
+              navigator.languages[0] || navigator.language,
+              { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
+            );
+          }          
+        }
+
         if (a.includes(`${fillValue}#`)) {
           return 1;
         } else if (b.includes(`${fillValue}#`)) {
           return -1;
         } else if (isNumericSort) {
-          return Number(a.substring(0, a.indexOf("#"))) - Number(b.substring(0, b.indexOf("#")))
+          return handleNumbers(a, b);
         } else{
           return a.localeCompare(
             b,

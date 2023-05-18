@@ -433,3 +433,43 @@ test("Sort all combination of negative and positive integers and decimal numbers
     col0: ["-6","-3","-2.3","1","1.05","5","14"],
   });
 });
+
+test("Sort all combination of negative and positive integers and decimal numbers", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["1.05", "-2.3", "-3", "1", "-6", "", "14"],
+      },
+      { classTags: "numeric-sort" }
+    )
+  ).toStrictEqual({
+    col0: ["-6","-3","-2.3","1","1.05","14",""],
+  });
+});
+
+
+test("Sort all negative numbers with parenthesis as well", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["1.05", "-2.3", "-3", "1", "-6", "(1.4)", "14"],
+      },
+      { classTags: "numeric-sort" }
+    )
+  ).toStrictEqual({
+    col0: ["-6","-3","-2.3","(1.4)","1","1.05","14"],
+  });
+});
+
+test("Sort all combination of negative and positive integers and decimal numbers and even alphabetical random", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["1.05", "-2.3", "-3", "1", "-6", "","(0.5)","1a","b","(c)","{1}"],
+      },
+      { classTags: "numeric-sort" }
+    )
+  ).toStrictEqual({
+    col0: ["{1}","-6","-3","-2.3","(0.5)","1","1.05","1a","b","(c)",""],
+  });
+});
