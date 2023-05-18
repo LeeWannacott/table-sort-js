@@ -141,7 +141,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         const dataAttributeTd = tr.querySelectorAll("td").item(columnIndex)
           .dataset.sort;
         columnData.push(`${dataAttributeTd}#${i}`);
-        columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
+        columnIndexAndTableRow[columnData[i]] = tr.outerHTML;
       }
     }
 
@@ -206,7 +206,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
             timeinSeconds = hours + minutesInSeconds + seconds;
           }
           columnData.push(`${timeinSeconds}#${i}`);
-          columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
+          columnIndexAndTableRow[columnData[i]] = tr.outerHTML;
         }
       } catch (e) {
         console.log(e);
@@ -244,7 +244,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
             );
           }
           columnData.push(`${numberToSort}#${i}`);
-          columnIndexAndTableRow[columnData[i]] = tr.innerHTML;
+          columnIndexAndTableRow[columnData[i]] = tr.outerHTML;
         }
       } catch (e) {
         console.log(e);
@@ -302,7 +302,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         }
         if (tdTextContent.trim() !== "") {
           if (isFileSize) {
-            fileSizeColumnTextAndRow[columnData[i]] = tr.innerHTML;
+            fileSizeColumnTextAndRow[columnData[i]] = tr.outerHTML;
           }
           // These classes already handle pushing to column and setting the tr html.
           if (
@@ -314,12 +314,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
             !isSortDateMonthDayYear
           ) {
             columnData.push(`${tdTextContent}#${i}`);
-            columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.innerHTML;
+            columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.outerHTML;
           }
         } else {
           // Fill in blank table cells dict key with filler value.
           columnData.push(`${fillValue}#${i}`);
-          columnIndexAndTableRow[`${fillValue}#${i}`] = tr.innerHTML;
+          columnIndexAndTableRow[`${fillValue}#${i}`] = tr.outerHTML;
         }
       }
 
@@ -423,7 +423,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           tr.querySelectorAll("td").item(columnIndex).innerHTML =
             fileSizeInBytesHTML;
         } else if (!isFileSize) {
-          tr.innerHTML = columnIndexAndTableRow[columnData[i]];
+          tr.outerHTML = columnIndexAndTableRow[columnData[i]];
         }
       }
     }

@@ -386,7 +386,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
-
     function updateTable(tableProperties) {
       const { tableRows, columnData, isFileSize } = tableProperties;
       for (let [i, tr] of tableRows.entries()) {
