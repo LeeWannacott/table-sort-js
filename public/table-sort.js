@@ -109,6 +109,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     const tableHead = sortableTable.querySelector("thead");
     const tableHeadHeaders = tableHead.querySelectorAll("th");
     const tableRows = tableBody.querySelectorAll("tr");
+    let columnIndexesClicked = [];
 
     const isNoSortClassInference =
       sortableTable.classList.contains("no-class-infer");
@@ -119,12 +120,24 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         if (!isNoSortClassInference) {
           inferSortClasses(tableRows, columnIndex, th);
         }
-        makeEachColumnSortable(th, columnIndex, tableBody, sortableTable);
+        makeEachColumnSortable(
+          th,
+          columnIndex,
+          tableBody,
+          sortableTable,
+          columnIndexesClicked
+        );
       }
     }
   }
 
-  function makeEachColumnSortable(th, columnIndex, tableBody, sortableTable) {
+  function makeEachColumnSortable(
+    th,
+    columnIndex,
+    tableBody,
+    sortableTable,
+    columnIndexesClicked
+  ) {
     const desc = th.classList.contains("order-by-desc");
     let tableArrows = sortableTable.classList.contains("table-arrows");
     const [arrowUp, arrowDown] = [" ▲", " ▼"];
@@ -249,19 +262,24 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
-    let [timesClickedColumn, columnIndexesClicked] = [0, []];
 
-    function rememberSort(timesClickedColumn, columnIndexesClicked) {
+    function rememberSort(timesClickedColumn,columnIndex, columnIndexesClicked) {
       // if user clicked different column from first column reset times clicked.
+      console.log(columnIndex);
+      console.log(timesClickedColumn);
       columnIndexesClicked.push(columnIndex);
+      console.log(columnIndexesClicked);
       if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
         const lastColumnClicked =
           columnIndexesClicked[columnIndexesClicked.length - 1];
         const secondLastColumnClicked =
           columnIndexesClicked[columnIndexesClicked.length - 2];
+        console.log("1");
         if (lastColumnClicked !== secondLastColumnClicked) {
-          timesClickedColumn = 0;
+          console.log("2", timesClickedColumn, "time");
           columnIndexesClicked.shift();
+          console.log("3", timesClickedColumn);
+          return timesClickedColumn = 0;
         }
       }
     }
@@ -430,7 +448,14 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
+    let timesClickedColumn = 0;
     th.addEventListener("click", function () {
+      const isRememberSort = sortableTable.classList.contains("remember-sort");
+      // if (!isRememberSort) {
+      console.log("times",timesClickedColumn)
+        rememberSort(timesClickedColumn,columnIndex, columnIndexesClicked);
+      // }
+      console.log(timesClickedColumn,"after")
       timesClickedColumn += 1;
       const column = {
         // column used for sorting; better name?
@@ -475,11 +500,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         sortDates("ymd", visibleTableRows, column);
       } else if (isSortDates.dayMonthYear) {
         sortDates("dmy", visibleTableRows, column);
-      }
-
-      const isRememberSort = sortableTable.classList.contains("remember-sort");
-      if (!isRememberSort) {
-        rememberSort(timesClickedColumn, columnIndexesClicked);
       }
 
       const tableProperties = {
