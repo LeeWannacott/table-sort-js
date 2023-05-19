@@ -281,8 +281,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       return timesClickedColumn;
     }
 
-    function getColSpanData(sortableTable, column) {
-      sortableTable.querySelectorAll("th").forEach((th, index) => {
+    function getColSpanData(headers, column) {
+      headers.forEach((th, index) => {
         column.span[index] = th.colSpan;
         if (index === 0) column.spanSum[index] = th.colSpan;
         else column.spanSum[index] = column.spanSum[index - 1] + th.colSpan;
@@ -447,41 +447,42 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     let timesClickedColumn = 0;
     th.addEventListener("click", function () {
-      const isRememberSort = sortableTable.classList.contains("remember-sort");
-      if (!isRememberSort) {
-        timesClickedColumn = rememberSort();
-      }
-
-      timesClickedColumn += 1;
       const column = {
-        // column used for sorting; better name?
         toBeSorted: [],
         span: {},
         spanSum: {},
       };
 
-      getColSpanData(sortableTable, column);
-
-      const visibleTableRows = Array.prototype.filter.call(
+      table.visibleRows = Array.prototype.filter.call(
         table.body.querySelectorAll("tr"),
         (tr) => {
           return tr.style.display !== "none";
         }
       );
 
+      getColSpanData(table.headers, column);
+
+      const isRememberSort = sortableTable.classList.contains("remember-sort");
+      if (!isRememberSort) {
+        timesClickedColumn = rememberSort();
+      }
+      timesClickedColumn += 1;
+
+      // const table.rows =
+
       const isDataAttribute = th.classList.contains("data-sort");
       if (isDataAttribute) {
-        sortDataAttributes(visibleTableRows, column);
+        sortDataAttributes(table.visibleRows, column);
       }
 
       const isFileSize = th.classList.contains("file-size-sort");
       if (isFileSize) {
-        sortFileSize(visibleTableRows, column);
+        sortFileSize(table.visibleRows, column);
       }
 
       const isTimeSort = th.classList.contains("runtime-sort");
       if (isTimeSort) {
-        sortByRuntime(visibleTableRows, column);
+        sortByRuntime(table.visibleRows, column);
       }
 
       const isSortDates = {
@@ -491,15 +492,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       };
       // pick mdy first to override the inferred default class which is dmy.
       if (isSortDates.monthDayYear) {
-        sortDates("mdy", visibleTableRows, column);
+        sortDates("mdy", table.visibleRows, column);
       } else if (isSortDates.yearMonthDay) {
-        sortDates("ymd", visibleTableRows, column);
+        sortDates("ymd", table.visibleRows, column);
       } else if (isSortDates.dayMonthYear) {
-        sortDates("dmy", visibleTableRows, column);
+        sortDates("dmy", table.visibleRows, column);
       }
 
       const tableProperties = {
-        tableRows: visibleTableRows,
+        tableRows: table.visibleRows,
         column,
         isFileSize,
         isSortDates,
