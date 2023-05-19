@@ -105,25 +105,28 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function makeTableSortable(sortableTable) {
-    const tableBody = getTableBody(sortableTable);
-    const tableHead = sortableTable.querySelector("thead");
-    const tableHeadHeaders = tableHead.querySelectorAll("th");
-    const tableRows = tableBody.querySelectorAll("tr");
+    const table = {
+      body: getTableBody(sortableTable),
+      head: sortableTable.querySelector("thead"),
+    };
+    table.headers = table.head.querySelectorAll("th");
+    table.rows = table.body.querySelectorAll("tr");
+
     let columnIndexesClicked = [];
 
     const isNoSortClassInference =
       sortableTable.classList.contains("no-class-infer");
 
-    for (let [columnIndex, th] of tableHeadHeaders.entries()) {
+    for (let [columnIndex, th] of table.headers.entries()) {
       if (!th.classList.contains("disable-sort")) {
         th.style.cursor = "pointer";
         if (!isNoSortClassInference) {
-          inferSortClasses(tableRows, columnIndex, th);
+          inferSortClasses(table.rows, columnIndex, th);
         }
         makeEachColumnSortable(
           th,
           columnIndex,
-          tableBody,
+          table,
           sortableTable,
           columnIndexesClicked
         );
@@ -134,7 +137,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   function makeEachColumnSortable(
     th,
     columnIndex,
-    tableBody,
+    table,
     sortableTable,
     columnIndexesClicked
   ) {
@@ -460,7 +463,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       getColSpanData(sortableTable, column);
 
       const visibleTableRows = Array.prototype.filter.call(
-        tableBody.querySelectorAll("tr"),
+        table.body.querySelectorAll("tr"),
         (tr) => {
           return tr.style.display !== "none";
         }
