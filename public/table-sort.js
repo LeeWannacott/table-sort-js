@@ -105,25 +105,28 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function makeTableSortable(sortableTable) {
-    const tableBody = getTableBody(sortableTable);
-    const tableHead = sortableTable.querySelector("thead");
-    const tableHeadHeaders = tableHead.querySelectorAll("th");
-    const tableRows = tableBody.querySelectorAll("tr");
+    const table = {
+      body: getTableBody(sortableTable),
+      head: sortableTable.querySelector("thead"),
+    };
+    table.headers = table.head.querySelectorAll("th");
+    table.rows = table.body.querySelectorAll("tr");
+
     let columnIndexesClicked = [];
 
     const isNoSortClassInference =
       sortableTable.classList.contains("no-class-infer");
 
-    for (let [columnIndex, th] of tableHeadHeaders.entries()) {
+    for (let [columnIndex, th] of table.headers.entries()) {
       if (!th.classList.contains("disable-sort")) {
         th.style.cursor = "pointer";
         if (!isNoSortClassInference) {
-          inferSortClasses(tableRows, columnIndex, th);
+          inferSortClasses(table.rows, columnIndex, th);
         }
         makeEachColumnSortable(
           th,
           columnIndex,
-          tableBody,
+          table,
           sortableTable,
           columnIndexesClicked
         );
@@ -134,12 +137,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   function makeEachColumnSortable(
     th,
     columnIndex,
-    tableBody,
+    table,
     sortableTable,
     columnIndexesClicked
   ) {
     const desc = th.classList.contains("order-by-desc");
-    let tableArrows = sortableTable.classList.contains("table-arrows");
+    const tableArrows = sortableTable.classList.contains("table-arrows");
     const [arrowUp, arrowDown] = [" ▲", " ▼"];
     const fillValue = "!X!Y!Z!";
 
@@ -278,8 +281,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       return timesClickedColumn;
     }
 
-    function getColSpanData(sortableTable, column) {
-      sortableTable.querySelectorAll("th").forEach((th, index) => {
+    function getColSpanData(headers, column) {
+      headers.forEach((th, index) => {
         column.span[index] = th.colSpan;
         if (index === 0) column.spanSum[index] = th.colSpan;
         else column.spanSum[index] = column.spanSum[index - 1] + th.colSpan;
@@ -297,14 +300,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function getTableData(tableProperties) {
-      const {
-        tableRows,
-        column,
-        isFileSize,
-        isTimeSort,
-        isSortDates,
-        isDataAttribute,
-      } = tableProperties;
+      const { tableRows, column, hasThClass, isSortDates } = tableProperties;
       for (let [i, tr] of tableRows.entries()) {
         let tdTextContent = getColumn(
           tr,
@@ -315,14 +311,14 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           tdTextContent = "";
         }
         if (tdTextContent.trim() !== "") {
-          if (isFileSize) {
+          if (hasThClass.fileSize) {
             fileSizeColumnTextAndRow[column.toBeSorted[i]] = tr.outerHTML;
           }
           // These classes already handle pushing to column and setting the tr html.
           if (
-            !isFileSize &&
-            !isDataAttribute &&
-            !isTimeSort &&
+            !hasThClass.fileSize &&
+            !hasThClass.dataSort &&
+            !hasThClass.runtime &&
             !isSortDates.dayMonthYear &&
             !isSortDates.yearMonthDay &&
             !isSortDates.monthDayYear
@@ -401,9 +397,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function updateTable(tableProperties) {
-      const { tableRows, column, isFileSize } = tableProperties;
+      const { tableRows, column, hasThClass } = tableProperties;
       for (let [i, tr] of tableRows.entries()) {
-        if (isFileSize) {
+        if (hasThClass.fileSize) {
           tr.innerHTML = fileSizeColumnTextAndRow[column.toBeSorted[i]];
           let fileSizeInBytesHTML = tr
             .querySelectorAll("td")
@@ -436,7 +432,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           }
           tr.querySelectorAll("td").item(columnIndex).innerHTML =
             fileSizeInBytesHTML;
-        } else if (!isFileSize) {
+        } else if (!hasThClass.fileSize) {
           tr.outerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
         }
       }
@@ -444,41 +440,41 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     let timesClickedColumn = 0;
     th.addEventListener("click", function () {
-      const isRememberSort = sortableTable.classList.contains("remember-sort");
-      if (!isRememberSort) {
-        timesClickedColumn = rememberSort();
-      }
-
-      timesClickedColumn += 1;
       const column = {
-        // column used for sorting; better name?
         toBeSorted: [],
         span: {},
         spanSum: {},
       };
 
-      getColSpanData(sortableTable, column);
-
-      const visibleTableRows = Array.prototype.filter.call(
-        tableBody.querySelectorAll("tr"),
+      table.visibleRows = Array.prototype.filter.call(
+        table.body.querySelectorAll("tr"),
         (tr) => {
           return tr.style.display !== "none";
         }
       );
 
-      const isDataAttribute = th.classList.contains("data-sort");
-      if (isDataAttribute) {
-        sortDataAttributes(visibleTableRows, column);
-      }
+      getColSpanData(table.headers, column);
 
-      const isFileSize = th.classList.contains("file-size-sort");
-      if (isFileSize) {
-        sortFileSize(visibleTableRows, column);
+      const isRememberSort = sortableTable.classList.contains("remember-sort");
+      if (!isRememberSort) {
+        timesClickedColumn = rememberSort();
       }
+      timesClickedColumn += 1;
 
-      const isTimeSort = th.classList.contains("runtime-sort");
-      if (isTimeSort) {
-        sortByRuntime(visibleTableRows, column);
+      const hasThClass = {
+        dataSort: th.classList.contains("data-sort"),
+        fileSize: th.classList.contains("file-size-sort"),
+        runtime: th.classList.contains("runtime-sort"),
+      };
+
+      if (hasThClass.dataSort) {
+        sortDataAttributes(table.visibleRows, column);
+      }
+      if (hasThClass.fileSize) {
+        sortFileSize(table.visibleRows, column);
+      }
+      if (hasThClass.runtime) {
+        sortByRuntime(table.visibleRows, column);
       }
 
       const isSortDates = {
@@ -488,20 +484,18 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       };
       // pick mdy first to override the inferred default class which is dmy.
       if (isSortDates.monthDayYear) {
-        sortDates("mdy", visibleTableRows, column);
+        sortDates("mdy", table.visibleRows, column);
       } else if (isSortDates.yearMonthDay) {
-        sortDates("ymd", visibleTableRows, column);
+        sortDates("ymd", table.visibleRows, column);
       } else if (isSortDates.dayMonthYear) {
-        sortDates("dmy", visibleTableRows, column);
+        sortDates("dmy", table.visibleRows, column);
       }
 
       const tableProperties = {
-        tableRows: visibleTableRows,
+        tableRows: table.visibleRows,
         column,
-        isFileSize,
+        hasThClass,
         isSortDates,
-        isDataAttribute,
-        isTimeSort,
       };
       getTableData(tableProperties);
       updateTable(tableProperties);
