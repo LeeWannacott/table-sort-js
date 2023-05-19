@@ -262,26 +262,20 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     }
 
-
-    function rememberSort(timesClickedColumn,columnIndex, columnIndexesClicked) {
+    function rememberSort() {
       // if user clicked different column from first column reset times clicked.
-      console.log(columnIndex);
-      console.log(timesClickedColumn);
       columnIndexesClicked.push(columnIndex);
-      console.log(columnIndexesClicked);
       if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
         const lastColumnClicked =
           columnIndexesClicked[columnIndexesClicked.length - 1];
         const secondLastColumnClicked =
           columnIndexesClicked[columnIndexesClicked.length - 2];
-        console.log("1");
         if (lastColumnClicked !== secondLastColumnClicked) {
-          console.log("2", timesClickedColumn, "time");
           columnIndexesClicked.shift();
-          console.log("3", timesClickedColumn);
-          return timesClickedColumn = 0;
+          timesClickedColumn = 0;
         }
       }
+      return timesClickedColumn;
     }
 
     function getColSpanData(sortableTable, column) {
@@ -451,11 +445,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     let timesClickedColumn = 0;
     th.addEventListener("click", function () {
       const isRememberSort = sortableTable.classList.contains("remember-sort");
-      // if (!isRememberSort) {
-      console.log("times",timesClickedColumn)
-        rememberSort(timesClickedColumn,columnIndex, columnIndexesClicked);
-      // }
-      console.log(timesClickedColumn,"after")
+      if (!isRememberSort) {
+        timesClickedColumn = rememberSort();
+      }
+
       timesClickedColumn += 1;
       const column = {
         // column used for sorting; better name?
@@ -464,14 +457,14 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         spanSum: {},
       };
 
+      getColSpanData(sortableTable, column);
+
       const visibleTableRows = Array.prototype.filter.call(
         tableBody.querySelectorAll("tr"),
         (tr) => {
           return tr.style.display !== "none";
         }
       );
-
-      getColSpanData(sortableTable, column);
 
       const isDataAttribute = th.classList.contains("data-sort");
       if (isDataAttribute) {

@@ -184,3 +184,45 @@ test("onload-sort: testing that it sorts without a click from user", () => {
     )
   ).toStrictEqual({ col0: ["5", "4", "3", "2", "1"] });
 });
+
+test("order-by-desc Remember-sort: Sorting cols without rememeber-sort class.", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["charlie", "alpha", "beta"],
+        col1: ["carrie", "doris", "fisher"],
+      },
+      {
+        classTags: "order-by-desc",
+      },
+      {
+        colsToClick: [0, 1, 0],
+        tableTags: "",
+      }
+    )
+  ).toStrictEqual({
+    col0: ["charlie", "beta", "alpha"],
+    col1: ["carrie", "fisher", "doris"],
+  });
+});
+
+test("order-by-desc Remember-sort: Sorting cols with rememeber-sort class.", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["charlie", "alpha", "beta"],
+        col1: ["carrie", "doris", "fisher"],
+      },
+      {
+        classTags: "order-by-desc",
+      },
+      {
+        colsToClick: [0, 1, 0],
+        tableTags: "remember-sort",
+      }
+    )
+  ).toStrictEqual({
+    col0: ["alpha", "beta", "charlie"],
+    col1: ["doris", "fisher", "carrie"],
+  });
+});
