@@ -62,6 +62,7 @@ Refer to the documenation for examples on how to use table-sort-js with [HTML](h
 | "dates-ymd-sort"             | Sorts dates in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) yyyy/mm/dd format. e.g (2021/10/28). Use "/" or "-" as separator. |
 | "file-size-sort"             | Sorts file sizes(B->TiB) uses the binary prefix. (e.g 10 B, 100 KiB, 1 MiB); optional space between number and prefix.              |
 | "runtime-sort"               | Sorts runtime in hours minutes and seconds e.g (10h 1m 20s). Useful for sorting the GitHub actions Run time column...               |
+| "numeric-sort"               | Sorts numbers - Positive, Negative (Both minus and parenthesis representations), Decimals (can also be used for Semantic Versioning)|
 
 | &lt;th&gt; Classes that change defaults. | Description                                                                                                         |
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |

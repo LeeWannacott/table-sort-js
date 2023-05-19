@@ -329,32 +329,35 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       const isAlphaSort = th.classList.contains("alpha-sort");
       const isNumericSort = th.classList.contains("numeric-sort");
       function sortAscending(a, b) {
+        function parseNumberFromString(str) {
+          let num;
+          str = str.slice(0, str.indexOf("#"));
+          if (str.match(/^\((\d+(?:\.\d+)?)\)$/)) {
+            num = -1 * Number(str.slice(1, -1));
+          } else {
+            num = Number(str);
+          }
+          return num;
+        }
+
+        function strLocaleCompare(str1, str2) {
+          return str1.localeCompare(
+            str2,
+            navigator.languages[0] || navigator.language,
+            { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
+          );
+        }
+
         function handleNumbers(str1, str2) {
           let num1, num2;
-          str1 = str1.slice(0, str1.indexOf("#"));
-          str2 = str2.slice(0, str2.indexOf("#"));
-
-          if (str1.match(/^\((\d+(?:\.\d+)?)\)$/)) {
-            num1 = -1 * Number(str1.slice(1, -1));
-          } else { 
-            num1 = Number(str1);
-          }
-
-          if (str2.match(/^\((\d+(?:\.\d+)?)\)$/)) {
-            num2 = -1 * Number(str2.slice(1, -1));
-          } else {
-            num2 = Number(str2);
-          }
+          num1 = parseNumberFromString(str1);
+          num2 = parseNumberFromString(str2);
 
           if (!isNaN(num1) && !isNaN(num2)) {
             return num1 - num2;
           } else {
-            return str1.localeCompare(
-              str2,
-              navigator.languages[0] || navigator.language,
-              { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
-            );
-          }          
+            return strLocaleCompare(str1, str2);
+          }
         }
 
         if (a.includes(`${fillValue}#`)) {
@@ -363,12 +366,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           return -1;
         } else if (isNumericSort) {
           return handleNumbers(a, b);
-        } else{
-          return a.localeCompare(
-            b,
-            navigator.languages[0] || navigator.language,
-            { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
-          );
+        } else {
+          return strLocaleCompare(a, b);
         }
       }
 
