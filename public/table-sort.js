@@ -142,7 +142,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     columnIndexesClicked
   ) {
     const desc = th.classList.contains("order-by-desc");
-    let tableArrows = sortableTable.classList.contains("table-arrows");
+    const tableArrows = sortableTable.classList.contains("table-arrows");
     const [arrowUp, arrowDown] = [" ▲", " ▼"];
     const fillValue = "!X!Y!Z!";
 
@@ -300,14 +300,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function getTableData(tableProperties) {
-      const {
-        tableRows,
-        column,
-        isFileSize,
-        isTimeSort,
-        isSortDates,
-        isDataAttribute,
-      } = tableProperties;
+      const { tableRows, column, hasThClass, isSortDates } = tableProperties;
       for (let [i, tr] of tableRows.entries()) {
         let tdTextContent = getColumn(
           tr,
@@ -318,14 +311,14 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           tdTextContent = "";
         }
         if (tdTextContent.trim() !== "") {
-          if (isFileSize) {
+          if (hasThClass.fileSize) {
             fileSizeColumnTextAndRow[column.toBeSorted[i]] = tr.outerHTML;
           }
           // These classes already handle pushing to column and setting the tr html.
           if (
-            !isFileSize &&
-            !isDataAttribute &&
-            !isTimeSort &&
+            !hasThClass.fileSize &&
+            !hasThClass.dataSort &&
+            !hasThClass.runtime &&
             !isSortDates.dayMonthYear &&
             !isSortDates.yearMonthDay &&
             !isSortDates.monthDayYear
@@ -404,9 +397,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function updateTable(tableProperties) {
-      const { tableRows, column, isFileSize } = tableProperties;
+      const { tableRows, column, hasThClass } = tableProperties;
       for (let [i, tr] of tableRows.entries()) {
-        if (isFileSize) {
+        if (hasThClass.fileSize) {
           tr.innerHTML = fileSizeColumnTextAndRow[column.toBeSorted[i]];
           let fileSizeInBytesHTML = tr
             .querySelectorAll("td")
@@ -439,7 +432,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           }
           tr.querySelectorAll("td").item(columnIndex).innerHTML =
             fileSizeInBytesHTML;
-        } else if (!isFileSize) {
+        } else if (!hasThClass.fileSize) {
           tr.outerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
         }
       }
@@ -468,20 +461,19 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
       timesClickedColumn += 1;
 
-      // const table.rows =
+      const hasThClass = {
+        dataSort: th.classList.contains("data-sort"),
+        fileSize: th.classList.contains("file-size-sort"),
+        runtime: th.classList.contains("runtime-sort"),
+      };
 
-      const isDataAttribute = th.classList.contains("data-sort");
-      if (isDataAttribute) {
+      if (hasThClass.dataSort) {
         sortDataAttributes(table.visibleRows, column);
       }
-
-      const isFileSize = th.classList.contains("file-size-sort");
-      if (isFileSize) {
+      if (hasThClass.fileSize) {
         sortFileSize(table.visibleRows, column);
       }
-
-      const isTimeSort = th.classList.contains("runtime-sort");
-      if (isTimeSort) {
+      if (hasThClass.runtime) {
         sortByRuntime(table.visibleRows, column);
       }
 
@@ -502,10 +494,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       const tableProperties = {
         tableRows: table.visibleRows,
         column,
-        isFileSize,
+        hasThClass,
         isSortDates,
-        isDataAttribute,
-        isTimeSort,
       };
       getTableData(tableProperties);
       updateTable(tableProperties);
