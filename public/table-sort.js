@@ -328,38 +328,39 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       const isPunctSort = th.classList.contains("punct-sort");
       const isAlphaSort = th.classList.contains("alpha-sort");
       const isNumericSort = th.classList.contains("numeric-sort");
+
+      function parseNumberFromString(str) {
+        let num;
+        str = str.slice(0, str.indexOf("#"));
+        if (str.match(/^\((\d+(?:\.\d+)?)\)$/)) {
+          num = -1 * Number(str.slice(1, -1));
+        } else {
+          num = Number(str);
+        }
+        return num;
+      }
+
+      function strLocaleCompare(str1, str2) {
+        return str1.localeCompare(
+          str2,
+          navigator.languages[0] || navigator.language,
+          { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
+        );
+      }
+
+      function handleNumbers(str1, str2) {
+        let num1, num2;
+        num1 = parseNumberFromString(str1);
+        num2 = parseNumberFromString(str2);
+
+        if (!isNaN(num1) && !isNaN(num2)) {
+          return num1 - num2;
+        } else {
+          return strLocaleCompare(str1, str2);
+        }
+      }
+
       function sortAscending(a, b) {
-        function parseNumberFromString(str) {
-          let num;
-          str = str.slice(0, str.indexOf("#"));
-          if (str.match(/^\((\d+(?:\.\d+)?)\)$/)) {
-            num = -1 * Number(str.slice(1, -1));
-          } else {
-            num = Number(str);
-          }
-          return num;
-        }
-
-        function strLocaleCompare(str1, str2) {
-          return str1.localeCompare(
-            str2,
-            navigator.languages[0] || navigator.language,
-            { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
-          );
-        }
-
-        function handleNumbers(str1, str2) {
-          let num1, num2;
-          num1 = parseNumberFromString(str1);
-          num2 = parseNumberFromString(str2);
-
-          if (!isNaN(num1) && !isNaN(num2)) {
-            return num1 - num2;
-          } else {
-            return strLocaleCompare(str1, str2);
-          }
-        }
-
         if (a.includes(`${fillValue}#`)) {
           return 1;
         } else if (b.includes(`${fillValue}#`)) {
