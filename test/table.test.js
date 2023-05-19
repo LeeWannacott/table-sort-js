@@ -285,6 +285,69 @@ test("Clicking multiple times (>2) doesn't break sorting", () => {
   });
 });
 
+test("Sorting columns without rememeber-sort ", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["charlie", "alpha", "beta"],
+        col1: ["doris", "carrie", "fisher"],
+      },
+      {
+        classTags: "",
+      },
+      {
+        colsToClick: [0, 1, 0],
+        tableTags: "",
+      }
+    )
+  ).toStrictEqual({
+    col0: ["alpha", "beta", "charlie"],
+    col1: ["carrie", "fisher", "doris"],
+  });
+});
+
+test("Remember-sort: Sorting cols that have the rememeber-sort class.", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["charlie", "alpha", "beta"],
+        col1: ["doris", "carrie", "fisher"],
+      },
+      {
+        classTags: "",
+      },
+      {
+        colsToClick: [0, 1, 0],
+        tableTags: "remember-sort",
+      }
+    )
+  ).toStrictEqual({
+    col0: ["charlie", "beta", "alpha"],
+    col1: ["doris", "fisher", "carrie"],
+  });
+});
+
+test("Checking ", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["charlie", "alpha", "beta"],
+        col1: ["doris", "carrie", "fisher"],
+      },
+      {
+        classTags: "",
+      },
+      {
+        colsToClick: [0, 1, 0],
+        tableTags: "",
+      }
+    )
+  ).toStrictEqual({
+    col0: ["alpha", "beta", "charlie"],
+    col1: ["carrie", "fisher", "doris"],
+  });
+});
+
 test("runtime-sort", () => {
   expect(
     createTestTable(

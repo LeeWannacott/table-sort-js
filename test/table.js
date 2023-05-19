@@ -53,7 +53,7 @@ function createTestTable(
     <head>
     </head>
     <body>
-      <table class="table-sort">
+      <table class="table-sort ${props.tableTags}">
       <thead>
       ${testTableHeaders}
       </thead>
