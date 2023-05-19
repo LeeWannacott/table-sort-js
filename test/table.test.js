@@ -489,3 +489,42 @@ test("dates-ymd-sort: ISO 8601 style yyyy/mm/dd; delim . or / or -", () => {
     col0: ["2023-03-9", "2023/4/6", "2023/4/32", "2023/09/6", "2023.12.16"],
   });
 });
+
+test("Sort decimal numbers", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["0.1", "0.2", "0.3", "0.11", "0.13", "0.13", "0.14"],
+      },
+      { classTags: "numeric-sort" }
+    )
+  ).toStrictEqual({
+    col0: ["0.1", "0.11", "0.13", "0.13", "0.14", "0.2", "0.3"],
+  });
+});
+
+test("Sort all combination positive, negative numbers with parenthesis as well", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["1.05", "-2.3", "-3", "1", "-6", "(1.4)", "14"],
+      },
+      { classTags: "numeric-sort" }
+    )
+  ).toStrictEqual({
+    col0: ["-6","-3","-2.3","(1.4)","1","1.05","14"],
+  });
+});
+
+test("Sort all combination of negative and positive integers and decimal numbers and even alphabetical random", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["1.05", "-2.3", "-3", "1", "-6", "","(0.5)","1a","b","(c)","{1}"],
+      },
+      { classTags: "numeric-sort" }
+    )
+  ).toStrictEqual({
+    col0: ["-6","-3","-2.3","(0.5)","1","1.05","{1}","1a","b","(c)",""],
+  });
+});
