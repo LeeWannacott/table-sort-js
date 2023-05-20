@@ -398,42 +398,45 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     return timesClickedColumn;
   }
 
+  function updateFilesize(i, tr, column, columnIndex) {
+    tr.innerHTML = fileSizeColumnTextAndRow[column.toBeSorted[i]];
+    let fileSizeInBytesHTML = tr
+      .querySelectorAll("td")
+      .item(columnIndex).innerHTML;
+    const fileSizeInBytesText = tr
+      .querySelectorAll("td")
+      .item(columnIndex).textContent;
+    // Remove the unique identifyer for duplicate values(#number).
+    column.toBeSorted[i] = column.toBeSorted[i].replace(/#[0-9]*/, "");
+    const fileSize = parseFloat(column.toBeSorted[i]);
+    let prefixes = ["", "Ki", "Mi", "Gi", "Ti", "Pi"];
+    let replaced = false;
+    for (let i = 0; i < prefixes.length; ++i) {
+      let nextPrefixMultiplier = 2 ** (10 * (i + 1));
+      if (fileSize < nextPrefixMultiplier) {
+        let prefixMultiplier = 2 ** (10 * i);
+        fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+          fileSizeInBytesText,
+          `${(fileSize / prefixMultiplier).toFixed(2)} ${prefixes[i]}B`
+        );
+        replaced = true;
+        break;
+      }
+    }
+    if (!replaced) {
+      fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+        fileSizeInBytesText,
+        "NaN"
+      );
+    }
+    tr.querySelectorAll("td").item(columnIndex).innerHTML = fileSizeInBytesHTML;
+  }
+
   function updateTable(tableProperties) {
     const { tableRows, column, columnIndex, hasThClass } = tableProperties;
     for (let [i, tr] of tableRows.entries()) {
       if (hasThClass.fileSize) {
-        tr.innerHTML = fileSizeColumnTextAndRow[column.toBeSorted[i]];
-        let fileSizeInBytesHTML = tr
-          .querySelectorAll("td")
-          .item(columnIndex).innerHTML;
-        const fileSizeInBytesText = tr
-          .querySelectorAll("td")
-          .item(columnIndex).textContent;
-        // Remove the unique identifyer for duplicate values(#number).
-        column.toBeSorted[i] = column.toBeSorted[i].replace(/#[0-9]*/, "");
-        const fileSize = parseFloat(column.toBeSorted[i]);
-        let prefixes = ["", "Ki", "Mi", "Gi", "Ti", "Pi"];
-        let replaced = false;
-        for (let i = 0; i < prefixes.length; ++i) {
-          let nextPrefixMultiplier = 2 ** (10 * (i + 1));
-          if (fileSize < nextPrefixMultiplier) {
-            let prefixMultiplier = 2 ** (10 * i);
-            fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-              fileSizeInBytesText,
-              `${(fileSize / prefixMultiplier).toFixed(2)} ${prefixes[i]}B`
-            );
-            replaced = true;
-            break;
-          }
-        }
-        if (!replaced) {
-          fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-            fileSizeInBytesText,
-            "NaN"
-          );
-        }
-        tr.querySelectorAll("td").item(columnIndex).innerHTML =
-          fileSizeInBytesHTML;
+        updateFilesize(i, tr, column, columnIndex);
       } else if (!hasThClass.fileSize) {
         tr.outerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
       }
@@ -498,6 +501,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       column.toBeSorted = [];
       column.span = {};
       column.spanSum = {};
+      getColSpanData(table.headers, column);
 
       table.visibleRows = Array.prototype.filter.call(
         table.body.querySelectorAll("tr"),
@@ -505,8 +509,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           return tr.style.display !== "none";
         }
       );
-
-      getColSpanData(table.headers, column);
 
       const isRememberSort = sortableTable.classList.contains("remember-sort");
       if (!isRememberSort) {
