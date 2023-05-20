@@ -145,6 +145,108 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
+  function sortFileSize(tableRows, column, columnIndex, fillValue) {
+    let unitToMultiplier = {
+      b: 1,
+      kb: 1000,
+      kib: 2 ** 10,
+      mb: 1e6,
+      mib: 2 ** 20,
+      gb: 1e9,
+      gib: 2 ** 30,
+      tb: 1e12,
+      tib: 2 ** 40,
+    };
+    const numberWithUnitType = /([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+    for (let [i, tr] of tableRows.entries()) {
+      let fileSizeTd = tr.querySelectorAll("td").item(columnIndex).textContent;
+      let match = fileSizeTd.match(numberWithUnitType);
+      if (match) {
+        let number = parseFloat(match[1]);
+        let unit = match[2].toLowerCase();
+        let multiplier = unitToMultiplier[unit];
+        column.toBeSorted.push(`${number * multiplier}#${i}`);
+      } else {
+        column.toBeSorted.push(`${fillValue}#${i}`);
+      }
+    }
+  }
+
+  function sortDates(datesFormat, tableRows, column, getColumn) {
+    try {
+      for (let [i, tr] of tableRows.entries()) {
+        let columnOfTd, datesRegex;
+        if (datesFormat === "mdy" || datesFormat === "dmy") {
+          datesRegex = /^(\d\d?)[./-](\d\d?)[./-]((\d\d)?\d\d)/;
+        } else if (datesFormat === "ymd") {
+          datesRegex = /^(\d\d\d\d)[./-](\d\d?)[./-](\d\d?)/;
+        }
+        columnOfTd = getColumn(tr, column.spanSum, column.span).textContent;
+        let match = columnOfTd.match(datesRegex);
+        let [years, days, months] = [0, 0, 0];
+        let numberToSort = columnOfTd;
+        if (match) {
+          const [regPos1, regPos2, regPos3] = [match[1], match[2], match[3]];
+          if (regPos1 && regPos2 && regPos3) {
+            if (datesFormat === "mdy") {
+              [months, days, years] = [regPos1, regPos2, regPos3];
+            } else if (datesFormat === "ymd") {
+              [years, months, days] = [regPos1, regPos2, regPos3];
+            } else {
+              [days, months, years] = [regPos1, regPos2, regPos3];
+            }
+          }
+          numberToSort = Number(
+            years +
+              String(months).padStart(2, "0") +
+              String(days).padStart(2, "0")
+          );
+        }
+        column.toBeSorted.push(`${numberToSort}#${i}`);
+        columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  function sortByRuntime(tableRows, column, getColumn) {
+    try {
+      for (let [i, tr] of tableRows.entries()) {
+        const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
+        let columnOfTd = "";
+        // TODO: github actions runtime didn't like textContent, tests didn't like innerText?
+        if (testingTableSortJS) {
+          columnOfTd = getColumn(tr, column.spanSum, column.span).textContent;
+        } else {
+          columnOfTd = getColumn(tr, column.spanSum, column.span).innerText;
+        }
+        let match = columnOfTd.match(regexMinutesAndSeconds);
+        let [minutesInSeconds, hours, seconds] = [0, 0, 0];
+        let timeinSeconds = columnOfTd;
+        if (match) {
+          const regexHours = match[1];
+          if (regexHours) {
+            hours = Number(regexHours.replace("h", "")) * 60 * 60;
+          }
+          const regexMinutes = match[2];
+          if (regexMinutes) {
+            minutesInSeconds = Number(regexMinutes.replace("m", "")) * 60;
+          }
+          const regexSeconds = match[3];
+          if (regexSeconds) {
+            seconds = Number(regexSeconds.replace("s", ""));
+          }
+          timeinSeconds = hours + minutesInSeconds + seconds;
+        }
+        column.toBeSorted.push(`${timeinSeconds}#${i}`);
+        columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   function makeEachColumnSortable(
     th,
     columnIndex,
@@ -161,110 +263,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       th.insertAdjacentText("beforeend", arrowDown);
     } else if (tableArrows) {
       th.insertAdjacentText("beforeend", arrowUp);
-    }
-
-    function sortFileSize(tableRows, column) {
-      let unitToMultiplier = {
-        b: 1,
-        kb: 1000,
-        kib: 2 ** 10,
-        mb: 1e6,
-        mib: 2 ** 20,
-        gb: 1e9,
-        gib: 2 ** 30,
-        tb: 1e12,
-        tib: 2 ** 40,
-      };
-      const numberWithUnitType = /([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-      for (let [i, tr] of tableRows.entries()) {
-        let fileSizeTd = tr
-          .querySelectorAll("td")
-          .item(columnIndex).textContent;
-        let match = fileSizeTd.match(numberWithUnitType);
-        if (match) {
-          let number = parseFloat(match[1]);
-          let unit = match[2].toLowerCase();
-          let multiplier = unitToMultiplier[unit];
-          column.toBeSorted.push(`${number * multiplier}#${i}`);
-        } else {
-          column.toBeSorted.push(`${fillValue}#${i}`);
-        }
-      }
-    }
-
-    function sortByRuntime(tableRows, column) {
-      try {
-        for (let [i, tr] of tableRows.entries()) {
-          const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
-          let columnOfTd = "";
-          // TODO: github actions runtime didn't like textContent, tests didn't like innerText?
-          if (testingTableSortJS) {
-            columnOfTd = getColumn(tr, column.spanSum, column.span).textContent;
-          } else {
-            columnOfTd = getColumn(tr, column.spanSum, column.span).innerText;
-          }
-          let match = columnOfTd.match(regexMinutesAndSeconds);
-          let [minutesInSeconds, hours, seconds] = [0, 0, 0];
-          let timeinSeconds = columnOfTd;
-          if (match) {
-            const regexHours = match[1];
-            if (regexHours) {
-              hours = Number(regexHours.replace("h", "")) * 60 * 60;
-            }
-            const regexMinutes = match[2];
-            if (regexMinutes) {
-              minutesInSeconds = Number(regexMinutes.replace("m", "")) * 60;
-            }
-            const regexSeconds = match[3];
-            if (regexSeconds) {
-              seconds = Number(regexSeconds.replace("s", ""));
-            }
-            timeinSeconds = hours + minutesInSeconds + seconds;
-          }
-          column.toBeSorted.push(`${timeinSeconds}#${i}`);
-          columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    function sortDates(datesFormat, tableRows, column) {
-      try {
-        for (let [i, tr] of tableRows.entries()) {
-          let columnOfTd, datesRegex;
-          if (datesFormat === "mdy" || datesFormat === "dmy") {
-            datesRegex = /^(\d\d?)[./-](\d\d?)[./-]((\d\d)?\d\d)/;
-          } else if (datesFormat === "ymd") {
-            datesRegex = /^(\d\d\d\d)[./-](\d\d?)[./-](\d\d?)/;
-          }
-          columnOfTd = getColumn(tr, column.spanSum, column.span).textContent;
-          let match = columnOfTd.match(datesRegex);
-          let [years, days, months] = [0, 0, 0];
-          let numberToSort = columnOfTd;
-          if (match) {
-            const [regPos1, regPos2, regPos3] = [match[1], match[2], match[3]];
-            if (regPos1 && regPos2 && regPos3) {
-              if (datesFormat === "mdy") {
-                [months, days, years] = [regPos1, regPos2, regPos3];
-              } else if (datesFormat === "ymd") {
-                [years, months, days] = [regPos1, regPos2, regPos3];
-              } else {
-                [days, months, years] = [regPos1, regPos2, regPos3];
-              }
-            }
-            numberToSort = Number(
-              years +
-                String(months).padStart(2, "0") +
-                String(days).padStart(2, "0")
-            );
-          }
-          column.toBeSorted.push(`${numberToSort}#${i}`);
-          columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
-        }
-      } catch (e) {
-        console.log(e);
-      }
     }
 
     function rememberSort() {
@@ -504,10 +502,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         sortDataAttributes(table.visibleRows, column, getColumn);
       }
       if (hasThClass.fileSize) {
-        sortFileSize(table.visibleRows, column);
+        sortFileSize(table.visibleRows, column, columnIndex, fillValue);
       }
       if (hasThClass.runtime) {
-        sortByRuntime(table.visibleRows, column);
+        sortByRuntime(table.visibleRows, column, getColumn);
       }
 
       const isSortDates = {
@@ -517,11 +515,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       };
       // pick mdy first to override the inferred default class which is dmy.
       if (isSortDates.monthDayYear) {
-        sortDates("mdy", table.visibleRows, column);
+        sortDates("mdy", table.visibleRows, column, getColumn);
       } else if (isSortDates.yearMonthDay) {
-        sortDates("ymd", table.visibleRows, column);
+        sortDates("ymd", table.visibleRows, column, getColumn);
       } else if (isSortDates.dayMonthYear) {
-        sortDates("dmy", table.visibleRows, column);
+        sortDates("dmy", table.visibleRows, column, getColumn);
       }
 
       const tableProperties = {
