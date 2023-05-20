@@ -71,7 +71,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       filesize: { regexp: fileSizeRegex, class: "file-size-sort", count: 0 },
       dmyDates: { regexp: dmyRegex, class: "dates-dmy-sort", count: 0 },
       ymdDates: { regexp: ymdRegex, class: "dates-ymd-sort", count: 0 },
-      numericRegex: {regexp: numericRegex, class: "numeric-sort",count:0}
+      numericRegex: { regexp: numericRegex, class: "numeric-sort", count: 0 },
     };
     let classNameAdded = false;
     let regexNotFoundCount = 0;

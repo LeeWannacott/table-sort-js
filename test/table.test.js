@@ -512,7 +512,7 @@ test("Sort all combination positive, negative numbers with parenthesis as well",
       { classTags: "numeric-sort" }
     )
   ).toStrictEqual({
-    col0: ["-6","-3","-2.3","(1.4)","1","1.05","14"],
+    col0: ["-6", "-3", "-2.3", "(1.4)", "1", "1.05", "14"],
   });
 });
 
@@ -520,11 +520,35 @@ test("Sort all combination of negative and positive integers and decimal numbers
   expect(
     createTestTable(
       {
-        col0: ["1.05", "-2.3", "-3", "1", "-6", "","(0.5)","1a","b","(c)","{1}"],
+        col0: [
+          "1.05",
+          "-2.3",
+          "-3",
+          "1",
+          "-6",
+          "",
+          "(0.5)",
+          "1a",
+          "b",
+          "(c)",
+          "{1}",
+        ],
       },
       { classTags: "numeric-sort" }
     )
   ).toStrictEqual({
-    col0: ["-6","-3","-2.3","(0.5)","1","1.05","{1}","1a","b","(c)",""],
+    col0: [
+      "-6",
+      "-3",
+      "-2.3",
+      "(0.5)",
+      "1",
+      "1.05",
+      "{1}",
+      "1a",
+      "b",
+      "(c)",
+      "",
+    ],
   });
 });
