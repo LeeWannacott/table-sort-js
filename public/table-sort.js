@@ -247,6 +247,146 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
+  function getTableData(tableProperties, timesClickedColumn) {
+    const {
+      tableRows,
+      getColumn,
+      fillValue,
+      column,
+      th,
+      hasThClass,
+      isSortDates,
+      desc,
+      arrow,
+      tableArrows,
+    } = tableProperties;
+    for (let [i, tr] of tableRows.entries()) {
+      let tdTextContent = getColumn(
+        tr,
+        column.spanSum,
+        column.span
+      ).textContent;
+      if (tdTextContent.length === 0) {
+        tdTextContent = "";
+      }
+      if (tdTextContent.trim() !== "") {
+        if (hasThClass.fileSize) {
+          fileSizeColumnTextAndRow[column.toBeSorted[i]] = tr.outerHTML;
+        }
+        // These classes already handle pushing to column and setting the tr html.
+        if (
+          !hasThClass.fileSize &&
+          !hasThClass.dataSort &&
+          !hasThClass.runtime &&
+          !isSortDates.dayMonthYear &&
+          !isSortDates.yearMonthDay &&
+          !isSortDates.monthDayYear
+        ) {
+          column.toBeSorted.push(`${tdTextContent}#${i}`);
+          columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.outerHTML;
+        }
+      } else {
+        // Fill in blank table cells dict key with filler value.
+        column.toBeSorted.push(`${fillValue}#${i}`);
+        columnIndexAndTableRow[`${fillValue}#${i}`] = tr.outerHTML;
+      }
+    }
+
+    const isPunctSort = th.classList.contains("punct-sort");
+    const isAlphaSort = th.classList.contains("alpha-sort");
+    const isNumericSort = th.classList.contains("numeric-sort");
+
+    function parseNumberFromString(str) {
+      let num;
+      str = str.slice(0, str.indexOf("#"));
+      if (str.match(/^\((\d+(?:\.\d+)?)\)$/)) {
+        num = -1 * Number(str.slice(1, -1));
+      } else {
+        num = Number(str);
+      }
+      return num;
+    }
+
+    function strLocaleCompare(str1, str2) {
+      return str1.localeCompare(
+        str2,
+        navigator.languages[0] || navigator.language,
+        { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
+      );
+    }
+
+    function handleNumbers(str1, str2) {
+      let num1, num2;
+      num1 = parseNumberFromString(str1);
+      num2 = parseNumberFromString(str2);
+
+      if (!isNaN(num1) && !isNaN(num2)) {
+        return num1 - num2;
+      } else {
+        return strLocaleCompare(str1, str2);
+      }
+    }
+
+    function sortAscending(a, b) {
+      if (a.includes(`${fillValue}#`)) {
+        return 1;
+      } else if (b.includes(`${fillValue}#`)) {
+        return -1;
+      } else if (isNumericSort) {
+        return handleNumbers(a, b);
+      } else {
+        return strLocaleCompare(a, b);
+      }
+    }
+
+    function sortDescending(a, b) {
+      return sortAscending(b, a);
+    }
+
+    function clearArrows(arrowUp = "▲", arrowDown = "▼") {
+      th.innerHTML = th.innerHTML.replace(arrowUp, "");
+      th.innerHTML = th.innerHTML.replace(arrowDown, "");
+    }
+
+    if (column.toBeSorted[0] === undefined) {
+      return;
+    }
+
+    function changeTableArrow(arrowDirection) {
+      if (tableArrows) {
+        clearArrows(arrow.up, arrow.down);
+        th.insertAdjacentText("beforeend", arrowDirection);
+      }
+    }
+
+    function sortColumn(sortDirection) {
+      column.toBeSorted.sort(sortDirection, {
+        numeric: !isAlphaSort,
+        ignorePunctuation: !isPunctSort,
+      });
+    }
+
+    if (timesClickedColumn === 1) {
+      if (desc) {
+        changeTableArrow(arrow.down);
+        sortColumn(sortDescending);
+      } else {
+        changeTableArrow(arrow.up);
+        sortColumn(sortAscending);
+      }
+    } else if (timesClickedColumn === 2) {
+      timesClickedColumn = 0;
+      if (desc) {
+        changeTableArrow(arrow.up);
+        sortColumn(sortAscending);
+      } else {
+        changeTableArrow(arrow.down);
+        sortColumn(sortDescending);
+      }
+    }
+    return timesClickedColumn;
+  }
+
   function makeEachColumnSortable(
     th,
     columnIndex,
@@ -256,13 +396,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   ) {
     const desc = th.classList.contains("order-by-desc");
     const tableArrows = sortableTable.classList.contains("table-arrows");
-    const [arrowUp, arrowDown] = [" ▲", " ▼"];
+    const arrow = { up: " ▲", down: " ▼" };
     const fillValue = "!X!Y!Z!";
 
     if (desc && tableArrows) {
-      th.insertAdjacentText("beforeend", arrowDown);
+      th.insertAdjacentText("beforeend", arrow.down);
     } else if (tableArrows) {
-      th.insertAdjacentText("beforeend", arrowUp);
+      th.insertAdjacentText("beforeend", arrow.up);
     }
 
     function rememberSort() {
@@ -297,134 +437,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
             ? colSpanSum[columnIndex] - 1
             : colSpanSum[columnIndex] - colSpanData[columnIndex]
         );
-    }
-
-    function getTableData(tableProperties) {
-      const { tableRows, column, hasThClass, isSortDates } = tableProperties;
-      for (let [i, tr] of tableRows.entries()) {
-        let tdTextContent = getColumn(
-          tr,
-          column.spanSum,
-          column.span
-        ).textContent;
-        if (tdTextContent.length === 0) {
-          tdTextContent = "";
-        }
-        if (tdTextContent.trim() !== "") {
-          if (hasThClass.fileSize) {
-            fileSizeColumnTextAndRow[column.toBeSorted[i]] = tr.outerHTML;
-          }
-          // These classes already handle pushing to column and setting the tr html.
-          if (
-            !hasThClass.fileSize &&
-            !hasThClass.dataSort &&
-            !hasThClass.runtime &&
-            !isSortDates.dayMonthYear &&
-            !isSortDates.yearMonthDay &&
-            !isSortDates.monthDayYear
-          ) {
-            column.toBeSorted.push(`${tdTextContent}#${i}`);
-            columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.outerHTML;
-          }
-        } else {
-          // Fill in blank table cells dict key with filler value.
-          column.toBeSorted.push(`${fillValue}#${i}`);
-          columnIndexAndTableRow[`${fillValue}#${i}`] = tr.outerHTML;
-        }
-      }
-
-      const isPunctSort = th.classList.contains("punct-sort");
-      const isAlphaSort = th.classList.contains("alpha-sort");
-      const isNumericSort = th.classList.contains("numeric-sort");
-
-      function parseNumberFromString(str) {
-        let num;
-        str = str.slice(0, str.indexOf("#"));
-        if (str.match(/^\((\d+(?:\.\d+)?)\)$/)) {
-          num = -1 * Number(str.slice(1, -1));
-        } else {
-          num = Number(str);
-        }
-        return num;
-      }
-
-      function strLocaleCompare(str1, str2) {
-        return str1.localeCompare(
-          str2,
-          navigator.languages[0] || navigator.language,
-          { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
-        );
-      }
-
-      function handleNumbers(str1, str2) {
-        let num1, num2;
-        num1 = parseNumberFromString(str1);
-        num2 = parseNumberFromString(str2);
-
-        if (!isNaN(num1) && !isNaN(num2)) {
-          return num1 - num2;
-        } else {
-          return strLocaleCompare(str1, str2);
-        }
-      }
-
-      function sortAscending(a, b) {
-        if (a.includes(`${fillValue}#`)) {
-          return 1;
-        } else if (b.includes(`${fillValue}#`)) {
-          return -1;
-        } else if (isNumericSort) {
-          return handleNumbers(a, b);
-        } else {
-          return strLocaleCompare(a, b);
-        }
-      }
-
-      function sortDescending(a, b) {
-        return sortAscending(b, a);
-      }
-
-      function clearArrows(arrowUp = "▲", arrowDown = "▼") {
-        th.innerHTML = th.innerHTML.replace(arrowUp, "");
-        th.innerHTML = th.innerHTML.replace(arrowDown, "");
-      }
-
-      if (column.toBeSorted[0] === undefined) {
-        return;
-      }
-
-      function changeTableArrow(arrowDirection) {
-        if (tableArrows) {
-          clearArrows(arrowUp, arrowDown);
-          th.insertAdjacentText("beforeend", arrowDirection);
-        }
-      }
-
-      function sortColumn(sortDirection) {
-        column.toBeSorted.sort(sortDirection, {
-          numeric: !isAlphaSort,
-          ignorePunctuation: !isPunctSort,
-        });
-      }
-
-      if (timesClickedColumn === 1) {
-        if (desc) {
-          changeTableArrow(arrowDown);
-          sortColumn(sortDescending);
-        } else {
-          changeTableArrow(arrowUp);
-          sortColumn(sortAscending);
-        }
-      } else if (timesClickedColumn === 2) {
-        timesClickedColumn = 0;
-        if (desc) {
-          changeTableArrow(arrowUp);
-          sortColumn(sortAscending);
-        } else {
-          changeTableArrow(arrowDown);
-          sortColumn(sortDescending);
-        }
-      }
     }
 
     function updateTable(tableProperties) {
@@ -524,11 +536,18 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
       const tableProperties = {
         tableRows: table.visibleRows,
+        getColumn,
+        fillValue,
         column,
+        th,
         hasThClass,
         isSortDates,
+        desc,
+        timesClickedColumn,
+        arrow,
+        tableArrows,
       };
-      getTableData(tableProperties);
+      timesClickedColumn = getTableData(tableProperties, timesClickedColumn);
       updateTable(tableProperties);
     });
 
