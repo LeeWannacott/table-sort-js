@@ -136,6 +136,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
+  function sortDataAttributes(tableRows, column, getColumn) {
+    for (let [i, tr] of tableRows.entries()) {
+      let dataAttributeTd = getColumn(tr, column.spanSum, column.span).dataset
+        .sort;
+      column.toBeSorted.push(`${dataAttributeTd}#${i}`);
+      columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
+    }
+  }
+
   function makeEachColumnSortable(
     th,
     columnIndex,
@@ -152,15 +161,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       th.insertAdjacentText("beforeend", arrowDown);
     } else if (tableArrows) {
       th.insertAdjacentText("beforeend", arrowUp);
-    }
-
-    function sortDataAttributes(tableRows, column) {
-      for (let [i, tr] of tableRows.entries()) {
-        let dataAttributeTd = getColumn(tr, column.spanSum, column.span).dataset
-          .sort;
-        column.toBeSorted.push(`${dataAttributeTd}#${i}`);
-        columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
-      }
     }
 
     function sortFileSize(tableRows, column) {
@@ -501,7 +501,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       };
 
       if (hasThClass.dataSort) {
-        sortDataAttributes(table.visibleRows, column);
+        sortDataAttributes(table.visibleRows, column, getColumn);
       }
       if (hasThClass.fileSize) {
         sortFileSize(table.visibleRows, column);
