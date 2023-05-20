@@ -28,7 +28,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
   const [getTagTable] = getHTMLTables();
   const columnIndexAndTableRow = {};
-  const fileSizeColumnTextAndRow = {};
   for (let table of getTagTable) {
     if (table.classList.contains("table-sort")) {
       makeTableSortable(table);
@@ -282,7 +281,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
       if (tdTextContent.trim() !== "") {
         if (hasThClass.fileSize) {
-          fileSizeColumnTextAndRow[column.toBeSorted[i]] = tr.outerHTML;
+          columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
         }
         // These classes already handle pushing to column and setting the tr html.
         if (
@@ -399,13 +398,18 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function updateFilesize(i, tr, column, columnIndex) {
-    tr.innerHTML = fileSizeColumnTextAndRow[column.toBeSorted[i]];
-    let fileSizeInBytesHTML = tr
-      .querySelectorAll("td")
-      .item(columnIndex).innerHTML;
-    const fileSizeInBytesText = tr
-      .querySelectorAll("td")
-      .item(columnIndex).textContent;
+    tr.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
+    let fileSizeInBytesHTML = column.getColumn(
+      tr,
+      column.spanSum,
+      column.span
+    ).outerHTML;
+    const fileSizeInBytesText = column.getColumn(
+      tr,
+      column.spanSum,
+      column.span
+    ).textContent;
+    console.log("1", columnIndex);
     // Remove the unique identifyer for duplicate values(#number).
     column.toBeSorted[i] = column.toBeSorted[i].replace(/#[0-9]*/, "");
     const fileSize = parseFloat(column.toBeSorted[i]);
@@ -429,18 +433,38 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         "NaN"
       );
     }
-    tr.querySelectorAll("td").item(columnIndex).innerHTML = fileSizeInBytesHTML;
+    console.log(5, fileSizeInBytesHTML);
+    console.log(1,tr.querySelectorAll("td").item(columnIndex).outerHTML )
+    tr.querySelectorAll("td").item(columnIndex).outerHTML = fileSizeInBytesHTML;
+    console.log(2,tr.querySelectorAll("td").item(columnIndex).outerHTML )
+    console.log(3,tr.outerHTML)
+
+    return tr.outerHTML
   }
 
   function updateTable(tableProperties) {
     const { tableRows, column, columnIndex, hasThClass } = tableProperties;
     for (let [i, tr] of tableRows.entries()) {
       if (hasThClass.fileSize) {
-        updateFilesize(i, tr, column, columnIndex);
+        tr.outerHTML = updateFilesize(
+          i,
+          tr,
+          column,
+          columnIndex
+        );
+        console.log(9,tr.outerHTML)
       } else if (!hasThClass.fileSize) {
         tr.outerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
       }
     }
+  }
+
+  function getColSpanData(headers, column) {
+    headers.forEach((th, index) => {
+      column.span[index] = th.colSpan;
+      if (index === 0) column.spanSum[index] = th.colSpan;
+      else column.spanSum[index] = column.spanSum[index - 1] + th.colSpan;
+    });
   }
 
   function makeEachColumnSortable(
@@ -475,14 +499,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         }
       }
       return timesClickedColumn;
-    }
-
-    function getColSpanData(headers, column) {
-      headers.forEach((th, index) => {
-        column.span[index] = th.colSpan;
-        if (index === 0) column.spanSum[index] = th.colSpan;
-        else column.spanSum[index] = column.spanSum[index - 1] + th.colSpan;
-      });
     }
 
     let timesClickedColumn = 0;
@@ -550,6 +566,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         tableRows: table.visibleRows,
         fillValue,
         column,
+        columnIndex,
         th,
         hasThClass,
         isSortDates,
