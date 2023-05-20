@@ -144,7 +144,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
-  function sortFileSize(tableRows, column, columnIndex, fillValue) {
+  function sortFileSize(tableRows, column, columnIndex) {
     let unitToMultiplier = {
       b: 1,
       kb: 1000,
@@ -165,8 +165,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         let unit = match[2].toLowerCase();
         let multiplier = unitToMultiplier[unit];
         column.toBeSorted.push(`${number * multiplier}#${i}`);
-      } else {
-        column.toBeSorted.push(`${fillValue}#${i}`);
+        columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
       }
     }
   }
@@ -280,14 +279,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         tdTextContent = "";
       }
       if (tdTextContent.trim() !== "") {
-        if (hasThClass.fileSize) {
-          columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
-        }
-        // These classes already handle pushing to column and setting the tr html.
         if (
           !hasThClass.fileSize &&
           !hasThClass.dataSort &&
           !hasThClass.runtime &&
+          !hasThClass.filesize &&
           !isSortDates.dayMonthYear &&
           !isSortDates.yearMonthDay &&
           !isSortDates.monthDayYear
@@ -398,31 +394,34 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function updateFilesize(i, tr, column, columnIndex) {
+    console.log("a", tr.outerHTML);
     tr.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
     let fileSizeInBytesHTML = column.getColumn(
       tr,
       column.spanSum,
       column.span
     ).outerHTML;
+    console.log("bi", fileSizeInBytesHTML);
     const fileSizeInBytesText = column.getColumn(
       tr,
       column.spanSum,
       column.span
     ).textContent;
-    console.log("1", columnIndex);
-    // Remove the unique identifyer for duplicate values(#number).
-    column.toBeSorted[i] = column.toBeSorted[i].replace(/#[0-9]*/, "");
-    const fileSize = parseFloat(column.toBeSorted[i]);
+
+    const fileSize = column.toBeSorted[i].replace(/#[0-9]*/, "");
+    console.log(fileSize, "file");
     let prefixes = ["", "Ki", "Mi", "Gi", "Ti", "Pi"];
     let replaced = false;
     for (let i = 0; i < prefixes.length; ++i) {
       let nextPrefixMultiplier = 2 ** (10 * (i + 1));
       if (fileSize < nextPrefixMultiplier) {
+        console.log("[", fileSize, prefixes[i]);
         let prefixMultiplier = 2 ** (10 * i);
         fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
           fileSizeInBytesText,
           `${(fileSize / prefixMultiplier).toFixed(2)} ${prefixes[i]}B`
         );
+        console.log(fileSizeInBytesHTML);
         replaced = true;
         break;
       }
@@ -433,26 +432,21 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         "NaN"
       );
     }
-    console.log(5, fileSizeInBytesHTML);
-    console.log(1,tr.querySelectorAll("td").item(columnIndex).outerHTML )
     tr.querySelectorAll("td").item(columnIndex).outerHTML = fileSizeInBytesHTML;
-    console.log(2,tr.querySelectorAll("td").item(columnIndex).outerHTML )
-    console.log(3,tr.outerHTML)
+    console.log("by", fileSizeInBytesHTML);
+    console.log(2, tr.querySelectorAll("td").item(columnIndex).outerHTML);
+    return tr.outerHTML;
 
-    return tr.outerHTML
+    // return tr.outerHTML;
   }
 
   function updateTable(tableProperties) {
     const { tableRows, column, columnIndex, hasThClass } = tableProperties;
     for (let [i, tr] of tableRows.entries()) {
       if (hasThClass.fileSize) {
-        tr.outerHTML = updateFilesize(
-          i,
-          tr,
-          column,
-          columnIndex
-        );
-        console.log(9,tr.outerHTML)
+        console.log(tr.outerHTML);
+        tr.outerHTML = updateFilesize(i, tr, column, columnIndex);
+        console.log(9, tr.outerHTML);
       } else if (!hasThClass.fileSize) {
         tr.outerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
       }
