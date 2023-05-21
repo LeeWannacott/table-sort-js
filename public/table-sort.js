@@ -15,6 +15,7 @@ Instructions:
   Click on the table headers to sort them.
 */
 
+
 function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   function getHTMLTables() {
     if (testingTableSortJS === true) {
@@ -394,14 +395,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function updateFilesize(i, tr, column, columnIndex) {
-    console.log("a", tr.outerHTML);
-    tr.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
+    // We do this to sort rows rather than cells:
+    const template = document.createElement('template')
+    template.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
+    tr = template.content.firstChild
     let fileSizeInBytesHTML = column.getColumn(
       tr,
       column.spanSum,
       column.span
     ).outerHTML;
-    console.log("bi", fileSizeInBytesHTML);
     const fileSizeInBytesText = column.getColumn(
       tr,
       column.spanSum,
@@ -409,19 +411,16 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     ).textContent;
 
     const fileSize = column.toBeSorted[i].replace(/#[0-9]*/, "");
-    console.log(fileSize, "file");
     let prefixes = ["", "Ki", "Mi", "Gi", "Ti", "Pi"];
     let replaced = false;
     for (let i = 0; i < prefixes.length; ++i) {
       let nextPrefixMultiplier = 2 ** (10 * (i + 1));
       if (fileSize < nextPrefixMultiplier) {
-        console.log("[", fileSize, prefixes[i]);
         let prefixMultiplier = 2 ** (10 * i);
         fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
           fileSizeInBytesText,
           `${(fileSize / prefixMultiplier).toFixed(2)} ${prefixes[i]}B`
         );
-        console.log(fileSizeInBytesHTML);
         replaced = true;
         break;
       }
@@ -432,21 +431,16 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         "NaN"
       );
     }
-    tr.querySelectorAll("td").item(columnIndex).outerHTML = fileSizeInBytesHTML;
-    console.log("by", fileSizeInBytesHTML);
-    console.log(2, tr.querySelectorAll("td").item(columnIndex).outerHTML);
+    tr.querySelectorAll("td").item(columnIndex).innerHTML = fileSizeInBytesHTML;
     return tr.outerHTML;
-
-    // return tr.outerHTML;
   }
 
   function updateTable(tableProperties) {
     const { tableRows, column, columnIndex, hasThClass } = tableProperties;
     for (let [i, tr] of tableRows.entries()) {
       if (hasThClass.fileSize) {
-        console.log(tr.outerHTML);
         tr.outerHTML = updateFilesize(i, tr, column, columnIndex);
-        console.log(9, tr.outerHTML);
+        // console.log(9, tr.outerHTML);
       } else if (!hasThClass.fileSize) {
         tr.outerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
       }
