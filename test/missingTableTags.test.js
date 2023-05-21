@@ -13,7 +13,7 @@ test("test no missing table tags - (user has put <tbody> and <thead>)", () => {
   ).toStrictEqual(["Alpha", "Bravo", "Charlie", "Delta", "Echo"]);
 });
 
-test("test with missing <tbody> tag - (tbody and thead exist)", () => {
+test("test with missing <tbody> tag - thead exist", () => {
   expect(
     createTestTableMissingBodyTag([
       "Echo",
@@ -37,7 +37,7 @@ test("test with missing <thead> tag)", () => {
   ).toStrictEqual(["Alpha", "Bravo", "Charlie", "Delta", "Echo"]);
 });
 
-test("test with missing <tbody> and <thead> tags - (tbody and thead exist)", () => {
+test("test with missing <tbody> and <thead> tags", () => {
   expect(
     createTestTableMissingBodyAndHeadTag([
       "Echo",
