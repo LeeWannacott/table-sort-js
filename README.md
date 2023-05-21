@@ -38,7 +38,7 @@ Examples on using table-sort-js with frontend frameworks such as [React.js](http
 Or Minified (smaller size, but harder to debug!):
 
 ```javascript
-<script src="https://cdn.jsdelivr.net/npm/table-sort-js@1/table-sort.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/table-sort-js@1/table-sort.min.js"></script>
 ```
 
 Refer to the documenation for examples on how to use table-sort-js with [HTML](https://leewannacott.github.io/table-sort-js/docs/html5.html)
