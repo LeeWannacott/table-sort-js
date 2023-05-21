@@ -15,7 +15,6 @@ Instructions:
   Click on the table headers to sort them.
 */
 
-
 function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   function getHTMLTables() {
     if (testingTableSortJS === true) {
@@ -396,9 +395,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
   function updateFilesize(i, tr, column, columnIndex) {
     // We do this to sort rows rather than cells:
-    const template = document.createElement('template')
+    const template = document.createElement("template");
     template.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
-    tr = template.content.firstChild
+    tr = template.content.firstChild;
     let fileSizeInBytesHTML = column.getColumn(
       tr,
       column.spanSum,
@@ -455,6 +454,22 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     });
   }
 
+  function rememberSort(columnIndexesClicked, timesClickedColumn, columnIndex) {
+    // if user clicked different column from first column reset times clicked.
+    columnIndexesClicked.push(columnIndex);
+    if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
+      const lastColumnClicked =
+        columnIndexesClicked[columnIndexesClicked.length - 1];
+      const secondLastColumnClicked =
+        columnIndexesClicked[columnIndexesClicked.length - 2];
+      if (lastColumnClicked !== secondLastColumnClicked) {
+        columnIndexesClicked.shift();
+        timesClickedColumn = 0;
+      }
+    }
+    return timesClickedColumn;
+  }
+
   function makeEachColumnSortable(
     th,
     columnIndex,
@@ -471,22 +486,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       th.insertAdjacentText("beforeend", arrow.down);
     } else if (tableArrows) {
       th.insertAdjacentText("beforeend", arrow.up);
-    }
-
-    function rememberSort() {
-      // if user clicked different column from first column reset times clicked.
-      columnIndexesClicked.push(columnIndex);
-      if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
-        const lastColumnClicked =
-          columnIndexesClicked[columnIndexesClicked.length - 1];
-        const secondLastColumnClicked =
-          columnIndexesClicked[columnIndexesClicked.length - 2];
-        if (lastColumnClicked !== secondLastColumnClicked) {
-          columnIndexesClicked.shift();
-          timesClickedColumn = 0;
-        }
-      }
-      return timesClickedColumn;
     }
 
     let timesClickedColumn = 0;
@@ -516,7 +515,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
       const isRememberSort = sortableTable.classList.contains("remember-sort");
       if (!isRememberSort) {
-        timesClickedColumn = rememberSort();
+        timesClickedColumn = rememberSort(
+          columnIndexesClicked,
+          timesClickedColumn,
+          columnIndex
+        );
       }
       timesClickedColumn += 1;
 
