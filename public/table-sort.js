@@ -131,17 +131,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         if (!table.hasClass.noClassInfer) {
           inferSortClasses(table.rows, columnIndex, th);
         }
-        makeEachColumnSortable(
-          th,
-          columnIndex,
-          table,
-          columnIndexesClicked
-        );
+        makeEachColumnSortable(th, columnIndex, table, columnIndexesClicked);
       }
     }
   }
 
-  function sortByCellsOrRows(table, tr) {
+  function innerOrOuterHTML(table, tr) {
     if (table.hasClass.cellsSort) {
       return tr.innerHTML;
     } else {
@@ -149,16 +144,16 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
-  function sortDataAttributes(tableRows, column) {
-    for (let [i, tr] of tableRows.entries()) {
+  function sortDataAttributes(table, column) {
+    for (let [i, tr] of table.visibleRows.entries()) {
       let dataAttributeTd = column.getColumn(tr, column.spanSum, column.span)
         .dataset.sort;
       column.toBeSorted.push(`${dataAttributeTd}#${i}`);
-      columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML //
+      columnIndexAndTableRow[column.toBeSorted[i]] = innerOrOuterHTML(table, tr);
     }
   }
 
-  function sortFileSize(tableRows, column, columnIndex) {
+  function sortFileSize(table, column, columnIndex) {
     let unitToMultiplier = {
       b: 1,
       kb: 1000,
@@ -171,7 +166,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       tib: 2 ** 40,
     };
     const numberWithUnitType = /([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-    for (let [i, tr] of tableRows.entries()) {
+    for (let [i, tr] of table.visibleRows.entries()) {
       let fileSizeTd = tr.querySelectorAll("td").item(columnIndex).textContent;
       let match = fileSizeTd.match(numberWithUnitType);
       if (match) {
@@ -179,14 +174,17 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         let unit = match[2].toLowerCase();
         let multiplier = unitToMultiplier[unit];
         column.toBeSorted.push(`${number * multiplier}#${i}`);
-        columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
+        columnIndexAndTableRow[column.toBeSorted[i]] = innerOrOuterHTML(
+          table,
+          tr
+        );
       }
     }
   }
 
-  function sortDates(datesFormat, tableRows, column) {
+  function sortDates(datesFormat, table, column) {
     try {
-      for (let [i, tr] of tableRows.entries()) {
+      for (let [i, tr] of table.visibleRows.entries()) {
         let columnOfTd, datesRegex;
         if (datesFormat === "mdy" || datesFormat === "dmy") {
           datesRegex = /^(\d\d?)[./-](\d\d?)[./-]((\d\d)?\d\d)/;
@@ -219,16 +217,19 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           );
         }
         column.toBeSorted.push(`${numberToSort}#${i}`);
-        columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
+        columnIndexAndTableRow[column.toBeSorted[i]] = innerOrOuterHTML(
+          table,
+          tr
+        );
       }
     } catch (e) {
       console.log(e);
     }
   }
 
-  function sortByRuntime(tableRows, column) {
+  function sortByRuntime(table, column) {
     try {
-      for (let [i, tr] of tableRows.entries()) {
+      for (let [i, tr] of table.visibleRows.entries()) {
         const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
         let columnOfTd = "";
         // TODO: github actions runtime didn't like textContent, tests didn't like innerText?
@@ -264,7 +265,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           timeinSeconds = hours + minutesInSeconds + seconds;
         }
         column.toBeSorted.push(`${timeinSeconds}#${i}`);
-        columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
+        columnIndexAndTableRow[column.toBeSorted[i]] = innerOrOuterHTML(
+          table,
+          tr
+        );
       }
     } catch (e) {
       console.log(e);
@@ -303,12 +307,18 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           !isSortDates.monthDayYear
         ) {
           column.toBeSorted.push(`${tdTextContent}#${i}`);
-          columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.outerHTML;
+          columnIndexAndTableRow[`${tdTextContent}#${i}`] = innerOrOuterHTML(
+            table,
+            tr
+          );
         }
       } else {
         // Fill in blank table cells dict key with filler value.
         column.toBeSorted.push(`${fillValue}#${i}`);
-        columnIndexAndTableRow[`${fillValue}#${i}`] = tr.outerHTML;
+        columnIndexAndTableRow[`${fillValue}#${i}`] = innerOrOuterHTML(
+          table,
+          tr
+        );
       }
     }
 
@@ -407,11 +417,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     return timesClickedColumn;
   }
 
-  function updateFilesize(i, tr, column, columnIndex) {
-    // We do this to sort rows rather than cells:
-    const template = document.createElement("template");
-    template.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
-    tr = template.content.firstChild;
+  function updateFilesize(i, table, tr, column, columnIndex) {
+    if (table.hasClass.cellsSort) {
+      tr.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
+    } else {
+      // We do this to sort rows rather than cells:
+      const template = document.createElement("template");
+      template.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
+      tr = template.content.firstChild;
+    }
     let fileSizeInBytesHTML = column.getColumn(
       tr,
       column.spanSum,
@@ -445,17 +459,24 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       );
     }
     tr.querySelectorAll("td").item(columnIndex).innerHTML = fileSizeInBytesHTML;
-    return tr.outerHTML;
+    return table.hasClass.cellsSort ? tr.innerHTML : tr.outerHTML;
   }
 
   function updateTable(tableProperties) {
-    const { tableRows, column, columnIndex, hasThClass } = tableProperties;
-    for (let [i, tr] of tableRows.entries()) {
+    const { column, table, columnIndex, hasThClass } = tableProperties;
+    for (let [i, tr] of table.visibleRows.entries()) {
       if (hasThClass.fileSize) {
-        tr.outerHTML = updateFilesize(i, tr, column, columnIndex);
-        // console.log(9, tr.outerHTML);
+        if (table.hasClass.cellsSort) {
+          tr.innerHTML = updateFilesize(i, table, tr, column, columnIndex);
+        } else {
+          tr.outerHTML = updateFilesize(i, table, tr, column, columnIndex);
+        }
       } else if (!hasThClass.fileSize) {
-        tr.outerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
+        if (table.hasClass.cellsSort) {
+          tr.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
+        } else {
+          tr.outerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
+        }
       }
     }
   }
@@ -541,13 +562,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       };
 
       if (hasThClass.dataSort) {
-        sortDataAttributes(table.visibleRows, column);
+        sortDataAttributes(table, column);
       }
       if (hasThClass.fileSize) {
-        sortFileSize(table.visibleRows, column, columnIndex, fillValue);
+        sortFileSize(table, column, columnIndex, fillValue);
       }
       if (hasThClass.runtime) {
-        sortByRuntime(table.visibleRows, column);
+        sortByRuntime(table, column);
       }
 
       const isSortDates = {
@@ -557,11 +578,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       };
       // pick mdy first to override the inferred default class which is dmy.
       if (isSortDates.monthDayYear) {
-        sortDates("mdy", table.visibleRows, column);
+        sortDates("mdy", table, column);
       } else if (isSortDates.yearMonthDay) {
-        sortDates("ymd", table.visibleRows, column);
+        sortDates("ymd", table, column);
       } else if (isSortDates.dayMonthYear) {
-        sortDates("dmy", table.visibleRows, column);
+        sortDates("dmy", table, column);
       }
 
       const tableProperties = {
