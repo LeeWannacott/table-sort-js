@@ -55,6 +55,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         return sortableTable.querySelector("tbody");
       }
     } else {
+      // if <tr> or <td> exists below <thead> the browser will make <tbody>
       return sortableTable.querySelector("tbody");
     }
   }
@@ -111,6 +112,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       body: getTableBody(sortableTable),
       head: sortableTable.querySelector("thead"),
     };
+    if(table.body == null){ return }
     table.headers = table.head.querySelectorAll("th");
     table.rows = table.body.querySelectorAll("tr");
 
