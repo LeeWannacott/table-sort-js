@@ -111,29 +111,41 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       body: getTableBody(sortableTable),
       head: sortableTable.querySelector("thead"),
     };
-    if(table.body == null){ return }
+    if (table.body == null) {
+      return;
+    }
     table.headers = table.head.querySelectorAll("th");
     table.rows = table.body.querySelectorAll("tr");
+    table.hasClass = {
+      noClassInfer: sortableTable.classList.contains("no-class-infer"),
+      cellsSort: sortableTable.classList.contains("cells-sort"),
+      tableArrows: sortableTable.classList.contains("table-arrows"),
+      rememberSort: sortableTable.classList.contains("remember-sort"),
+    };
 
     let columnIndexesClicked = [];
-
-    const isNoSortClassInference =
-      sortableTable.classList.contains("no-class-infer");
 
     for (let [columnIndex, th] of table.headers.entries()) {
       if (!th.classList.contains("disable-sort")) {
         th.style.cursor = "pointer";
-        if (!isNoSortClassInference) {
+        if (!table.hasClass.noClassInfer) {
           inferSortClasses(table.rows, columnIndex, th);
         }
         makeEachColumnSortable(
           th,
           columnIndex,
           table,
-          sortableTable,
           columnIndexesClicked
         );
       }
+    }
+  }
+
+  function sortByCellsOrRows(table, tr) {
+    if (table.hasClass.cellsSort) {
+      return tr.innerHTML;
+    } else {
+      return tr.outerHTML;
     }
   }
 
@@ -142,7 +154,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       let dataAttributeTd = column.getColumn(tr, column.spanSum, column.span)
         .dataset.sort;
       column.toBeSorted.push(`${dataAttributeTd}#${i}`);
-      columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
+      columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML //
     }
   }
 
@@ -261,6 +273,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
   function getTableData(tableProperties, timesClickedColumn) {
     const {
+      table,
       tableRows,
       fillValue,
       column,
@@ -269,7 +282,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       isSortDates,
       desc,
       arrow,
-      tableArrows,
     } = tableProperties;
     for (let [i, tr] of tableRows.entries()) {
       let tdTextContent = column.getColumn(
@@ -361,7 +373,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function changeTableArrow(arrowDirection) {
-      if (tableArrows) {
+      if (table.hasClass.tableArrows) {
         clearArrows(arrow.up, arrow.down);
         th.insertAdjacentText("beforeend", arrowDirection);
       }
@@ -476,17 +488,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     th,
     columnIndex,
     table,
-    sortableTable,
     columnIndexesClicked
   ) {
     const desc = th.classList.contains("order-by-desc");
-    const tableArrows = sortableTable.classList.contains("table-arrows");
     const arrow = { up: " ▲", down: " ▼" };
     const fillValue = "!X!Y!Z!";
 
-    if (desc && tableArrows) {
+    if (desc && table.hasClass.tableArrows) {
       th.insertAdjacentText("beforeend", arrow.down);
-    } else if (tableArrows) {
+    } else if (table.hasClass.tableArrows) {
       th.insertAdjacentText("beforeend", arrow.up);
     }
 
@@ -515,8 +525,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         }
       );
 
-      const isRememberSort = sortableTable.classList.contains("remember-sort");
-      if (!isRememberSort) {
+      if (!table.hasClass.rememberSort) {
         timesClickedColumn = rememberSort(
           columnIndexesClicked,
           timesClickedColumn,
@@ -556,6 +565,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
 
       const tableProperties = {
+        table,
         tableRows: table.visibleRows,
         fillValue,
         column,
@@ -566,7 +576,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         desc,
         timesClickedColumn,
         arrow,
-        tableArrows,
       };
       timesClickedColumn = getTableData(tableProperties, timesClickedColumn);
       updateTable(tableProperties);
