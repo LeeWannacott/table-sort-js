@@ -64,6 +64,7 @@ Then rename and add the following script before your HTML table:
 | "no-class-infer"      | Turns off inference for adding sort classes automatically i.e (file-size-sort, runtime-sort, dates-dmy-sort). |
 | "table-arrows"        | Display ascending or descending triangles.                                                                    |
 | "remember-sort"       | If clicking on different columns remembers sort of the original column.                                       |
+| "cells-sort"          | sort cells (td) rather than table rows (tr); useful for keeping table rows with classes/attributes in place.  |
 
 <br>
 
