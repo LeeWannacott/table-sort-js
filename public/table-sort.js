@@ -136,7 +136,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
-  function innerOrOuterHTML(table, tr) {
+  function cellsOrRows(table, tr) {
     if (table.hasClass.cellsSort) {
       return tr.innerHTML;
     } else {
@@ -149,7 +149,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       let dataAttributeTd = column.getColumn(tr, column.spanSum, column.span)
         .dataset.sort;
       column.toBeSorted.push(`${dataAttributeTd}#${i}`);
-      columnIndexAndTableRow[column.toBeSorted[i]] = innerOrOuterHTML(table, tr);
+      columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(table, tr);
     }
   }
 
@@ -174,7 +174,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         let unit = match[2].toLowerCase();
         let multiplier = unitToMultiplier[unit];
         column.toBeSorted.push(`${number * multiplier}#${i}`);
-        columnIndexAndTableRow[column.toBeSorted[i]] = innerOrOuterHTML(
+        columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(
           table,
           tr
         );
@@ -217,7 +217,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           );
         }
         column.toBeSorted.push(`${numberToSort}#${i}`);
-        columnIndexAndTableRow[column.toBeSorted[i]] = innerOrOuterHTML(
+        columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(
           table,
           tr
         );
@@ -265,7 +265,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           timeinSeconds = hours + minutesInSeconds + seconds;
         }
         column.toBeSorted.push(`${timeinSeconds}#${i}`);
-        columnIndexAndTableRow[column.toBeSorted[i]] = innerOrOuterHTML(
+        columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(
           table,
           tr
         );
@@ -307,7 +307,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           !isSortDates.monthDayYear
         ) {
           column.toBeSorted.push(`${tdTextContent}#${i}`);
-          columnIndexAndTableRow[`${tdTextContent}#${i}`] = innerOrOuterHTML(
+          columnIndexAndTableRow[`${tdTextContent}#${i}`] = cellsOrRows(
             table,
             tr
           );
@@ -315,7 +315,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       } else {
         // Fill in blank table cells dict key with filler value.
         column.toBeSorted.push(`${fillValue}#${i}`);
-        columnIndexAndTableRow[`${fillValue}#${i}`] = innerOrOuterHTML(
+        columnIndexAndTableRow[`${fillValue}#${i}`] = cellsOrRows(
           table,
           tr
         );
