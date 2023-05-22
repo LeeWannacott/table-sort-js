@@ -552,3 +552,52 @@ test("Sort all combination of negative and positive integers and decimal numbers
     ],
   });
 });
+
+test("default behavior without cells-sort (tr's move when sorted)", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["8", "2", "3", "4", "5", "6", "0", "1", "7"],
+      },
+      { classTags: "" },
+      // note this isn't an actual class just used for testing purposes
+      { tableTags: "tr-sort", trClasses: "test" }
+    )
+  ).toStrictEqual({
+    col0: [
+      '<tr class="test-6"> <td>0</td></tr>',
+      '<tr class="test-7"> <td>1</td></tr>',
+      '<tr class="test-1"> <td>2</td></tr>',
+      '<tr class="test-2"> <td>3</td></tr>',
+      '<tr class="test-3"> <td>4</td></tr>',
+      '<tr class="test-4"> <td>5</td></tr>',
+      '<tr class="test-5"> <td>6</td></tr>',
+      '<tr class="test-8"> <td>7</td></tr>',
+      '<tr class="test-0"> <td>8</td></tr>',
+    ],
+  });
+});
+
+test("cells-sort table class (tr's stay in place, but td's are sorted)", () => {
+  expect(
+    createTestTable(
+      {
+        col0: ["8", "2", "3", "4", "5", "6", "0", "1", "7"],
+      },
+      { classTags: "" },
+      { tableTags: "cells-sort", trClasses: "test" }
+    )
+  ).toStrictEqual({
+    col0: [
+      '<tr class="test-0"> <td>0</td></tr>',
+      '<tr class="test-1"> <td>1</td></tr>',
+      '<tr class="test-2"> <td>2</td></tr>',
+      '<tr class="test-3"> <td>3</td></tr>',
+      '<tr class="test-4"> <td>4</td></tr>',
+      '<tr class="test-5"> <td>5</td></tr>',
+      '<tr class="test-6"> <td>6</td></tr>',
+      '<tr class="test-7"> <td>7</td></tr>',
+      '<tr class="test-8"> <td>8</td></tr>',
+    ],
+  });
+});
