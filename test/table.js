@@ -7,7 +7,7 @@ const tableSortJs = require("../public/table-sort");
 function createTestTable(
   testTableData,
   thAttributes = { classTags: "", colspan: "" },
-  props = { colsToClick: [], invisibleIndex: [], tableTags: "" }
+  props = { colsToClick: [], invisibleIndex: [], tableTags: "", trClasses: "" }
 ) {
   const numberOfTableColumns = Object.keys(testTableData).length;
   let testTableHeaders = "";
@@ -44,7 +44,15 @@ function createTestTable(
     ) {
       testTableTdRows.push(`<tr style="display: none;">${testTableTdRow}</tr>`);
     } else {
-      testTableTdRows.push(`<tr> ${testTableTdRow}</tr>`);
+      if (props.tableTags === "cells-sort" || props.tableTags === "tr-sort") {
+        testTableTdRows.push(
+          `<tr class="${props.trClasses}-${i}"> ${testTableTdRow}</tr>`
+        );
+      } else {
+        testTableTdRows.push(
+          `<tr class="${props.trClasses}"> ${testTableTdRow}</tr>`
+        );
+      }
     }
   }
 
@@ -97,9 +105,13 @@ function createTestTable(
   for (let [i, tr] of tableRows.entries()) {
     if (tr.style.display !== "none") {
       for (let i = 0; i < numberOfTableColumns; i++)
-        testIfSortedList[`col${i}`].push(
-          tr.querySelectorAll("td").item(i).innerHTML
-        );
+        if (props.tableTags === "cells-sort" || props.tableTags ==="tr-sort") {
+          testIfSortedList[`col${i}`].push(tr.outerHTML);
+        } else {
+          testIfSortedList[`col${i}`].push(
+            tr.querySelectorAll("td").item(i).innerHTML
+          );
+        }
     }
   }
   return testIfSortedList;
