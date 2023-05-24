@@ -3,6 +3,7 @@
 [![jsDeliver downloads](https://data.jsdelivr.com/v1/package/npm/table-sort-js/badge)](https://www.jsdelivr.com/package/npm/table-sort-js)
 ![repo size](https://img.shields.io/github/repo-size/leewannacott/table-sort-js)
 ![MIT licence](https://img.shields.io/github/license/LeeWannacott/table-sort-js)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ![build status](https://img.shields.io/github/actions/workflow/status/leewannacott/table-sort-js/jest.yml?branch=master)
 
 # TABLE-SORT-JS.
