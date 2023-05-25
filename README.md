@@ -18,19 +18,7 @@
 
 ## Install instructions.
 
-- <b>Option 1:</b> Install from npm:
-
-```javascript
-npm install table-sort-js
-```
-
-```javascript
-import tableSort from "table-sort-js/table-sort.js";
-```
-
-Examples on using table-sort-js with frontend frameworks such as [React.js](https://leewannacott.github.io/table-sort-js/docs/react.html) and [Vue.js](https://leewannacott.github.io/table-sort-js/docs/vue.html)
-
-- <b>Option 2</b>: Load as script from a Content Delivery Network (CDN):
+- <b>Option 1</b>: Load as script from a Content Delivery Network (CDN):
 
 ```javascript
 <script src="https://cdn.jsdelivr.net/npm/table-sort-js/table-sort.js"></script>
@@ -42,15 +30,20 @@ Or Minified (smaller size, but harder to debug!):
 <script src="https://cdn.jsdelivr.net/npm/table-sort-js/table-sort.min.js"></script>
 ```
 
-Refer to the documenation for examples on how to use table-sort-js with [HTML](https://leewannacott.github.io/table-sort-js/docs/html5.html)
+Example on how to use table-sort-js with [HTML](https://leewannacott.github.io/table-sort-js/docs/html5.html)
 
-- <b>Option 3:</b> Download [table-sort.js](https://cdn.jsdelivr.net/npm/table-sort-js/table-sort.js) (Select save as.), or download a [minified version](https://cdn.jsdelivr.net/npm/table-sort-js/table-sort.min.js) (~5kB)
 
-Then rename and add the following script before your HTML table:
+- <b>Option 2:</b> Install from npm:
 
-```html
-<script src="table-sort.js"></script>
+```javascript
+npm install table-sort-js
 ```
+
+```javascript
+import tableSort from "table-sort-js/table-sort.js";
+```
+
+Examples on using table-sort-js with frontend frameworks such as [React.js](https://leewannacott.github.io/table-sort-js/docs/react.html) and [Vue.js](https://leewannacott.github.io/table-sort-js/docs/vue.html)
 
 ## To make tables sortable:
 
