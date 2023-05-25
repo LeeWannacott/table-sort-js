@@ -28,7 +28,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
   const [getTagTable] = getHTMLTables();
   const columnIndexAndTableRow = {};
-  const fileSizeColumnTextAndRow = {};
   for (let table of getTagTable) {
     if (table.classList.contains("table-sort")) {
       makeTableSortable(table);
@@ -55,6 +54,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         return sortableTable.querySelector("tbody");
       }
     } else {
+      // if <tr> or <td> exists below <thead> the browser will make <tbody>
       return sortableTable.querySelector("tbody");
     }
   }
@@ -111,373 +111,433 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       body: getTableBody(sortableTable),
       head: sortableTable.querySelector("thead"),
     };
+    if (table.body == null) {
+      return;
+    }
     table.headers = table.head.querySelectorAll("th");
     table.rows = table.body.querySelectorAll("tr");
+    table.hasClass = {
+      noClassInfer: sortableTable.classList.contains("no-class-infer"),
+      cellsSort: sortableTable.classList.contains("cells-sort"),
+      tableArrows: sortableTable.classList.contains("table-arrows"),
+      rememberSort: sortableTable.classList.contains("remember-sort"),
+    };
 
     let columnIndexesClicked = [];
-
-    const isNoSortClassInference =
-      sortableTable.classList.contains("no-class-infer");
 
     for (let [columnIndex, th] of table.headers.entries()) {
       if (!th.classList.contains("disable-sort")) {
         th.style.cursor = "pointer";
-        if (!isNoSortClassInference) {
+        if (!table.hasClass.noClassInfer) {
           inferSortClasses(table.rows, columnIndex, th);
         }
-        makeEachColumnSortable(
-          th,
-          columnIndex,
+        makeEachColumnSortable(th, columnIndex, table, columnIndexesClicked);
+      }
+    }
+  }
+
+  function cellsOrRows(table, tr) {
+    if (table.hasClass.cellsSort) {
+      return tr.innerHTML;
+    } else {
+      return tr.outerHTML;
+    }
+  }
+
+  function sortDataAttributes(table, column) {
+    for (let [i, tr] of table.visibleRows.entries()) {
+      let dataAttributeTd = column.getColumn(tr, column.spanSum, column.span)
+        .dataset.sort;
+      column.toBeSorted.push(`${dataAttributeTd}#${i}`);
+      columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(table, tr);
+    }
+  }
+
+  function sortFileSize(table, column, columnIndex) {
+    let unitToMultiplier = {
+      b: 1,
+      kb: 1000,
+      kib: 2 ** 10,
+      mb: 1e6,
+      mib: 2 ** 20,
+      gb: 1e9,
+      gib: 2 ** 30,
+      tb: 1e12,
+      tib: 2 ** 40,
+    };
+    const numberWithUnitType = /([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+    for (let [i, tr] of table.visibleRows.entries()) {
+      let fileSizeTd = tr.querySelectorAll("td").item(columnIndex).textContent;
+      let match = fileSizeTd.match(numberWithUnitType);
+      if (match) {
+        let number = parseFloat(match[1]);
+        let unit = match[2].toLowerCase();
+        let multiplier = unitToMultiplier[unit];
+        column.toBeSorted.push(`${number * multiplier}#${i}`);
+        columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(
           table,
-          sortableTable,
-          columnIndexesClicked
+          tr
         );
       }
     }
+  }
+
+  function sortDates(datesFormat, table, column) {
+    try {
+      for (let [i, tr] of table.visibleRows.entries()) {
+        let columnOfTd, datesRegex;
+        if (datesFormat === "mdy" || datesFormat === "dmy") {
+          datesRegex = /^(\d\d?)[./-](\d\d?)[./-]((\d\d)?\d\d)/;
+        } else if (datesFormat === "ymd") {
+          datesRegex = /^(\d\d\d\d)[./-](\d\d?)[./-](\d\d?)/;
+        }
+        columnOfTd = column.getColumn(
+          tr,
+          column.spanSum,
+          column.span
+        ).textContent;
+        let match = columnOfTd.match(datesRegex);
+        let [years, days, months] = [0, 0, 0];
+        let numberToSort = columnOfTd;
+        if (match) {
+          const [regPos1, regPos2, regPos3] = [match[1], match[2], match[3]];
+          if (regPos1 && regPos2 && regPos3) {
+            if (datesFormat === "mdy") {
+              [months, days, years] = [regPos1, regPos2, regPos3];
+            } else if (datesFormat === "ymd") {
+              [years, months, days] = [regPos1, regPos2, regPos3];
+            } else {
+              [days, months, years] = [regPos1, regPos2, regPos3];
+            }
+          }
+          numberToSort = Number(
+            years +
+              String(months).padStart(2, "0") +
+              String(days).padStart(2, "0")
+          );
+        }
+        column.toBeSorted.push(`${numberToSort}#${i}`);
+        columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(
+          table,
+          tr
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  function sortByRuntime(table, column) {
+    try {
+      for (let [i, tr] of table.visibleRows.entries()) {
+        const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
+        let columnOfTd = "";
+        // TODO: github actions runtime didn't like textContent, tests didn't like innerText?
+        if (testingTableSortJS) {
+          columnOfTd = column.getColumn(
+            tr,
+            column.spanSum,
+            column.span
+          ).textContent;
+        } else {
+          columnOfTd = column.getColumn(
+            tr,
+            column.spanSum,
+            column.span
+          ).innerText;
+        }
+        let match = columnOfTd.match(regexMinutesAndSeconds);
+        let [minutesInSeconds, hours, seconds] = [0, 0, 0];
+        let timeinSeconds = columnOfTd;
+        if (match) {
+          const regexHours = match[1];
+          if (regexHours) {
+            hours = Number(regexHours.replace("h", "")) * 60 * 60;
+          }
+          const regexMinutes = match[2];
+          if (regexMinutes) {
+            minutesInSeconds = Number(regexMinutes.replace("m", "")) * 60;
+          }
+          const regexSeconds = match[3];
+          if (regexSeconds) {
+            seconds = Number(regexSeconds.replace("s", ""));
+          }
+          timeinSeconds = hours + minutesInSeconds + seconds;
+        }
+        column.toBeSorted.push(`${timeinSeconds}#${i}`);
+        columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(
+          table,
+          tr
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  function getTableData(tableProperties, timesClickedColumn) {
+    const {
+      table,
+      tableRows,
+      fillValue,
+      column,
+      th,
+      hasThClass,
+      isSortDates,
+      desc,
+      arrow,
+    } = tableProperties;
+    for (let [i, tr] of tableRows.entries()) {
+      let tdTextContent = column.getColumn(
+        tr,
+        column.spanSum,
+        column.span
+      ).textContent;
+      if (tdTextContent.length === 0) {
+        tdTextContent = "";
+      }
+      if (tdTextContent.trim() !== "") {
+        if (
+          !hasThClass.fileSize &&
+          !hasThClass.dataSort &&
+          !hasThClass.runtime &&
+          !hasThClass.filesize &&
+          !isSortDates.dayMonthYear &&
+          !isSortDates.yearMonthDay &&
+          !isSortDates.monthDayYear
+        ) {
+          column.toBeSorted.push(`${tdTextContent}#${i}`);
+          columnIndexAndTableRow[`${tdTextContent}#${i}`] = cellsOrRows(
+            table,
+            tr
+          );
+        }
+      } else {
+        // Fill in blank table cells dict key with filler value.
+        column.toBeSorted.push(`${fillValue}#${i}`);
+        columnIndexAndTableRow[`${fillValue}#${i}`] = cellsOrRows(
+          table,
+          tr
+        );
+      }
+    }
+
+    const isPunctSort = th.classList.contains("punct-sort");
+    const isAlphaSort = th.classList.contains("alpha-sort");
+    const isNumericSort = th.classList.contains("numeric-sort");
+
+    function parseNumberFromString(str) {
+      let num;
+      str = str.slice(0, str.indexOf("#"));
+      if (str.match(/^\((\d+(?:\.\d+)?)\)$/)) {
+        num = -1 * Number(str.slice(1, -1));
+      } else {
+        num = Number(str);
+      }
+      return num;
+    }
+
+    function strLocaleCompare(str1, str2) {
+      return str1.localeCompare(
+        str2,
+        navigator.languages[0] || navigator.language,
+        { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
+      );
+    }
+
+    function handleNumbers(str1, str2) {
+      let num1, num2;
+      num1 = parseNumberFromString(str1);
+      num2 = parseNumberFromString(str2);
+
+      if (!isNaN(num1) && !isNaN(num2)) {
+        return num1 - num2;
+      } else {
+        return strLocaleCompare(str1, str2);
+      }
+    }
+
+    function sortAscending(a, b) {
+      if (a.includes(`${fillValue}#`)) {
+        return 1;
+      } else if (b.includes(`${fillValue}#`)) {
+        return -1;
+      } else if (isNumericSort) {
+        return handleNumbers(a, b);
+      } else {
+        return strLocaleCompare(a, b);
+      }
+    }
+
+    function sortDescending(a, b) {
+      return sortAscending(b, a);
+    }
+
+    function clearArrows(arrowUp = "▲", arrowDown = "▼") {
+      th.innerHTML = th.innerHTML.replace(arrowUp, "");
+      th.innerHTML = th.innerHTML.replace(arrowDown, "");
+    }
+
+    if (column.toBeSorted[0] === undefined) {
+      return;
+    }
+
+    function changeTableArrow(arrowDirection) {
+      if (table.hasClass.tableArrows) {
+        clearArrows(arrow.up, arrow.down);
+        th.insertAdjacentText("beforeend", arrowDirection);
+      }
+    }
+
+    function sortColumn(sortDirection) {
+      column.toBeSorted.sort(sortDirection, {
+        numeric: !isAlphaSort,
+        ignorePunctuation: !isPunctSort,
+      });
+    }
+
+    if (timesClickedColumn === 1) {
+      if (desc) {
+        changeTableArrow(arrow.down);
+        sortColumn(sortDescending);
+      } else {
+        changeTableArrow(arrow.up);
+        sortColumn(sortAscending);
+      }
+    } else if (timesClickedColumn === 2) {
+      timesClickedColumn = 0;
+      if (desc) {
+        changeTableArrow(arrow.up);
+        sortColumn(sortAscending);
+      } else {
+        changeTableArrow(arrow.down);
+        sortColumn(sortDescending);
+      }
+    }
+    return timesClickedColumn;
+  }
+
+  function updateFilesize(i, table, tr, column, columnIndex) {
+    if (table.hasClass.cellsSort) {
+      tr.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
+    } else {
+      // We do this to sort rows rather than cells:
+      const template = document.createElement("template");
+      template.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
+      tr = template.content.firstChild;
+    }
+    let fileSizeInBytesHTML = column.getColumn(
+      tr,
+      column.spanSum,
+      column.span
+    ).outerHTML;
+    const fileSizeInBytesText = column.getColumn(
+      tr,
+      column.spanSum,
+      column.span
+    ).textContent;
+
+    const fileSize = column.toBeSorted[i].replace(/#[0-9]*/, "");
+    let prefixes = ["", "Ki", "Mi", "Gi", "Ti", "Pi"];
+    let replaced = false;
+    for (let i = 0; i < prefixes.length; ++i) {
+      let nextPrefixMultiplier = 2 ** (10 * (i + 1));
+      if (fileSize < nextPrefixMultiplier) {
+        let prefixMultiplier = 2 ** (10 * i);
+        fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+          fileSizeInBytesText,
+          `${(fileSize / prefixMultiplier).toFixed(2)} ${prefixes[i]}B`
+        );
+        replaced = true;
+        break;
+      }
+    }
+    if (!replaced) {
+      fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
+        fileSizeInBytesText,
+        "NaN"
+      );
+    }
+    tr.querySelectorAll("td").item(columnIndex).innerHTML = fileSizeInBytesHTML;
+    return table.hasClass.cellsSort ? tr.innerHTML : tr.outerHTML;
+  }
+
+  function updateTable(tableProperties) {
+    const { column, table, columnIndex, hasThClass } = tableProperties;
+    for (let [i, tr] of table.visibleRows.entries()) {
+      if (hasThClass.fileSize) {
+        if (table.hasClass.cellsSort) {
+          tr.innerHTML = updateFilesize(i, table, tr, column, columnIndex);
+        } else {
+          tr.outerHTML = updateFilesize(i, table, tr, column, columnIndex);
+        }
+      } else if (!hasThClass.fileSize) {
+        if (table.hasClass.cellsSort) {
+          tr.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
+        } else {
+          tr.outerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
+        }
+      }
+    }
+  }
+
+  function getColSpanData(headers, column) {
+    headers.forEach((th, index) => {
+      column.span[index] = th.colSpan;
+      if (index === 0) column.spanSum[index] = th.colSpan;
+      else column.spanSum[index] = column.spanSum[index - 1] + th.colSpan;
+    });
+  }
+
+  function rememberSort(columnIndexesClicked, timesClickedColumn, columnIndex) {
+    // if user clicked different column from first column reset times clicked.
+    columnIndexesClicked.push(columnIndex);
+    if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
+      const lastColumnClicked =
+        columnIndexesClicked[columnIndexesClicked.length - 1];
+      const secondLastColumnClicked =
+        columnIndexesClicked[columnIndexesClicked.length - 2];
+      if (lastColumnClicked !== secondLastColumnClicked) {
+        columnIndexesClicked.shift();
+        timesClickedColumn = 0;
+      }
+    }
+    return timesClickedColumn;
   }
 
   function makeEachColumnSortable(
     th,
     columnIndex,
     table,
-    sortableTable,
     columnIndexesClicked
   ) {
     const desc = th.classList.contains("order-by-desc");
-    const tableArrows = sortableTable.classList.contains("table-arrows");
-    const [arrowUp, arrowDown] = [" ▲", " ▼"];
+    const arrow = { up: " ▲", down: " ▼" };
     const fillValue = "!X!Y!Z!";
 
-    if (desc && tableArrows) {
-      th.insertAdjacentText("beforeend", arrowDown);
-    } else if (tableArrows) {
-      th.insertAdjacentText("beforeend", arrowUp);
-    }
-
-    function sortDataAttributes(tableRows, column) {
-      for (let [i, tr] of tableRows.entries()) {
-        let dataAttributeTd = getColumn(tr, column.spanSum, column.span).dataset
-          .sort;
-        column.toBeSorted.push(`${dataAttributeTd}#${i}`);
-        columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
-      }
-    }
-
-    function sortFileSize(tableRows, column) {
-      let unitToMultiplier = {
-        b: 1,
-        kb: 1000,
-        kib: 2 ** 10,
-        mb: 1e6,
-        mib: 2 ** 20,
-        gb: 1e9,
-        gib: 2 ** 30,
-        tb: 1e12,
-        tib: 2 ** 40,
-      };
-      const numberWithUnitType = /([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-      for (let [i, tr] of tableRows.entries()) {
-        let fileSizeTd = tr
-          .querySelectorAll("td")
-          .item(columnIndex).textContent;
-        let match = fileSizeTd.match(numberWithUnitType);
-        if (match) {
-          let number = parseFloat(match[1]);
-          let unit = match[2].toLowerCase();
-          let multiplier = unitToMultiplier[unit];
-          column.toBeSorted.push(`${number * multiplier}#${i}`);
-        } else {
-          column.toBeSorted.push(`${fillValue}#${i}`);
-        }
-      }
-    }
-
-    function sortByRuntime(tableRows, column) {
-      try {
-        for (let [i, tr] of tableRows.entries()) {
-          const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
-          let columnOfTd = "";
-          // TODO: github actions runtime didn't like textContent, tests didn't like innerText?
-          if (testingTableSortJS) {
-            columnOfTd = getColumn(tr, column.spanSum, column.span).textContent;
-          } else {
-            columnOfTd = getColumn(tr, column.spanSum, column.span).innerText;
-          }
-          let match = columnOfTd.match(regexMinutesAndSeconds);
-          let [minutesInSeconds, hours, seconds] = [0, 0, 0];
-          let timeinSeconds = columnOfTd;
-          if (match) {
-            const regexHours = match[1];
-            if (regexHours) {
-              hours = Number(regexHours.replace("h", "")) * 60 * 60;
-            }
-            const regexMinutes = match[2];
-            if (regexMinutes) {
-              minutesInSeconds = Number(regexMinutes.replace("m", "")) * 60;
-            }
-            const regexSeconds = match[3];
-            if (regexSeconds) {
-              seconds = Number(regexSeconds.replace("s", ""));
-            }
-            timeinSeconds = hours + minutesInSeconds + seconds;
-          }
-          column.toBeSorted.push(`${timeinSeconds}#${i}`);
-          columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    function sortDates(datesFormat, tableRows, column) {
-      try {
-        for (let [i, tr] of tableRows.entries()) {
-          let columnOfTd, datesRegex;
-          if (datesFormat === "mdy" || datesFormat === "dmy") {
-            datesRegex = /^(\d\d?)[./-](\d\d?)[./-]((\d\d)?\d\d)/;
-          } else if (datesFormat === "ymd") {
-            datesRegex = /^(\d\d\d\d)[./-](\d\d?)[./-](\d\d?)/;
-          }
-          columnOfTd = getColumn(tr, column.spanSum, column.span).textContent;
-          let match = columnOfTd.match(datesRegex);
-          let [years, days, months] = [0, 0, 0];
-          let numberToSort = columnOfTd;
-          if (match) {
-            const [regPos1, regPos2, regPos3] = [match[1], match[2], match[3]];
-            if (regPos1 && regPos2 && regPos3) {
-              if (datesFormat === "mdy") {
-                [months, days, years] = [regPos1, regPos2, regPos3];
-              } else if (datesFormat === "ymd") {
-                [years, months, days] = [regPos1, regPos2, regPos3];
-              } else {
-                [days, months, years] = [regPos1, regPos2, regPos3];
-              }
-            }
-            numberToSort = Number(
-              years +
-                String(months).padStart(2, "0") +
-                String(days).padStart(2, "0")
-            );
-          }
-          column.toBeSorted.push(`${numberToSort}#${i}`);
-          columnIndexAndTableRow[column.toBeSorted[i]] = tr.outerHTML;
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    function rememberSort() {
-      // if user clicked different column from first column reset times clicked.
-      columnIndexesClicked.push(columnIndex);
-      if (timesClickedColumn === 1 && columnIndexesClicked.length > 1) {
-        const lastColumnClicked =
-          columnIndexesClicked[columnIndexesClicked.length - 1];
-        const secondLastColumnClicked =
-          columnIndexesClicked[columnIndexesClicked.length - 2];
-        if (lastColumnClicked !== secondLastColumnClicked) {
-          columnIndexesClicked.shift();
-          timesClickedColumn = 0;
-        }
-      }
-      return timesClickedColumn;
-    }
-
-    function getColSpanData(headers, column) {
-      headers.forEach((th, index) => {
-        column.span[index] = th.colSpan;
-        if (index === 0) column.spanSum[index] = th.colSpan;
-        else column.spanSum[index] = column.spanSum[index - 1] + th.colSpan;
-      });
-    }
-
-    function getColumn(tr, colSpanSum, colSpanData) {
-      return tr
-        .querySelectorAll("td")
-        .item(
-          colSpanData[columnIndex] === 1
-            ? colSpanSum[columnIndex] - 1
-            : colSpanSum[columnIndex] - colSpanData[columnIndex]
-        );
-    }
-
-    function getTableData(tableProperties) {
-      const { tableRows, column, hasThClass, isSortDates } = tableProperties;
-      for (let [i, tr] of tableRows.entries()) {
-        let tdTextContent = getColumn(
-          tr,
-          column.spanSum,
-          column.span
-        ).textContent;
-        if (tdTextContent.length === 0) {
-          tdTextContent = "";
-        }
-        if (tdTextContent.trim() !== "") {
-          if (hasThClass.fileSize) {
-            fileSizeColumnTextAndRow[column.toBeSorted[i]] = tr.outerHTML;
-          }
-          // These classes already handle pushing to column and setting the tr html.
-          if (
-            !hasThClass.fileSize &&
-            !hasThClass.dataSort &&
-            !hasThClass.runtime &&
-            !isSortDates.dayMonthYear &&
-            !isSortDates.yearMonthDay &&
-            !isSortDates.monthDayYear
-          ) {
-            column.toBeSorted.push(`${tdTextContent}#${i}`);
-            columnIndexAndTableRow[`${tdTextContent}#${i}`] = tr.outerHTML;
-          }
-        } else {
-          // Fill in blank table cells dict key with filler value.
-          column.toBeSorted.push(`${fillValue}#${i}`);
-          columnIndexAndTableRow[`${fillValue}#${i}`] = tr.outerHTML;
-        }
-      }
-
-      const isPunctSort = th.classList.contains("punct-sort");
-      const isAlphaSort = th.classList.contains("alpha-sort");
-      const isNumericSort = th.classList.contains("numeric-sort");
-
-      function parseNumberFromString(str) {
-        let num;
-        str = str.slice(0, str.indexOf("#"));
-        if (str.match(/^\((\d+(?:\.\d+)?)\)$/)) {
-          num = -1 * Number(str.slice(1, -1));
-        } else {
-          num = Number(str);
-        }
-        return num;
-      }
-
-      function strLocaleCompare(str1, str2) {
-        return str1.localeCompare(
-          str2,
-          navigator.languages[0] || navigator.language,
-          { numeric: !isAlphaSort, ignorePunctuation: !isPunctSort }
-        );
-      }
-
-      function handleNumbers(str1, str2) {
-        let num1, num2;
-        num1 = parseNumberFromString(str1);
-        num2 = parseNumberFromString(str2);
-
-        if (!isNaN(num1) && !isNaN(num2)) {
-          return num1 - num2;
-        } else {
-          return strLocaleCompare(str1, str2);
-        }
-      }
-
-      function sortAscending(a, b) {
-        if (a.includes(`${fillValue}#`)) {
-          return 1;
-        } else if (b.includes(`${fillValue}#`)) {
-          return -1;
-        } else if (isNumericSort) {
-          return handleNumbers(a, b);
-        } else {
-          return strLocaleCompare(a, b);
-        }
-      }
-
-      function sortDescending(a, b) {
-        return sortAscending(b, a);
-      }
-
-      function clearArrows(arrowUp = "▲", arrowDown = "▼") {
-        th.innerHTML = th.innerHTML.replace(arrowUp, "");
-        th.innerHTML = th.innerHTML.replace(arrowDown, "");
-      }
-
-      if (column.toBeSorted[0] === undefined) {
-        return;
-      }
-
-      function changeTableArrow(arrowDirection) {
-        if (tableArrows) {
-          clearArrows(arrowUp, arrowDown);
-          th.insertAdjacentText("beforeend", arrowDirection);
-        }
-      }
-
-      function sortColumn(sortDirection) {
-        column.toBeSorted.sort(sortDirection, {
-          numeric: !isAlphaSort,
-          ignorePunctuation: !isPunctSort,
-        });
-      }
-
-      if (timesClickedColumn === 1) {
-        if (desc) {
-          changeTableArrow(arrowDown);
-          sortColumn(sortDescending);
-        } else {
-          changeTableArrow(arrowUp);
-          sortColumn(sortAscending);
-        }
-      } else if (timesClickedColumn === 2) {
-        timesClickedColumn = 0;
-        if (desc) {
-          changeTableArrow(arrowUp);
-          sortColumn(sortAscending);
-        } else {
-          changeTableArrow(arrowDown);
-          sortColumn(sortDescending);
-        }
-      }
-    }
-
-    function updateTable(tableProperties) {
-      const { tableRows, column, hasThClass } = tableProperties;
-      for (let [i, tr] of tableRows.entries()) {
-        if (hasThClass.fileSize) {
-          tr.innerHTML = fileSizeColumnTextAndRow[column.toBeSorted[i]];
-          let fileSizeInBytesHTML = tr
-            .querySelectorAll("td")
-            .item(columnIndex).innerHTML;
-          const fileSizeInBytesText = tr
-            .querySelectorAll("td")
-            .item(columnIndex).textContent;
-          // Remove the unique identifyer for duplicate values(#number).
-          column.toBeSorted[i] = column.toBeSorted[i].replace(/#[0-9]*/, "");
-          const fileSize = parseFloat(column.toBeSorted[i]);
-          let prefixes = ["", "Ki", "Mi", "Gi", "Ti", "Pi"];
-          let replaced = false;
-          for (let i = 0; i < prefixes.length; ++i) {
-            let nextPrefixMultiplier = 2 ** (10 * (i + 1));
-            if (fileSize < nextPrefixMultiplier) {
-              let prefixMultiplier = 2 ** (10 * i);
-              fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-                fileSizeInBytesText,
-                `${(fileSize / prefixMultiplier).toFixed(2)} ${prefixes[i]}B`
-              );
-              replaced = true;
-              break;
-            }
-          }
-          if (!replaced) {
-            fileSizeInBytesHTML = fileSizeInBytesHTML.replace(
-              fileSizeInBytesText,
-              "NaN"
-            );
-          }
-          tr.querySelectorAll("td").item(columnIndex).innerHTML =
-            fileSizeInBytesHTML;
-        } else if (!hasThClass.fileSize) {
-          tr.outerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
-        }
-      }
+    if (desc && table.hasClass.tableArrows) {
+      th.insertAdjacentText("beforeend", arrow.down);
+    } else if (table.hasClass.tableArrows) {
+      th.insertAdjacentText("beforeend", arrow.up);
     }
 
     let timesClickedColumn = 0;
+    const column = {
+      getColumn: function getColumn(tr, colSpanSum, colSpanData) {
+        return tr
+          .querySelectorAll("td")
+          .item(
+            colSpanData[columnIndex] === 1
+              ? colSpanSum[columnIndex] - 1
+              : colSpanSum[columnIndex] - colSpanData[columnIndex]
+          );
+      },
+    };
     th.addEventListener("click", function () {
-      const column = {
-        toBeSorted: [],
-        span: {},
-        spanSum: {},
-      };
+      column.toBeSorted = [];
+      column.span = {};
+      column.spanSum = {};
+      getColSpanData(table.headers, column);
 
       table.visibleRows = Array.prototype.filter.call(
         table.body.querySelectorAll("tr"),
@@ -486,11 +546,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         }
       );
 
-      getColSpanData(table.headers, column);
-
-      const isRememberSort = sortableTable.classList.contains("remember-sort");
-      if (!isRememberSort) {
-        timesClickedColumn = rememberSort();
+      if (!table.hasClass.rememberSort) {
+        timesClickedColumn = rememberSort(
+          columnIndexesClicked,
+          timesClickedColumn,
+          columnIndex
+        );
       }
       timesClickedColumn += 1;
 
@@ -501,13 +562,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       };
 
       if (hasThClass.dataSort) {
-        sortDataAttributes(table.visibleRows, column);
+        sortDataAttributes(table, column);
       }
       if (hasThClass.fileSize) {
-        sortFileSize(table.visibleRows, column);
+        sortFileSize(table, column, columnIndex, fillValue);
       }
       if (hasThClass.runtime) {
-        sortByRuntime(table.visibleRows, column);
+        sortByRuntime(table, column);
       }
 
       const isSortDates = {
@@ -517,20 +578,27 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       };
       // pick mdy first to override the inferred default class which is dmy.
       if (isSortDates.monthDayYear) {
-        sortDates("mdy", table.visibleRows, column);
+        sortDates("mdy", table, column);
       } else if (isSortDates.yearMonthDay) {
-        sortDates("ymd", table.visibleRows, column);
+        sortDates("ymd", table, column);
       } else if (isSortDates.dayMonthYear) {
-        sortDates("dmy", table.visibleRows, column);
+        sortDates("dmy", table, column);
       }
 
       const tableProperties = {
+        table,
         tableRows: table.visibleRows,
+        fillValue,
         column,
+        columnIndex,
+        th,
         hasThClass,
         isSortDates,
+        desc,
+        timesClickedColumn,
+        arrow,
       };
-      getTableData(tableProperties);
+      timesClickedColumn = getTableData(tableProperties, timesClickedColumn);
       updateTable(tableProperties);
     });
 

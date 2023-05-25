@@ -64,126 +64,163 @@
         <div class="header">Demo tables showing off what table-sort-js can sort
           and features.</div>
         <div class="info">
-          <table class="table table-sort table-arrows" id="classes-table" style="width: 100%">
-            <thead>
-            <tr>
-              <th>Names</th>
-              <th>Numbers</th>
-              <th>Floating Point</th>
-              <th>Money</th>
-              <th>Dates</th>
-              <th>Release version</th>
-              <th class="file-size-sort order-by-desc">File-size-sort</th>
-            </tr>
-            </thead>
-            <tr>
-              <td>Malcom</td>
-              <td>405</td>
-              <td>81.98</td>
-              <td>$400.23</td>
-              <td>2023/5/23</td>
-              <td>4.48.12</td>
-              <td>10GiB</td>
-            </tr>
-            <tr>
-              <td>Bernie</td>
-              <td>2922</td>
-              <td>72.33</td>
-              <td>$63.23</td>
-              <td>2014/8/28</td>
-              <td>5.28.12</td>
-              <td>10MB</td>
-            </tr>
-            <tr>
-              <td>Doris</td>
-              <td>3232</td>
-              <td>29.953</td>
-              <td>$19.23</td>
-              <td>2014/8/30</td>
-              <td>10.23.32</td>
-              <td>10tb</td>
-            </tr>
-            <tr>
-              <td>Harry</td>
-              <td>4</td>
-              <td>83.93</td>
-              <td>$102.33</td>
-              <td>1893/8/13</td>
-              <td>2.23.12</td>
-              <td>10B</td>
-            </tr>
-              <td>Walter</td>
-              <td>29</td>
-              <td>2345.23</td>
-              <td>$17.83</td>
-              <td>1645/8/18</td>
-              <td>3.9.12</td>
-              <td>10GB</td>
-            </tr>
-            <tr>
-              <td>Ben</td>
-              <td>222</td>
-              <td>42.743</td>
-              <td>$630.33</td>
-              <td>1972/3/12</td>
-              <td>1.29.52</td>
-              <td>2000B</td>
-            </tr>
-            <tr>
-              <td>Roy</td>
-              <td>302</td>
-              <td>903.933</td>
-              <td>$19.82</td>
-              <td>1942/12/23</td>
-              <td>1.33.32</td>
-              <td>1000tb</td>
-            </tr>
-            <tr>
-              <td>Juan</td>
-              <td>84</td>
-              <td>982.743</td>
-              <td>$1920.59</td>
-              <td>1924/5/23</td>
-              <td>2.23.12</td>
-              <td>blank</td>
-            </tr>
-            </tr>
-              <td>Joe</td>
-              <td>23</td>
-              <td>9834.943</td>
-              <td>$13.23</td>
-              <td>2023/5/23</td>
-              <td>3.18.12</td>
-              <td>10 KiB</td>
-            </tr>
-            <tr>
-              <td>Johnny</td>
-              <td>42</td>
-              <td>138.943</td>
-              <td>$13.93</td>
-              <td>1923.5.13</td>
-              <td>5.7.72</td>
-              <td>10 MiB</td>
-            </tr>
-            <tr>
-              <td>Marilyn</td>
-              <td>420</td>
-              <td>234.953</td>
-              <td>$18.23</td>
-              <td>1923-7-23</td>
-              <td>2.3.33</td>
-              <td>1000MB</td>
-            </tr>
-            <tr>
-              <td>Richard</td>
-              <td>69</td>
-              <td>3832.23</td>
-              <td>$102.89</td>
-              <td>1733,08,31</td>
-              <td>4.1.12</td>
-              <td>10TiB</td>
-            </tr>
-          </table>
+    <table class="table-sort table-arrows classes-tables" id="classes-table">
+      <thead>
+        <tr>
+          <th>Last Name</th>
+          <th>First Name</th>
+          <th class="order-by-desc">Birth Date</th>
+          <th>Employee ID</th>
+          <th>Department</th>
+          <th>Runtime</th>
+          <th class="onload-sort">File Size</th>
+          <th class="data-sort">data-sort days</th>
+          <th>dates in dd/mm/yyyy</th>
+        </tr>
+      </thead>
+      <tr class="table-row-1">
+        <td>Franklin</td>
+        <td>Benjamin</td>
+        <td>1706-1-17</td>
+        <td>1</td>
+        <td>k-level</td>
+        <td>1h 1m 17s</td>
+        <td>10b</td>
+        <td data-sort="2">Tuesday</td>
+        <td>17/6/1978</td>
+      </tr>
+      <tr class="table-row-2">
+        <td>da Vinci</td>
+        <td>Zarlo</td>
+        <td>1452-4-15</td>
+        <td>13000</td>
+        <td></td>
+        <td>1m 45s</td>
+        <td>192038998987021b</td>
+        <td data-sort="3">Wednesday</td>
+        <td>18/10/2027</td>
+      </tr>
+      <tr>
+        <td>Statham</td>
+        <td>Jason</td>
+        <td>1967-7-26</td>
+        <td></td>
+        <td>HR</td>
+        <td>11m 40s</td>
+        <td>134809b</td>
+        <td data-sort="5">Friday</td>
+        <td>4/9/2008</td>
+      </tr>
+      <tr>
+        <td>Micheal</td>
+        <td>Angelo</td>
+        <td>1958-8-21</td>
+        <td>54</td>
+        <td>Marketing</td>
+        <td>29s</td>
+        <td>30980980b</td>
+        <td data-sort="4">Thursday</td>
+        <td>2/3/1879</td>
+      </tr>
+
+      <tr>
+        <td>Ben</td>
+        <td></td>
+        <td>1994/9/23</td>
+        <td>134</td>
+        <td>Marketing</td>
+        <td>41s</td>
+        <td>902938402398b</td>
+        <td data-sort="1">Monday</td>
+        <td>8/6/1978</td>
+      </tr>
+    </table>
+    <br>
+    <h2 style="margin: 1em; margin-left:0em;">Demo of colspan and data-sort class to sort fractions:</h2>
+    <table class="available table-sort table-arrows" id="classes-table">
+      <thead>
+        <tr>
+          <th class="disable-sort"></th>
+          <th class="">Category</th>
+          <th class="show_name">Show</th>
+          <th colspan="2" class="data-sort">Overall</th>
+          <th colspan="2" class="data-sort">On Our Dates</th>
+          <th>First Sold Out</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tags"></td>
+          <td class="category">Comedy</td>
+          <td class="show_name">Show 1</td>
+          <td class="ratio all" data-sort="72">18/25</td>
+          <td class="pct all">72%</td>
+          <td class="ratio ours" data-sort="75">3/4</td>
+          <td class="pct ours">75%</td>
+          <td>1999-07-30</td>
+        </tr>
+        <tr>
+          <td class="tags"></td>
+          <td class="category">Music</td>
+          <td class="show_name">Show 2</td>
+          <td class="ratio all" data-sort="60">6/10</td>
+          <td class="pct all">60%</td>
+          <td class="ratio ours" data-sort="75">3/4</td>
+          <td class="pct ours">75%</td>
+          <td>1999-08-04</td>
+        </tr>
+        <tr>
+          <td class="tags"></td>
+          <td class="category">Theatre</td>
+          <td class="show_name">Show 3</td>
+          <td class="ratio all" data-sort="47">7/15</td>
+          <td class="pct all">47%</td>
+          <td class="ratio ours" data-sort="75">3/4</td>
+          <td class="pct ours">75%</td>
+          <td>1999-07-19</td>
+        </tr>
+        <tr>
+          <td class="tags"></td>
+          <td class="category">Comedy</td>
+          <td class="show_name">Show 4</td>
+          <td class="ratio all" data-sort="67">10/15</td>
+          <td class="pct all">67%</td>
+          <td class="ratio ours" data-sort="67">2/3</td>
+          <td class="pct ours">67%</td>
+          <td>1999-07-19</td>
+        </tr>
+        <tr>
+          <td class="tags"></td>
+          <td class="category">Comedy</td>
+          <td class="show_name">Show 5</td>
+          <td class="ratio all" data-sort="75">9/12</td>
+          <td class="pct all">75%</td>
+          <td class="ratio ours" data-sort="50">1/2</td>
+          <td class="pct ours">50%</td>
+          <td>1999-07-29</td>
+        </tr>
+        <tr>
+          <td class="tags"></td>
+          <td class="category">Comedy</td>
+          <td class="show_name">Show 6</td>
+          <td class="ratio all" data-sort="67">16/24</td>
+          <td class="pct all">67%</td>
+          <td class="ratio ours" data-sort="50">2/4</td>
+          <td class="pct ours">50%</td>
+          <td>1999-07-26</td>
+        </tr>
+        <tr>
+          <td class="tags"></td>
+          <td class="category">Comedy</td>
+          <td class="show_name">Show 7</td>
+          <td class="ratio all" data-sort="62">16/26</td>
+          <td class="pct all">62%</td>
+          <td class="ratio ours" data-sort="50">2/4</td>
+          <td class="pct ours">50%</td>
+          <td>2022-07-31</td>
+        </tr>
+      </tbody>
+    </table>
 
         </div>
       </div>
