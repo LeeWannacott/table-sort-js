@@ -49,7 +49,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     if (sortableTable.getElementsByTagName("thead").length === 0) {
       createMissingTableHead(sortableTable);
       if (sortableTable.querySelectorAll("tbody").length > 1) {
-        // why index 1?
+        // Why index 1?; I don't remember
         return sortableTable.querySelectorAll("tbody")[1];
       } else {
         return sortableTable.querySelectorAll("tbody");
@@ -114,12 +114,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       rows: [],
       headers: [],
     };
-    for (let [index, body] of table.bodies.entries()) {
-      console.log(body, index);
+    for (let index of table.bodies.keys()) {
       if (table.bodies.item(index) == null) {
         return;
       }
-      console.log(table.theads.item(index).querySelectorAll("th"));
       table.headers.push(table.theads.item(index).querySelectorAll("th"));
       table.rows.push(table.bodies.item(index).querySelectorAll("tr"));
     }
@@ -131,13 +129,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       rememberSort: sortableTable.classList.contains("remember-sort"),
     };
 
-    let columnIndexesClicked = [];
 
-    for (
-      let headerIndex = 0;
-      headerIndex < table.headers.length;
-      headerIndex++
-    ) {
+    for ( let headerIndex = 0; headerIndex < table.theads.length; headerIndex++) {
+    let columnIndexesClicked = [];
       for (let [columnIndex, th] of table.headers[headerIndex].entries()) {
         if (!th.classList.contains("disable-sort")) {
           th.style.cursor = "pointer";
