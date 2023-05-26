@@ -45,17 +45,18 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     sortableTable.insertBefore(createTableHead, sortableTable.firstChild);
   }
 
-  function getTableBody(sortableTable) {
+  function getTableBodies(sortableTable) {
     if (sortableTable.getElementsByTagName("thead").length === 0) {
       createMissingTableHead(sortableTable);
       if (sortableTable.querySelectorAll("tbody").length > 1) {
+        // Why index 1?; I don't remember
         return sortableTable.querySelectorAll("tbody")[1];
       } else {
-        return sortableTable.querySelector("tbody");
+        return sortableTable.querySelectorAll("tbody");
       }
     } else {
       // if <tr> or <td> exists below <thead> the browser will make <tbody>
-      return sortableTable.querySelector("tbody");
+      return sortableTable.querySelectorAll("tbody");
     }
   }
 
@@ -108,14 +109,19 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
   function makeTableSortable(sortableTable) {
     const table = {
-      body: getTableBody(sortableTable),
-      head: sortableTable.querySelector("thead"),
+      bodies: getTableBodies(sortableTable),
+      theads: sortableTable.querySelectorAll("thead"),
+      rows: [],
+      headers: [],
     };
-    if (table.body == null) {
-      return;
+    for (let index of table.bodies.keys()) {
+      if (table.bodies.item(index) == null) {
+        return;
+      }
+      table.headers.push(table.theads.item(index).querySelectorAll("th"));
+      table.rows.push(table.bodies.item(index).querySelectorAll("tr"));
     }
-    table.headers = table.head.querySelectorAll("th");
-    table.rows = table.body.querySelectorAll("tr");
+
     table.hasClass = {
       noClassInfer: sortableTable.classList.contains("no-class-infer"),
       cellsSort: sortableTable.classList.contains("cells-sort"),
@@ -123,15 +129,26 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       rememberSort: sortableTable.classList.contains("remember-sort"),
     };
 
-    let columnIndexesClicked = [];
-
-    for (let [columnIndex, th] of table.headers.entries()) {
-      if (!th.classList.contains("disable-sort")) {
-        th.style.cursor = "pointer";
-        if (!table.hasClass.noClassInfer) {
-          inferSortClasses(table.rows, columnIndex, th);
+    for (
+      let headerIndex = 0;
+      headerIndex < table.theads.length;
+      headerIndex++
+    ) {
+      let columnIndexesClicked = [];
+      for (let [columnIndex, th] of table.headers[headerIndex].entries()) {
+        if (!th.classList.contains("disable-sort")) {
+          th.style.cursor = "pointer";
+          if (!table.hasClass.noClassInfer) {
+            inferSortClasses(table.rows[headerIndex], columnIndex, th);
+          }
+          makeEachColumnSortable(
+            th,
+            headerIndex,
+            columnIndex,
+            table,
+            columnIndexesClicked
+          );
         }
-        makeEachColumnSortable(th, columnIndex, table, columnIndexesClicked);
       }
     }
   }
@@ -174,10 +191,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         let unit = match[2].toLowerCase();
         let multiplier = unitToMultiplier[unit];
         column.toBeSorted.push(`${number * multiplier}#${i}`);
-        columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(
-          table,
-          tr
-        );
+        columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(table, tr);
       }
     }
   }
@@ -217,10 +231,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           );
         }
         column.toBeSorted.push(`${numberToSort}#${i}`);
-        columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(
-          table,
-          tr
-        );
+        columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(table, tr);
       }
     } catch (e) {
       console.log(e);
@@ -265,10 +276,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           timeinSeconds = hours + minutesInSeconds + seconds;
         }
         column.toBeSorted.push(`${timeinSeconds}#${i}`);
-        columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(
-          table,
-          tr
-        );
+        columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(table, tr);
       }
     } catch (e) {
       console.log(e);
@@ -315,10 +323,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       } else {
         // Fill in blank table cells dict key with filler value.
         column.toBeSorted.push(`${fillValue}#${i}`);
-        columnIndexAndTableRow[`${fillValue}#${i}`] = cellsOrRows(
-          table,
-          tr
-        );
+        columnIndexAndTableRow[`${fillValue}#${i}`] = cellsOrRows(table, tr);
       }
     }
 
@@ -507,6 +512,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
   function makeEachColumnSortable(
     th,
+    headerIndex,
     columnIndex,
     table,
     columnIndexesClicked
@@ -537,10 +543,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       column.toBeSorted = [];
       column.span = {};
       column.spanSum = {};
-      getColSpanData(table.headers, column);
+      getColSpanData(table.headers[headerIndex], column);
 
       table.visibleRows = Array.prototype.filter.call(
-        table.body.querySelectorAll("tr"),
+        table.bodies.item(headerIndex).querySelectorAll("tr"),
         (tr) => {
           return tr.style.display !== "none";
         }
