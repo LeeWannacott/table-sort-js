@@ -105,7 +105,7 @@ function createTestTable(
   for (let [i, tr] of tableRows.entries()) {
     if (tr.style.display !== "none") {
       for (let i = 0; i < numberOfTableColumns; i++)
-        if (props.tableTags === "cells-sort" || props.tableTags ==="tr-sort") {
+        if (props.tableTags === "cells-sort" || props.tableTags === "tr-sort") {
           testIfSortedList[`col${i}`].push(tr.outerHTML);
         } else {
           testIfSortedList[`col${i}`].push(

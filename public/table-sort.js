@@ -129,9 +129,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       rememberSort: sortableTable.classList.contains("remember-sort"),
     };
 
-
-    for ( let headerIndex = 0; headerIndex < table.theads.length; headerIndex++) {
-    let columnIndexesClicked = [];
+    for (
+      let headerIndex = 0;
+      headerIndex < table.theads.length;
+      headerIndex++
+    ) {
+      let columnIndexesClicked = [];
       for (let [columnIndex, th] of table.headers[headerIndex].entries()) {
         if (!th.classList.contains("disable-sort")) {
           th.style.cursor = "pointer";

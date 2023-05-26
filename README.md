@@ -32,7 +32,6 @@ Or Minified (smaller size, but harder to debug!):
 
 Example on how to use table-sort-js with [HTML](https://leewannacott.github.io/table-sort-js/docs/html5.html)
 
-
 - <b>Option 2:</b> Install from npm:
 
 ```javascript

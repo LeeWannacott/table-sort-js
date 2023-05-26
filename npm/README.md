@@ -3,6 +3,7 @@
 [![jsDeliver downloads](https://data.jsdelivr.com/v1/package/npm/table-sort-js/badge)](https://www.jsdelivr.com/package/npm/table-sort-js)
 ![repo size](https://img.shields.io/github/repo-size/leewannacott/table-sort-js)
 ![MIT licence](https://img.shields.io/github/license/LeeWannacott/table-sort-js)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ![build status](https://img.shields.io/github/actions/workflow/status/leewannacott/table-sort-js/jest.yml?branch=master)
 
 # TABLE-SORT-JS.
@@ -17,7 +18,21 @@
 
 ## Install instructions.
 
-- <b>Option 1:</b> Install from npm:
+- <b>Option 1</b>: Load as script from a Content Delivery Network (CDN):
+
+```javascript
+<script src="https://cdn.jsdelivr.net/npm/table-sort-js/table-sort.js"></script>
+```
+
+Or Minified (smaller size, but harder to debug!):
+
+```javascript
+<script src="https://cdn.jsdelivr.net/npm/table-sort-js/table-sort.min.js"></script>
+```
+
+Example on how to use table-sort-js with [HTML](https://leewannacott.github.io/table-sort-js/docs/html5.html)
+
+- <b>Option 2:</b> Install from npm:
 
 ```javascript
 npm install table-sort-js
@@ -28,28 +43,6 @@ import tableSort from "table-sort-js/table-sort.js";
 ```
 
 Examples on using table-sort-js with frontend frameworks such as [React.js](https://leewannacott.github.io/table-sort-js/docs/react.html) and [Vue.js](https://leewannacott.github.io/table-sort-js/docs/vue.html)
-
-- <b>Option 2</b>: Load as script from a Content Delivery Network (CDN):
-
-```javascript
-<script src="https://cdn.jsdelivr.net/npm/table-sort-js@latest/table-sort.js"></script>
-```
-
-Or Minified (smaller size, but harder to debug!):
-
-```javascript
-<script src="https://cdn.jsdelivr.net/npm/table-sort-js@latest/table-sort.min.js"></script>
-```
-
-Refer to the documenation for examples on how to use table-sort-js with [HTML](https://leewannacott.github.io/table-sort-js/docs/html5.html)
-
-- <b>Option 3:</b> Download [table-sort.js](https://cdn.jsdelivr.net/npm/table-sort-js@latest/table-sort.js) (Select save as.), or download a [minified version](https://cdn.jsdelivr.net/npm/table-sort-js@latest/table-sort.min.js) (~5kB)
-
-Then rename and add the following script before your HTML table:
-
-```html
-<script src="table-sort.js"></script>
-```
 
 ## To make tables sortable:
 
@@ -64,6 +57,7 @@ Then rename and add the following script before your HTML table:
 | "no-class-infer"      | Turns off inference for adding sort classes automatically i.e (file-size-sort, runtime-sort, dates-dmy-sort). |
 | "table-arrows"        | Display ascending or descending triangles.                                                                    |
 | "remember-sort"       | If clicking on different columns remembers sort of the original column.                                       |
+| "cells-sort"          | sort cells (td) rather than table rows (tr); useful for keeping table rows with classes/attributes in place.  |
 
 <br>
 
