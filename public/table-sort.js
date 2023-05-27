@@ -56,6 +56,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     } else {
       // if <tr> or <td> exists below <thead> the browser will make <tbody>
+      console.log(
+        sortableTable.getElementsByTagName("thead").length,
+        sortableTable.querySelectorAll("tbody").length
+      );
+      let amountOfThead = sortableTable.getElementsByTagName("thead").length;
+      let amountOfTbodies = sortableTable.querySelectorAll("tbody").length;
+      let index = amountOfThead < amountOfTbodies;
+      if (amountOfThead < amountOfTbodies) {
+      }
       return sortableTable.querySelectorAll("tbody");
     }
   }

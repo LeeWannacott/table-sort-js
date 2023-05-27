@@ -4,6 +4,7 @@ const {
   createTestTableMissingBodyAndHeadTag,
   createTestTableMissingBodyTag,
   createTestTableMultipleTBodies,
+  createTestTableMultipleTBodiesWithoutTheads,
 } = require("./missingTableTags");
 
 // toBe for primitives like strings, numbers or booleans for everything else use toEqual(object)
@@ -53,6 +54,20 @@ test("test with missing <tbody> and <thead> tags", () => {
 test("Multiple <tbody> tags", () => {
   expect(
     createTestTableMultipleTBodies(
+      ["Echo", "Alpha", "Bravo", "Charlie", "Delta"],
+      [2, 1, 3, 5, 4],
+      ["diddly", "Jeremy", "squat", "Clarksons", "farm"]
+    )
+  ).toStrictEqual([
+    ["Alpha", "Bravo", "Charlie", "Delta", "Echo"],
+    ["1", "2", "3", "4", "5"],
+    ["Clarksons", "diddly", "farm", "Jeremy", "squat"],
+  ]);
+});
+
+test("Multiple <tbody> tags without theads", () => {
+  expect(
+    createTestTableMultipleTBodiesWithoutTheads(
       ["Echo", "Alpha", "Bravo", "Charlie", "Delta"],
       [2, 1, 3, 5, 4],
       ["diddly", "Jeremy", "squat", "Clarksons", "farm"]
