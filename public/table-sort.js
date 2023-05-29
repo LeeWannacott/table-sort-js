@@ -114,21 +114,21 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       rows: [],
       headers: [],
     };
+    for (let index of table.theads.keys()) {
+      table.headers.push(table.theads.item(index).querySelectorAll("th"));
+    }
     for (let index of table.bodies.keys()) {
       if (table.bodies.item(index) == null) {
         return;
       }
-      table.headers.push(table.theads.item(index).querySelectorAll("th"));
       table.rows.push(table.bodies.item(index).querySelectorAll("tr"));
     }
-
     table.hasClass = {
       noClassInfer: sortableTable.classList.contains("no-class-infer"),
       cellsSort: sortableTable.classList.contains("cells-sort"),
       tableArrows: sortableTable.classList.contains("table-arrows"),
       rememberSort: sortableTable.classList.contains("remember-sort"),
     };
-
     for (
       let headerIndex = 0;
       headerIndex < table.theads.length;
