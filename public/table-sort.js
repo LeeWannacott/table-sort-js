@@ -49,8 +49,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     if (sortableTable.getElementsByTagName("thead").length === 0) {
       createMissingTableHead(sortableTable);
       if (sortableTable.querySelectorAll("tbody").length > 1) {
-        // Why index 1?; I don't remember
-        return sortableTable.querySelectorAll("tbody")[1];
+        // don't select empty tbody that the browser creates
+        return sortableTable.querySelectorAll('tbody:not(:nth-child(2))');
       } else {
         return sortableTable.querySelectorAll("tbody");
       }
