@@ -235,7 +235,6 @@ function createTestTableMultipleTBodies(
   return [...testIfSortedArray];
 }
 
-
 function createTestTableMultipleTBodiesWithoutTheads(
   testTableData,
   testTableData2,
@@ -269,15 +268,11 @@ function createTestTableMultipleTBodiesWithoutTheads(
       <tbody>
         ${testTableTdRows}
       </tbody>
-      <thead>
         ${getClassTagsForTH}
-      </thead>
       <tbody>
         ${testTableTdRows2}
       </tbody>
-      <thead>
         ${getClassTagsForTH}
-      </thead>
       <tbody>
         ${testTableTdRows3}
       </tbody>
@@ -298,7 +293,7 @@ function createTestTableMultipleTBodiesWithoutTheads(
   const tableBodies = table.querySelectorAll("tbody");
   const tableHeads = table.querySelectorAll("thead");
 
-  console.log(tableBodies.length)
+  console.log(tableBodies.length);
   let tableRowArray = [];
   for (let i = 0; i < tableBodies.length; i++) {
     let tableRows = [...tableBodies.item(i).querySelectorAll("tr")];

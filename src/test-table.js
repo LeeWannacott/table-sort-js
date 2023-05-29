@@ -82,7 +82,7 @@ export class App extends Component {
             Statistics on public repositories pulled from the GitHub API v3:
           </h6>
           <div>
-            <table className="table table-sort table-bordered table-responsive table-hover">
+            <table className="table table-bordered table-responsive table-hover">
               <thead className="cw-light">
                 <tr>
                   <th>Repository Name</th>

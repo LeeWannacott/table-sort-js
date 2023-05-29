@@ -56,14 +56,38 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       }
     } else {
       // if <tr> or <td> exists below <thead> the browser will make <tbody>
-      console.log(
-        sortableTable.getElementsByTagName("thead").length,
-        sortableTable.querySelectorAll("tbody").length
-      );
+      // console.log(
+      // sortableTable.getElementsByTagName("thead").length,
+      // sortableTable.querySelectorAll("tbody").length
+      // );
       let amountOfThead = sortableTable.getElementsByTagName("thead").length;
       let amountOfTbodies = sortableTable.querySelectorAll("tbody").length;
-      let index = amountOfThead < amountOfTbodies;
+      let Tbodies = sortableTable.querySelectorAll("tbody");
+      let index = amountOfTbodies - amountOfThead;
+      // console.log(Tbodies.item(0))
+      // console.log(Tbodies.item(2).rows[0])
+      // console.log(Tbodies.item(i).rows[0])
+      // let createTableHead = document.createElement("thead");
+      // createTableHead.appendChild(Tbodies.item(2).rows[0]);
+      // sortableTable.insertBefore(
+      // createTableHead,
+      // Tbodies.item(2)
+      // );
+      console.log(amountOfThead,amountOfTbodies,index)
+
       if (amountOfThead < amountOfTbodies) {
+        console.log("bingo");
+        let createTableHead;
+        if (testingTableSortJS === true) {
+          createTableHead = domDocumentWindow.createElement("thead");
+        } else {
+          createTableHead = document.createElement("thead");
+        }
+        for (let i = amountOfThead; i < amountOfTbodies; i++) {
+          console.log(Tbodies.item(i).rows[0],Tbodies.item);
+          createTableHead.appendChild(Tbodies.item(i).rows[0]);
+          sortableTable.insertBefore(createTableHead, Tbodies.item(i));
+        }
       }
       return sortableTable.querySelectorAll("tbody");
     }
