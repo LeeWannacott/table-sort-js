@@ -515,6 +515,43 @@ test("dates-ymd-sort: ISO 8601 style yyyy/mm/dd; delim . or / or -", () => {
   });
 });
 
+test("Sort decimals with commas", () => {
+  expect(
+    createTestTable(
+      {
+        col0: {
+          td: [
+            "20,000.89",
+            "30,000.32",
+            "1",
+            "0.111",
+            "21,000.92",
+            "19845",
+            "12000",
+            "-90",
+            "-10,000.39",
+            "-10,000.10",
+          ],
+        },
+      },
+      { classTags: "numeric-sort" }
+    )
+  ).toStrictEqual({
+    col0: [
+      "-10,000.39",
+      "-10,000.10",
+      "-90",
+      "0.111",
+      "1",
+      "12000",
+      "19845",
+      "20,000.89",
+      "21,000.92",
+      "30,000.32",
+    ],
+  });
+});
+
 test("Sort decimal numbers", () => {
   expect(
     createTestTable(
@@ -527,7 +564,7 @@ test("Sort decimal numbers", () => {
     col0: ["0.1", "0.11", "0.13", "0.13", "0.14", "0.2", "0.3"],
   });
 });
-
+//
 test("Sort all combination positive, negative numbers with parenthesis as well", () => {
   expect(
     createTestTable(
@@ -540,7 +577,7 @@ test("Sort all combination positive, negative numbers with parenthesis as well",
     col0: ["-6", "-3", "-2.3", "(1.4)", "1", "1.05", "14"],
   });
 });
-
+//
 test("Sort all combination of negative and positive integers and decimal numbers and even alphabetical random", () => {
   expect(
     createTestTable(

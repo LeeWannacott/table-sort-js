@@ -57,10 +57,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   function inferSortClasses(tableRows, columnIndex, column, th) {
     const runtimeRegex = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
     const fileSizeRegex = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-    // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
+    // Don't infer dates with delimiter "."; as could capture semantic version numbers.
     const dmyRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
     const ymdRegex = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
-    const numericRegex = /^(?:\(\d+(?:\.\d+)?\)|-?\d+(?:\.\d+)?)$/;
+    // const numericRegex = /^(?:\(\d+(?:\.\d+)?\)|-?\d+(?:\.\d+)?)$/;  doesn't handle commas
+    const numericRegex = /^-?(?:\d{1,3}(?:[',]\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?(?:[',]\d{3})*?)$/
     const inferableClasses = {
       runtime: { regexp: runtimeRegex, class: "runtime-sort", count: 0 },
       filesize: { regexp: fileSizeRegex, class: "file-size-sort", count: 0 },
@@ -345,6 +346,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     function handleNumbers(str1, str2) {
       let num1, num2;
+      str1 = str1.replaceAll(",", "");
+      str2 = str2.replaceAll(",", "");
       num1 = parseNumberFromString(str1);
       num2 = parseNumberFromString(str2);
 
