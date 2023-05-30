@@ -3,7 +3,7 @@ const createTestTable = require("./table");
 test("Alpha - Capitalized: order-by-desc", () => {
   expect(
     createTestTable(
-      { col0: {td: ["Echo", "Alpha", "Bravo", "Charlie", "Delta"] }},
+      { col0: { td: ["Echo", "Alpha", "Bravo", "Charlie", "Delta"] } },
       {
         classTags: "order-by-desc",
       }
@@ -14,7 +14,7 @@ test("Alpha - Capitalized: order-by-desc", () => {
 test("Alpha - Lowercase: order-by-desc ", () => {
   expect(
     createTestTable(
-      { col0: {td: ["echo", "alpha", "bravo", "charlie", "delta"] }},
+      { col0: { td: ["echo", "alpha", "bravo", "charlie", "delta"] } },
       {
         classTags: "order-by-desc",
       }
@@ -24,14 +24,17 @@ test("Alpha - Lowercase: order-by-desc ", () => {
 
 test("Numerical: order-by-desc", () => {
   expect(
-    createTestTable({ col0: {td:[5, 3, 4, 1, 2] }}, { classTags: "order-by-desc" })
+    createTestTable(
+      { col0: { td: [5, 3, 4, 1, 2] } },
+      { classTags: "order-by-desc" }
+    )
   ).toStrictEqual({ col0: ["5", "4", "3", "2", "1"] });
 });
 
 test("Alphanumeric: order-by-desc", () => {
   expect(
     createTestTable(
-      { col0:{td: ["Alpha1", "Echo5", "Bravo2", "Charlie3", "Delta4"] }},
+      { col0: { td: ["Alpha1", "Echo5", "Bravo2", "Charlie3", "Delta4"] } },
       {
         classTags: "order-by-desc",
       }
@@ -44,7 +47,11 @@ test("Alphanumeric: order-by-desc", () => {
 test("Dates: order-by-desc", () => {
   expect(
     createTestTable(
-      { col0: {td: ["1979/9/6", "2008/4/9", "1879/12/16", "1978/4/6", "1978/4/16"] }},
+      {
+        col0: {
+          td: ["1979/9/6", "2008/4/9", "1879/12/16", "1978/4/6", "1978/4/16"],
+        },
+      },
       { classTags: "order-by-desc" }
     )
   ).toStrictEqual({
@@ -55,7 +62,7 @@ test("Dates: order-by-desc", () => {
 test("Money: order-by-desc", () => {
   expect(
     createTestTable(
-      { col0: {td: ["$29", "$93", "$84", "$20", "$58"] }},
+      { col0: { td: ["$29", "$93", "$84", "$20", "$58"] } },
       {
         classTags: "order-by-desc",
       }
@@ -66,7 +73,7 @@ test("Money: order-by-desc", () => {
 test("Empty cells sort at the end: order-by-desc", () => {
   expect(
     createTestTable(
-      { col0: {td: ["Echo", "", "Bravo", "", "Alpha"] }},
+      { col0: { td: ["Echo", "", "Bravo", "", "Alpha"] } },
       {
         classTags: "order-by-desc",
       }
@@ -78,18 +85,20 @@ test("Order by file-size: file-size order-by-desc", () => {
   expect(
     createTestTable(
       {
-        col0: {td:[
-          "10MB",
-          "10GB",
-          "10TB",
-          "10B",
-          "10MiB",
-          "10TiB",
-          "10Kib",
-          "10KB",
-          "10GiB",
-        ],
-      }},
+        col0: {
+          td: [
+            "10MB",
+            "10GB",
+            "10TB",
+            "10B",
+            "10MiB",
+            "10TiB",
+            "10Kib",
+            "10KB",
+            "10GiB",
+          ],
+        },
+      },
       { classTags: "order-by-desc file-size-sort" }
     )
   ).toStrictEqual({
@@ -110,7 +119,7 @@ test("Order by file-size: file-size order-by-desc", () => {
 test("Floating point numbers: order-by-desc", () => {
   expect(
     createTestTable(
-      { col0: {td:[6.23, 0.25, 3.15, 9.09, 0.35] }},
+      { col0: { td: [6.23, 0.25, 3.15, 9.09, 0.35] } },
       {
         classTags: "order-by-desc",
       }
@@ -121,7 +130,7 @@ test("Floating point numbers: order-by-desc", () => {
 test("Release Versions: order-by-desc", () => {
   expect(
     createTestTable(
-      { col0: {td: ["4.0.1", "3.0.2", "4.1.0", "3.0.4", "4.2.0"] }},
+      { col0: { td: ["4.0.1", "3.0.2", "4.1.0", "3.0.4", "4.2.0"] } },
       {
         classTags: "order-by-desc",
       }
@@ -133,16 +142,18 @@ test("data-sort: example days of week  - reversed", () => {
   expect(
     createTestTable(
       {
-        col0: {td:[
-          "Saturday",
-          "Wednesday",
-          "Sunday",
-          "Friday",
-          "Thursday",
-          "Tuesday",
-          "Monday",
-        ],
-      }},
+        col0: {
+          td: [
+            "Saturday",
+            "Wednesday",
+            "Sunday",
+            "Friday",
+            "Thursday",
+            "Tuesday",
+            "Monday",
+          ],
+        },
+      },
       { classTags: "data-sort order-by-desc" }
     )
   ).toStrictEqual({
@@ -162,14 +173,16 @@ test("visible-tr-sort: example sort only visible trs", () => {
   expect(
     createTestTable(
       {
-        col0: {td:[
-          "row1", // invisible
-          "row2",
-          "row3", // invisible
-          "row4",
-          "row5",
-        ],
-      }},
+        col0: {
+          td: [
+            "row1", // invisible
+            "row2",
+            "row3", // invisible
+            "row4",
+            "row5",
+          ],
+        },
+      },
       { classTags: "order-by-desc" },
       { invisibleIndex: [0, 2] }
     )
@@ -179,7 +192,7 @@ test("visible-tr-sort: example sort only visible trs", () => {
 test("onload-sort: testing that it sorts without a click from user", () => {
   expect(
     createTestTable(
-      { col0: {td: [5, 3, 4, 1, 2] }},
+      { col0: { td: [5, 3, 4, 1, 2] } },
       { classTags: "order-by-desc onload-sort" }
     )
   ).toStrictEqual({ col0: ["5", "4", "3", "2", "1"] });
@@ -189,8 +202,8 @@ test("order-by-desc Remember-sort: Sorting cols without rememeber-sort class.", 
   expect(
     createTestTable(
       {
-        col0: {td: ["charlie", "alpha", "beta"]},
-        col1: {td: ["carrie", "doris", "fisher"]},
+        col0: { td: ["charlie", "alpha", "beta"] },
+        col1: { td: ["carrie", "doris", "fisher"] },
       },
       {
         classTags: "order-by-desc",
@@ -210,8 +223,8 @@ test("order-by-desc Remember-sort: Sorting cols with rememeber-sort class.", () 
   expect(
     createTestTable(
       {
-        col0: {td:["charlie", "alpha", "beta"]},
-        col1: {td:["carrie", "doris", "fisher"]},
+        col0: { td: ["charlie", "alpha", "beta"] },
+        col1: { td: ["carrie", "doris", "fisher"] },
       },
       {
         classTags: "order-by-desc",

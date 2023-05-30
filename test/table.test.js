@@ -5,7 +5,7 @@ const createTestTable = require("./table");
 test("Alpha - Capitalized ", () => {
   expect(
     createTestTable(
-      { col0: {td: ["Echo", "Alpha", "Bravo", "Charlie", "Delta"]} },
+      { col0: { td: ["Echo", "Alpha", "Bravo", "Charlie", "Delta"] } },
       {
         classTags: "",
       }
@@ -16,7 +16,7 @@ test("Alpha - Capitalized ", () => {
 test("Alpha - Lowercase", () => {
   expect(
     createTestTable(
-      { col0: {td:["echo", "alpha", "bravo", "charlie", "delta"]} },
+      { col0: { td: ["echo", "alpha", "bravo", "charlie", "delta"] } },
       {
         classTags: "",
       }
@@ -26,14 +26,14 @@ test("Alpha - Lowercase", () => {
 
 test("Numerical", () => {
   expect(
-    createTestTable({ col0: {td: [5, 3, 4, 1, 2]} }, { classTags: "" })
+    createTestTable({ col0: { td: [5, 3, 4, 1, 2] } }, { classTags: "" })
   ).toStrictEqual({ col0: ["1", "2", "3", "4", "5"] });
 });
 
 test("Alphanumeric: natural sort", () => {
   expect(
     createTestTable(
-      { col0: {td:["Alpha1", "Echo5", "Bravo2", "Charlie3", "Delta4"]} },
+      { col0: { td: ["Alpha1", "Echo5", "Bravo2", "Charlie3", "Delta4"] } },
       {
         classTags: "",
       }
@@ -46,7 +46,11 @@ test("Alphanumeric: natural sort", () => {
 test("Dates", () => {
   expect(
     createTestTable(
-      { col0: {td:["1979/9/6", "2008/4/9", "1879/12/16", "1978/4/6", "1978/4/16"]} },
+      {
+        col0: {
+          td: ["1979/9/6", "2008/4/9", "1879/12/16", "1978/4/6", "1978/4/16"],
+        },
+      },
       { classTags: "" }
     )
   ).toStrictEqual({
@@ -57,7 +61,7 @@ test("Dates", () => {
 test("Money", () => {
   expect(
     createTestTable(
-      { col0: {td: ["$29", "$93", "$84", "$20", "$58"]} },
+      { col0: { td: ["$29", "$93", "$84", "$20", "$58"] } },
       { classTags: "" }
     )
   ).toStrictEqual({ col0: ["$20", "$29", "$58", "$84", "$93"] });
@@ -66,7 +70,7 @@ test("Money", () => {
 test("Empty cells sort at the end.", () => {
   expect(
     createTestTable(
-      { col0: {td: ["Echo", "", "Bravo", "", "Alpha"]} },
+      { col0: { td: ["Echo", "", "Bravo", "", "Alpha"] } },
       { classTags: "" }
     )
   ).toStrictEqual({ col0: ["Alpha", "Bravo", "Echo", "", ""] });
@@ -75,7 +79,21 @@ test("Empty cells sort at the end.", () => {
 test("Order by file-size: file-size", () => {
   expect(
     createTestTable(
-      { col0: {td:[ "10MB", "10GB", "10TB", "10B", "10MiB", "10TiB", "10Kib", "10KB", "10GiB", ]}},
+      {
+        col0: {
+          td: [
+            "10MB",
+            "10GB",
+            "10TB",
+            "10B",
+            "10MiB",
+            "10TiB",
+            "10Kib",
+            "10KB",
+            "10GiB",
+          ],
+        },
+      },
       { classTags: "file-size-sort" }
     )
   ).toStrictEqual({
@@ -98,7 +116,7 @@ test("Order by file-size: file-size", () => {
 test("Alpha - lower & upper", () => {
   expect(
     createTestTable(
-      { col0:{td: ["AlPhA", "bRaVo", "EcHo", "ChArLiE", "dElTa"] }},
+      { col0: { td: ["AlPhA", "bRaVo", "EcHo", "ChArLiE", "dElTa"] } },
       {
         classTags: "",
       }
@@ -108,14 +126,19 @@ test("Alpha - lower & upper", () => {
 
 test("Floating point numbers", () => {
   expect(
-    createTestTable({ col0: {td: [6.23, 0.25, 3.15, 9.09, 0.35]} }, { classTags: "" })
+    createTestTable(
+      { col0: { td: [6.23, 0.25, 3.15, 9.09, 0.35] } },
+      { classTags: "" }
+    )
   ).toStrictEqual({ col0: ["0.25", "0.35", "3.15", "6.23", "9.09"] });
 });
 
 test("Release Versions", () => {
   expect(
     createTestTable(
-      { col0: {td: ["4.18.0", "3.0.2", "4.1.0", "3.0.18", "4.2.0", "4.17.1"] }},
+      {
+        col0: { td: ["4.18.0", "3.0.2", "4.1.0", "3.0.18", "4.2.0", "4.17.1"] },
+      },
       {
         classTags: "",
       }
@@ -129,15 +152,17 @@ test("data-sort: example days of week", () => {
   expect(
     createTestTable(
       {
-        col0: {td:[
-          "Saturday",
-          "Wednesday",
-          "Sunday",
-          "Friday",
-          "Thursday",
-          "Tuesday",
-          "Monday",
-        ],}
+        col0: {
+          td: [
+            "Saturday",
+            "Wednesday",
+            "Sunday",
+            "Friday",
+            "Thursday",
+            "Tuesday",
+            "Monday",
+          ],
+        },
       },
       { classTags: "data-sort" }
     )
@@ -158,16 +183,18 @@ test("data-sort clicked twice: example days of week", () => {
   expect(
     createTestTable(
       {
-        col0: {td: [
-          "Saturday",
-          "Wednesday",
-          "Sunday",
-          "Friday",
-          "Thursday",
-          "Tuesday",
-          "Monday",
-        ],
-      }},
+        col0: {
+          td: [
+            "Saturday",
+            "Wednesday",
+            "Sunday",
+            "Friday",
+            "Thursday",
+            "Tuesday",
+            "Monday",
+          ],
+        },
+      },
       { classTags: "data-sort" },
       {
         colsToClick: [0, 0],
@@ -189,7 +216,7 @@ test("data-sort clicked twice: example days of week", () => {
 test("disable-sort: disable sorting on a column", () => {
   expect(
     createTestTable(
-      { col0: {td: ["row2", "row1", "row4", "row3"]} },
+      { col0: { td: ["row2", "row1", "row4", "row3"] } },
       {
         classTags: "disable-sort",
       }
@@ -200,7 +227,7 @@ test("disable-sort: disable sorting on a column", () => {
 test("alpha-sort: sort alphabetically as opposed to natural sorting", () => {
   expect(
     createTestTable(
-      { col0: {td: ["z2", "z11", "z89", "z82", "z8"]} },
+      { col0: { td: ["z2", "z11", "z89", "z82", "z8"] } },
       {
         classTags: "alpha-sort",
       }
@@ -211,7 +238,7 @@ test("alpha-sort: sort alphabetically as opposed to natural sorting", () => {
 test("punc-sort: sort involving punctuation - nat sort", () => {
   expect(
     createTestTable(
-      { col0: {td: ["row2", "*row1", "-row4", "-row3", "#row3"]}},
+      { col0: { td: ["row2", "*row1", "-row4", "-row3", "#row3"] } },
       {
         classTags: "punct-sort",
       },
@@ -226,8 +253,8 @@ test("testing that multiple columns works", () => {
   expect(
     createTestTable(
       {
-        col0: {td: ["charlie", "alpha", "beta"]},
-        col1:{td: ["doris", "carrie", "fisher"]},
+        col0: { td: ["charlie", "alpha", "beta"] },
+        col1: { td: ["doris", "carrie", "fisher"] },
       },
       {
         classTags: "",
@@ -245,7 +272,7 @@ test("testing that multiple columns works", () => {
 test("onload-sort: testing that it sorts without a click from user", () => {
   expect(
     createTestTable(
-      { col0: {td:["echo", "alpha", "bravo", "charlie", "delta"] }},
+      { col0: { td: ["echo", "alpha", "bravo", "charlie", "delta"] } },
       {
         classTags: "onload-sort",
       }
@@ -257,8 +284,8 @@ test("Clicking multiple times (>2) doesn't break sorting", () => {
   expect(
     createTestTable(
       {
-        col0: {td: ["charlie", "alpha", "beta"]},
-        col1: {td: ["doris", "carrie", "fisher"]},
+        col0: { td: ["charlie", "alpha", "beta"] },
+        col1: { td: ["doris", "carrie", "fisher"] },
       },
       {
         classTags: "",
@@ -277,8 +304,8 @@ test("Sorting columns without rememeber-sort ", () => {
   expect(
     createTestTable(
       {
-        col0:{td: ["charlie", "alpha", "beta"]},
-        col1: {td:["doris", "carrie", "fisher"]},
+        col0: { td: ["charlie", "alpha", "beta"] },
+        col1: { td: ["doris", "carrie", "fisher"] },
       },
       {
         classTags: "",
@@ -298,8 +325,8 @@ test("Remember-sort: Sorting cols that have the rememeber-sort class.", () => {
   expect(
     createTestTable(
       {
-        col0: {td: ["charlie", "alpha", "beta"]},
-        col1: {td:["doris", "carrie", "fisher"]},
+        col0: { td: ["charlie", "alpha", "beta"] },
+        col1: { td: ["doris", "carrie", "fisher"] },
       },
       {
         classTags: "",
@@ -319,8 +346,8 @@ test("Checking ", () => {
   expect(
     createTestTable(
       {
-        col0: {td: ["charlie", "alpha", "beta"]},
-        col1: {td: ["doris", "carrie", "fisher"]},
+        col0: { td: ["charlie", "alpha", "beta"] },
+        col1: { td: ["doris", "carrie", "fisher"] },
       },
       {
         classTags: "",
@@ -340,20 +367,22 @@ test("runtime-sort", () => {
   expect(
     createTestTable(
       {
-        col0: {td:[
-          "2m 52s",
-          "1h 20m 10s",
-          "3s",
-          "11h 10m 10s",
-          "7s",
-          "11m 40s",
-          "36s",
-          "1h 10m 10s",
-          "9m 44s",
-          "1m 36s",
-          "41s",
-        ],
-      }},
+        col0: {
+          td: [
+            "2m 52s",
+            "1h 20m 10s",
+            "3s",
+            "11h 10m 10s",
+            "7s",
+            "11m 40s",
+            "36s",
+            "1h 10m 10s",
+            "9m 44s",
+            "1m 36s",
+            "41s",
+          ],
+        },
+      },
       {
         classTags: "runtime-sort",
       },
@@ -382,18 +411,20 @@ test("dates-dmy-sort: UK style dd/mm/yyyy; delim . or / or -", () => {
   expect(
     createTestTable(
       {
-        col0: {td: [
-          "17/6/1978",
-          "18.10.2027",
-          "10-12-2017",
-          "13/12/2017",
-          "4.9.2008",
-          "2.3.1879",
-          "22.3.1879",
-          "8/6/1978",
-          "4/6/1978",
-        ],
-      }},
+        col0: {
+          td: [
+            "17/6/1978",
+            "18.10.2027",
+            "10-12-2017",
+            "13/12/2017",
+            "4.9.2008",
+            "2.3.1879",
+            "22.3.1879",
+            "8/6/1978",
+            "4/6/1978",
+          ],
+        },
+      },
       { classTags: "dates-dmy-sort" }
     )
   ).toStrictEqual({
@@ -415,15 +446,17 @@ test("dates-mdy-sort: US style mm/dd/yyyy; delim . or / or -", () => {
   expect(
     createTestTable(
       {
-        col0: {td: [
-          "1-14-1992",
-          "1.13.1992",
-          "4.30.2008",
-          "1/20/1992",
-          "10-12-2017",
-          "2/14/1992",
-        ],
-      }},
+        col0: {
+          td: [
+            "1-14-1992",
+            "1.13.1992",
+            "4.30.2008",
+            "1/20/1992",
+            "10-12-2017",
+            "2/14/1992",
+          ],
+        },
+      },
       { classTags: "dates-mdy-sort" }
     )
   ).toStrictEqual({
@@ -442,15 +475,17 @@ test("dates-mdy-sort US style overrides inferred class dates-dmy-sort:", () => {
   expect(
     createTestTable(
       {
-        col0: {td: [
-          "1-14-1992",
-          "1.13.1992",
-          "4.30.2008",
-          "1/20/1992",
-          "10-12-2017",
-          "2/14/1992",
-        ],
-      }},
+        col0: {
+          td: [
+            "1-14-1992",
+            "1.13.1992",
+            "4.30.2008",
+            "1/20/1992",
+            "10-12-2017",
+            "2/14/1992",
+          ],
+        },
+      },
       { classTags: "dates-mdy-sort dates-dmy-sort" }
     )
   ).toStrictEqual({
@@ -469,7 +504,9 @@ test("dates-ymd-sort: ISO 8601 style yyyy/mm/dd; delim . or / or -", () => {
   expect(
     createTestTable(
       {
-        col0: {td: ["2023/09/6", "2023-03-9", "2023.12.16", "2023/4/6", "2023/4/32"]},
+        col0: {
+          td: ["2023/09/6", "2023-03-9", "2023.12.16", "2023/4/6", "2023/4/32"],
+        },
       },
       { classTags: "dates-ymd-sort" }
     )
@@ -482,7 +519,7 @@ test("Sort decimal numbers", () => {
   expect(
     createTestTable(
       {
-        col0: {td: ["0.1", "0.2", "0.3", "0.11", "0.13", "0.13", "0.14"]},
+        col0: { td: ["0.1", "0.2", "0.3", "0.11", "0.13", "0.13", "0.14"] },
       },
       { classTags: "numeric-sort" }
     )
@@ -495,7 +532,7 @@ test("Sort all combination positive, negative numbers with parenthesis as well",
   expect(
     createTestTable(
       {
-        col0: {td:["1.05", "-2.3", "-3", "1", "-6", "(1.4)", "14"]},
+        col0: { td: ["1.05", "-2.3", "-3", "1", "-6", "(1.4)", "14"] },
       },
       { classTags: "numeric-sort" }
     )
@@ -508,19 +545,21 @@ test("Sort all combination of negative and positive integers and decimal numbers
   expect(
     createTestTable(
       {
-        col0: {td:[
-          "1.05",
-          "-2.3",
-          "-3",
-          "1",
-          "-6",
-          "",
-          "(0.5)",
-          "1a",
-          "b",
-          "(c)",
-          "{1}",
-        ]},
+        col0: {
+          td: [
+            "1.05",
+            "-2.3",
+            "-3",
+            "1",
+            "-6",
+            "",
+            "(0.5)",
+            "1a",
+            "b",
+            "(c)",
+            "{1}",
+          ],
+        },
       },
       { classTags: "numeric-sort" }
     )
@@ -545,7 +584,7 @@ test("default behavior without cells-sort (tr's move when sorted)", () => {
   expect(
     createTestTable(
       {
-        col0: {td: ["8", "2", "3", "4", "5", "6", "0", "1", "7"]},
+        col0: { td: ["8", "2", "3", "4", "5", "6", "0", "1", "7"] },
       },
       { classTags: "" },
       // note this isn't an actual class just used for testing purposes
@@ -570,7 +609,7 @@ test("cells-sort table class (tr's stay in place, but td's are sorted)", () => {
   expect(
     createTestTable(
       {
-        col0: {td: ["8", "2", "3", "4", "5", "6", "0", "1", "7"]},
+        col0: { td: ["8", "2", "3", "4", "5", "6", "0", "1", "7"] },
       },
       { classTags: "" },
       { tableTags: "cells-sort", trClasses: "test" }
@@ -590,30 +629,29 @@ test("cells-sort table class (tr's stay in place, but td's are sorted)", () => {
   });
 });
 
-
-// 
+//
 // test("colspan", () => {
-  // expect(
-    // createTestTable(
-      // {
-        // col0: {td:["8", "2", "3", "4", "5", "6", "0", "1", "7"]},
-        // col1: {td:["8", "2", "3", "4", "5", "6", "0", "1", "7"]},
-        // col2: {td:["8", "2", "3", "4", "5", "6", "0", "1", "7"]},
-      // },
-      // { classTags: "data-sort" },
-      // { tableTags: "tr-sort", trClasses: "test" }
-    // )
-  // ).toStrictEqual({
-    // col0: [
-      // '<tr class="test-0"> <td>0</td></tr>',
-      // '<tr class="test-1"> <td>1</td></tr>',
-      // '<tr class="test-2"> <td>2</td></tr>',
-      // '<tr class="test-3"> <td>3</td></tr>',
-      // '<tr class="test-4"> <td>4</td></tr>',
-      // '<tr class="test-5"> <td>5</td></tr>',
-      // '<tr class="test-6"> <td>6</td></tr>',
-      // '<tr class="test-7"> <td>7</td></tr>',
-      // '<tr class="test-8"> <td>8</td></tr>',
-    // ],
-  // });
+// expect(
+// createTestTable(
+// {
+// col0: {td:["8", "2", "3", "4", "5", "6", "0", "1", "7"]},
+// col1: {td:["8", "2", "3", "4", "5", "6", "0", "1", "7"]},
+// col2: {td:["8", "2", "3", "4", "5", "6", "0", "1", "7"]},
+// },
+// { classTags: "data-sort" },
+// { tableTags: "tr-sort", trClasses: "test" }
+// )
+// ).toStrictEqual({
+// col0: [
+// '<tr class="test-0"> <td>0</td></tr>',
+// '<tr class="test-1"> <td>1</td></tr>',
+// '<tr class="test-2"> <td>2</td></tr>',
+// '<tr class="test-3"> <td>3</td></tr>',
+// '<tr class="test-4"> <td>4</td></tr>',
+// '<tr class="test-5"> <td>5</td></tr>',
+// '<tr class="test-6"> <td>6</td></tr>',
+// '<tr class="test-7"> <td>7</td></tr>',
+// '<tr class="test-8"> <td>8</td></tr>',
+// ],
+// });
 // });
