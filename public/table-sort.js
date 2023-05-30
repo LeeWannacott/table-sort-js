@@ -345,6 +345,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
 
     function handleNumbers(str1, str2) {
       let num1, num2;
+      str1 = str1.replaceAll(",", "");
+      str2 = str2.replaceAll(",", "");
       num1 = parseNumberFromString(str1);
       num2 = parseNumberFromString(str2);
 
