@@ -63,12 +63,12 @@ function createTestTable(
     <body>
       <table class="table-sort ${props.tableTags}">
       <thead>
-      ${testTableHeaders}
+        ${testTableHeaders}
       </thead>
-    <tbody>
-    ${testTableTdRows}
-    </tbody>
-  </table> 
+      <tbody>
+        ${testTableTdRows}
+      </tbody>
+    </table> 
   </body>
   </html>`);
 
