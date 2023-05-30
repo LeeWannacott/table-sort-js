@@ -19,11 +19,11 @@ function createTestTable(
   function getRowsOfTd(index, type) {
     let rowsOfTd = "";
     for (let key in testTableData) {
-      if (testTableData[key]) {
+      if (testTableData[key].td) {
         if (type === "data-sort") {
-          rowsOfTd += `<td data-sort="${index}">${testTableData[key][index]}</td>`;
+          rowsOfTd += `<td data-sort="${index}">${testTableData[key].td[index]}</td>`;
         } else {
-          rowsOfTd += `<td>${testTableData[key][index]}</td>`;
+          rowsOfTd += `<td>${testTableData[key].td[index]}</td>`;
         }
       }
     }
@@ -31,7 +31,7 @@ function createTestTable(
   }
 
   let testTableTdRows = [];
-  for (let i = 0; i < testTableData["col0"].length; i++) {
+  for (let i = 0; i < testTableData["col0"].td.length; i++) {
     let testTableTdRow;
     if (thAttributes.classTags.includes("data-sort")) {
       testTableTdRow = `${getRowsOfTd(i, "data-sort")}`;
@@ -63,12 +63,12 @@ function createTestTable(
     <body>
       <table class="table-sort ${props.tableTags}">
       <thead>
-      ${testTableHeaders}
+        ${testTableHeaders}
       </thead>
-    <tbody>
-    ${testTableTdRows}
-    </tbody>
-  </table> 
+      <tbody>
+        ${testTableTdRows}
+      </tbody>
+    </table> 
   </body>
   </html>`);
 
