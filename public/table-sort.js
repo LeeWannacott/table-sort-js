@@ -61,7 +61,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     const dmyRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
     const ymdRegex = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
     // const numericRegex = /^(?:\(\d+(?:\.\d+)?\)|-?\d+(?:\.\d+)?)$/;  doesn't handle commas
-    const numericRegex = /^-?(?:\d{1,3}(?:[',]\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?(?:[',]\d{3})*?)$/
+    const numericRegex =
+      /^-?(?:\d{1,3}(?:[',]\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?(?:[',]\d{3})*?)$/;
     const inferableClasses = {
       runtime: { regexp: runtimeRegex, class: "runtime-sort", count: 0 },
       filesize: { regexp: fileSizeRegex, class: "file-size-sort", count: 0 },
