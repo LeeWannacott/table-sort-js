@@ -49,8 +49,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     if (sortableTable.getElementsByTagName("thead").length === 0) {
       createMissingTableHead(sortableTable);
       if (sortableTable.querySelectorAll("tbody").length > 1) {
-        // Why index 1?; I don't remember
-        return sortableTable.querySelectorAll("tbody")[1];
+        // don't select empty tbody that the browser creates
+        return sortableTable.querySelectorAll('tbody:not(:nth-child(2))');
       } else {
         return sortableTable.querySelectorAll("tbody");
       }
@@ -85,8 +85,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       let foundMatch = false;
       for (let key of Object.keys(inferableClasses)) {
         let classRegexp = inferableClasses[key].regexp;
-        if (tableColumn.innerText) {
-          if (tableColumn.innerText.match(classRegexp) !== null) {
+        if (tableColumn?.innerText !== undefined) {
+          if (tableColumn.innerText.match(classRegexp)) {
             foundMatch = true;
             inferableClasses[key].count++;
           }
@@ -114,21 +114,21 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       rows: [],
       headers: [],
     };
+    for (let index of table.theads.keys()) {
+      table.headers.push(table.theads.item(index).querySelectorAll("th"));
+    }
     for (let index of table.bodies.keys()) {
       if (table.bodies.item(index) == null) {
         return;
       }
-      table.headers.push(table.theads.item(index).querySelectorAll("th"));
       table.rows.push(table.bodies.item(index).querySelectorAll("tr"));
     }
-
     table.hasClass = {
       noClassInfer: sortableTable.classList.contains("no-class-infer"),
       cellsSort: sortableTable.classList.contains("cells-sort"),
       tableArrows: sortableTable.classList.contains("table-arrows"),
       rememberSort: sortableTable.classList.contains("remember-sort"),
     };
-
     for (
       let headerIndex = 0;
       headerIndex < table.theads.length;
