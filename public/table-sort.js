@@ -17,13 +17,10 @@ Instructions:
 
 function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   function getHTMLTables() {
-    if (testingTableSortJS === true) {
-      const getTagTable = domDocumentWindow.getElementsByTagName("table");
-      return [getTagTable];
-    } else {
-      const getTagTable = document.getElementsByTagName("table");
-      return [getTagTable];
-    }
+    const getTagTable = !testingTableSortJS
+      ? document.getElementsByTagName("table")
+      : domDocumentWindow.getElementsByTagName("table");
+    return [getTagTable];
   }
 
   const [getTagTable] = getHTMLTables();
@@ -35,12 +32,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function createMissingTableHead(sortableTable) {
-    let createTableHead;
-    if (testingTableSortJS === true) {
-      createTableHead = domDocumentWindow.createElement("thead");
-    } else {
-      createTableHead = document.createElement("thead");
-    }
+    let createTableHead = !testingTableSortJS
+      ? document.createElement("thead")
+      : domDocumentWindow.createElement("thead");
     createTableHead.appendChild(sortableTable.rows[0]);
     sortableTable.insertBefore(createTableHead, sortableTable.firstChild);
   }
@@ -50,7 +44,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       createMissingTableHead(sortableTable);
       if (sortableTable.querySelectorAll("tbody").length > 1) {
         // don't select empty tbody that the browser creates
-        return sortableTable.querySelectorAll('tbody:not(:nth-child(2))');
+        return sortableTable.querySelectorAll("tbody:not(:nth-child(2))");
       } else {
         return sortableTable.querySelectorAll("tbody");
       }
@@ -244,19 +238,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
         let columnOfTd = "";
         // TODO: github actions runtime didn't like textContent, tests didn't like innerText?
-        if (testingTableSortJS) {
-          columnOfTd = column.getColumn(
-            tr,
-            column.spanSum,
-            column.span
-          ).textContent;
-        } else {
-          columnOfTd = column.getColumn(
-            tr,
-            column.spanSum,
-            column.span
-          ).innerText;
-        }
+        columnOfTd = column.getColumn(tr, column.spanSum, column.span);
+        columnOfTd = testingTableSortJS
+          ? columnOfTd.textContent
+          : columnOfTd.innerText;
         let match = columnOfTd.match(regexMinutesAndSeconds);
         let [minutesInSeconds, hours, seconds] = [0, 0, 0];
         let timeinSeconds = columnOfTd;
