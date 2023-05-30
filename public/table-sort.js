@@ -54,7 +54,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
-  function inferSortClasses(tableRows, columnIndex, th) {
+  function inferSortClasses(tableRows, columnIndex, column, th) {
     const runtimeRegex = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
     const fileSizeRegex = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
     // Doesn't infer dates with delimiter "."; as could capture semantic version numbers.
@@ -75,7 +75,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       if (regexNotFoundCount >= threshold) {
         break;
       }
-      const tableColumn = tr.querySelectorAll("td").item(columnIndex);
+      const tableColumn = tr
+        .querySelectorAll("td")
+        .item(
+          column.span[columnIndex] === 1
+            ? column.spanSum[columnIndex] - 1
+            : column.spanSum[columnIndex] - column.span[columnIndex]
+        );
       let foundMatch = false;
       for (let key of Object.keys(inferableClasses)) {
         let classRegexp = inferableClasses[key].regexp;
@@ -129,11 +135,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       headerIndex++
     ) {
       let columnIndexesClicked = [];
+      const column = { span: {}, spanSum: {} };
+      getColSpanData(table.headers[headerIndex], column);
       for (let [columnIndex, th] of table.headers[headerIndex].entries()) {
         if (!th.classList.contains("disable-sort")) {
           th.style.cursor = "pointer";
           if (!table.hasClass.noClassInfer) {
-            inferSortClasses(table.rows[headerIndex], columnIndex, th);
+            inferSortClasses(table.rows[headerIndex], columnIndex, column, th);
           }
           makeEachColumnSortable(
             th,
@@ -416,13 +424,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       template.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
       tr = template.content.firstChild;
     }
-    let getColumnTd = column.getColumn(
-      tr,
-      column.spanSum,
-      column.span
-    );
-    let fileSizeInBytesHTML = getColumnTd.outerHTML
-    const fileSizeInBytesText = getColumnTd.textContent
+    let getColumnTd = column.getColumn(tr, column.spanSum, column.span);
+    let fileSizeInBytesHTML = getColumnTd.outerHTML;
+    const fileSizeInBytesText = getColumnTd.textContent;
     const fileSize = column.toBeSorted[i].replace(/#[0-9]*/, "");
     let prefixes = ["", "Ki", "Mi", "Gi", "Ti", "Pi"];
     let replaced = false;
