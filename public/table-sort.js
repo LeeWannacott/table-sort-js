@@ -416,17 +416,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       template.innerHTML = columnIndexAndTableRow[column.toBeSorted[i]];
       tr = template.content.firstChild;
     }
-    let fileSizeInBytesHTML = column.getColumn(
+    let getColumnTd = column.getColumn(
       tr,
       column.spanSum,
       column.span
-    ).outerHTML;
-    const fileSizeInBytesText = column.getColumn(
-      tr,
-      column.spanSum,
-      column.span
-    ).textContent;
-
+    );
+    let fileSizeInBytesHTML = getColumnTd.outerHTML
+    const fileSizeInBytesText = getColumnTd.textContent
     const fileSize = column.toBeSorted[i].replace(/#[0-9]*/, "");
     let prefixes = ["", "Ki", "Mi", "Gi", "Ti", "Pi"];
     let replaced = false;
