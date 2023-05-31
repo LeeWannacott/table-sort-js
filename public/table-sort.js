@@ -189,19 +189,24 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     for (let tr of e.target.tableRows[0]) {
       let maxScoreForRow = [];
       let tds = tr.querySelectorAll("td");
+      let tdlengths = []
       for (let td of tds) {
         let sum = 0;
-        for (let char of Array.from(e.target.value)){
+        for (let char of Array.from(e.target.value)) {
           if (td.innerText.includes(char)) {
             sum += 1;
             console.log(td.innerText);
-            maxScoreForRow.push(sum);
           } else {
-            maxScoreForRow.push(0);
+            sum +=0
           }
+        }
+            maxScoreForRow.push(sum);
+        tdlengths.push(td.innerText.length)
       }
-      }
-      columnData.push(Math.max(...maxScoreForRow));
+      console.log(maxScoreForRow)
+     let mathMax = Math.max(...maxScoreForRow)
+      let index = maxScoreForRow.indexOf(mathMax)
+      columnData.push(Math.max(...maxScoreForRow)/tdlengths[index]);
     }
     console.log("col", columnData);
   }
