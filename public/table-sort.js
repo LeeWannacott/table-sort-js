@@ -49,13 +49,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         return sortableTable.querySelectorAll("tbody");
       }
     } else {
-      let input = document.createElement('input')
-      input.style.backgroundColor = "red"
-      input.setAttribute("type", "text"); 
-      input.setAttribute("id", "fuzzy")
-      input.addEventListener("input", sortFuzzySearch);
-      console.log("yo")
-      sortableTable.insertBefore(input, sortableTable.firstChild);
       // if <tr> or <td> exists below <thead> the browser will make <tbody>
       return sortableTable.querySelectorAll("tbody");
     }
@@ -123,13 +116,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       rows: [],
       headers: [],
     };
+    if (table.bodies.item(0) == null) {
+      return;
+    }
     for (let index of table.theads.keys()) {
       table.headers.push(table.theads.item(index).querySelectorAll("th"));
     }
     for (let index of table.bodies.keys()) {
-      if (table.bodies.item(index) == null) {
-        return;
-      }
       table.rows.push(table.bodies.item(index).querySelectorAll("tr"));
     }
     table.hasClass = {
@@ -138,6 +131,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       tableArrows: sortableTable.classList.contains("table-arrows"),
       rememberSort: sortableTable.classList.contains("remember-sort"),
     };
+
+    let input = document.createElement("input");
+    input.style.backgroundColor = "red";
+    input.setAttribute("type", "text");
+    input.setAttribute("id", "fuzzy");
+    input.tableRows = table.rows;
+    input.addEventListener("input", sortFuzzySearch);
+    sortableTable.insertBefore(input, sortableTable.firstChild);
+
     for (
       let headerIndex = 0;
       headerIndex < table.theads.length;
@@ -181,11 +183,27 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
-  function sortFuzzySearch(e){
-    console.log(e.target.value)
-
-
-
+  function sortFuzzySearch(e) {
+    console.log(Array.from(e.target.value));
+    let columnData = [];
+    for (let tr of e.target.tableRows[0]) {
+      let maxScoreForRow = [];
+      let tds = tr.querySelectorAll("td");
+      for (let td of tds) {
+        let sum = 0;
+        for (let char of Array.from(e.target.value)){
+          if (td.innerText.includes(char)) {
+            sum += 1;
+            console.log(td.innerText);
+            maxScoreForRow.push(sum);
+          } else {
+            maxScoreForRow.push(0);
+          }
+      }
+      }
+      columnData.push(Math.max(...maxScoreForRow));
+    }
+    console.log("col", columnData);
   }
 
   function sortFileSize(table, column, columnIndex) {
