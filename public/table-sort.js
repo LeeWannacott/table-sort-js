@@ -49,6 +49,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         return sortableTable.querySelectorAll("tbody");
       }
     } else {
+      let input = document.createElement('input')
+      input.style.backgroundColor = "red"
+      input.setAttribute("type", "text"); 
+      input.setAttribute("id", "fuzzy")
+      input.addEventListener("input", sortFuzzySearch);
+      console.log("yo")
+      sortableTable.insertBefore(input, sortableTable.firstChild);
       // if <tr> or <td> exists below <thead> the browser will make <tbody>
       return sortableTable.querySelectorAll("tbody");
     }
@@ -172,6 +179,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       column.toBeSorted.push(`${dataAttributeTd}#${i}`);
       columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(table, tr);
     }
+  }
+
+  function sortFuzzySearch(e){
+    console.log(e.target.value)
+
+
+
   }
 
   function sortFileSize(table, column, columnIndex) {
