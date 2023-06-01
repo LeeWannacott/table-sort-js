@@ -137,6 +137,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     input.setAttribute("type", "text");
     input.setAttribute("id", "fuzzy");
     input.tableRows = table.rows;
+    input.table = table;
     input.addEventListener("input", sortFuzzySearch);
     sortableTable.insertBefore(input, sortableTable.firstChild);
 
@@ -186,29 +187,48 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   function sortFuzzySearch(e) {
     console.log(Array.from(e.target.value));
     let columnData = [];
-    for (let tr of e.target.tableRows[0]) {
+    for (let [i, tr] of e.target.tableRows[0].entries()) {
       let maxScoreForRow = [];
       let tds = tr.querySelectorAll("td");
-      let tdlengths = []
+      let tdlengths = [];
       for (let td of tds) {
         let sum = 0;
         for (let char of Array.from(e.target.value)) {
           if (td.innerText.includes(char)) {
             sum += 1;
-            console.log(td.innerText);
-          } else {
-            sum +=0
           }
         }
-            maxScoreForRow.push(sum);
-        tdlengths.push(td.innerText.length)
+        maxScoreForRow.push(sum);
+        tdlengths.push(td.innerText.length);
       }
-      console.log(maxScoreForRow)
-     let mathMax = Math.max(...maxScoreForRow)
-      let index = maxScoreForRow.indexOf(mathMax)
-      columnData.push(Math.max(...maxScoreForRow)/tdlengths[index]);
+      let mathMax = Math.max(...maxScoreForRow);
+      let index = maxScoreForRow.indexOf(mathMax);
+      if (!isNaN(mathMax / tdlengths[index])) {
+        columnData.push(`${mathMax / tdlengths[index]}#${i}`);
+        columnIndexAndTableRow[`${mathMax / tdlengths[index]}#${i}`] =
+          cellsOrRows(e.target.table, tr);
+      } else {
+        columnData.push(`0#${i}`);
+        columnIndexAndTableRow[`0#${i}`] = cellsOrRows(e.target.table, tr);
+      }
     }
-    console.log("col", columnData);
+    console.log(columnData);
+
+    columnData.sort().reverse();
+
+    console.log("reversed", columnData);
+
+    for (let [i, tr] of e.target.tableRows[0].entries()) {
+      if (e.target.table.hasClass.cellsSort) {
+        tr.innerHTML = columnIndexAndTableRow[columnData[i]];
+      } else {
+        console.log("i", columnIndexAndTableRow[columnData[i]]);
+        const template = document.createElement("template");
+        template.outerHTML = columnIndexAndTableRow[columnData[i]];
+        tr = template.content;
+        // tr.outerHTML =  columnIndexAndTableRow[columnData[i]];
+      }
+    }
   }
 
   function sortFileSize(table, column, columnIndex) {
