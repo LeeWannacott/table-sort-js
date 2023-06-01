@@ -132,14 +132,19 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       rememberSort: sortableTable.classList.contains("remember-sort"),
     };
 
+    let div = document.createElement("div");
     let input = document.createElement("input");
-    input.style.backgroundColor = "red";
+    let label = document.createElement("label");
+    div.style.display ="flex"
+    label.innerHTML = "Search:"
     input.setAttribute("type", "text");
-    input.setAttribute("id", "fuzzy");
+    input.setAttribute("id", "fuzzy-search");
     input.tableRows = table.rows;
     input.table = table;
     input.addEventListener("input", sortFuzzySearch);
-    sortableTable.insertBefore(input, sortableTable.firstChild);
+    div.appendChild(label)
+    div.appendChild(input)
+    sortableTable.insertBefore(div, sortableTable.firstChild);
 
     for (
       let headerIndex = 0;
@@ -185,49 +190,50 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function sortFuzzySearch(e) {
-    console.log(Array.from(e.target.value));
-    let columnData = [];
-    for (let [i, tr] of e.target.tableRows[0].entries()) {
-      let maxScoreForRow = [];
-      let tds = tr.querySelectorAll("td");
-      let tdlengths = [];
+    for (let bodyIndex = 0; bodyIndex< e.target.tableRows.length;bodyIndex++){
+      const columnToBeSorted = [];
+    for (let [i, tr] of e.target.tableRows[bodyIndex].entries()) {
+      const maxSimiliarityForRow = [];
+      const tds = tr.querySelectorAll("td");
+      const tdLengths = [];
       for (let td of tds) {
-        let sum = 0;
-        for (let char of Array.from(e.target.value)) {
-          if (td.innerText.includes(char)) {
-            sum += 1;
+        let amountOfCharsInTd = 0;
+        for (let character of Array.from(e.target.value)) {
+          if (td.innerText.includes(character)) {
+            amountOfCharsInTd += 1;
           }
         }
-        maxScoreForRow.push(sum);
-        tdlengths.push(td.innerText.length);
+        maxSimiliarityForRow.push(amountOfCharsInTd);
+        tdLengths.push(td.innerText.length);
       }
-      let mathMax = Math.max(...maxScoreForRow);
-      let index = maxScoreForRow.indexOf(mathMax);
-      if (!isNaN(mathMax / tdlengths[index])) {
-        columnData.push(`${mathMax / tdlengths[index]}#${i}`);
-        columnIndexAndTableRow[`${mathMax / tdlengths[index]}#${i}`] =
+      let maxSimiliarityInRow = Math.max(...maxSimiliarityForRow);
+      let index = maxSimiliarityForRow.indexOf(maxSimiliarityInRow);
+      if (!isNaN(maxSimiliarityInRow / tdLengths[index])) {
+        columnToBeSorted.push(`${maxSimiliarityInRow / tdLengths[index]}#${i}`);
+        columnIndexAndTableRow[`${maxSimiliarityInRow / tdLengths[index]}#${i}`] =
           cellsOrRows(e.target.table, tr);
       } else {
-        columnData.push(`0#${i}`);
-        columnIndexAndTableRow[`0#${i}`] = cellsOrRows(e.target.table, tr);
+        columnToBeSorted.push(`0#${i}`);
+        columnIndexAndTableRow[`0#${i}`] = tr.innerHTML
       }
     }
-    console.log(columnData);
+      console.log(columnToBeSorted);
 
-    columnData.sort().reverse();
+      columnToBeSorted.sort().reverse();
 
-    console.log("reversed", columnData);
+      console.log("reversed", columnToBeSorted);
 
-    for (let [i, tr] of e.target.tableRows[0].entries()) {
+    for (let [i, tr] of e.target.tableRows[bodyIndex].entries()) {
       if (e.target.table.hasClass.cellsSort) {
-        tr.innerHTML = columnIndexAndTableRow[columnData[i]];
+        tr.innerHTML = columnIndexAndTableRow[columnToBeSorted[i]];
       } else {
-        console.log("i", columnIndexAndTableRow[columnData[i]]);
+        console.log("i", columnIndexAndTableRow[columnToBeSorted[i]]);
         const template = document.createElement("template");
-        template.outerHTML = columnIndexAndTableRow[columnData[i]];
-        tr = template.content;
+        template.outerHTML = columnIndexAndTableRow[columnToBeSorted[i]];
+        tr = template.content.firstChild;
         // tr.outerHTML =  columnIndexAndTableRow[columnData[i]];
       }
+    }
     }
   }
 
