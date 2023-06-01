@@ -135,15 +135,15 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     let div = document.createElement("div");
     let input = document.createElement("input");
     let label = document.createElement("label");
-    div.style.display ="flex"
-    label.innerHTML = "Search:"
+    div.style.display = "flex";
+    label.innerHTML = "Search:";
     input.setAttribute("type", "text");
     input.setAttribute("id", "fuzzy-search");
     input.tableRows = table.rows;
     input.table = table;
     input.addEventListener("input", sortFuzzySearch);
-    div.appendChild(label)
-    div.appendChild(input)
+    div.appendChild(label);
+    div.appendChild(input);
     sortableTable.insertBefore(div, sortableTable.firstChild);
 
     for (
@@ -190,50 +190,49 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function sortFuzzySearch(e) {
-    for (let bodyIndex = 0; bodyIndex< e.target.tableRows.length;bodyIndex++){
+    for (
+      let bodyIndex = 0;
+      bodyIndex < e.target.tableRows.length;
+      bodyIndex++
+    ) {
       const columnToBeSorted = [];
-    for (let [i, tr] of e.target.tableRows[bodyIndex].entries()) {
-      const maxSimiliarityForRow = [];
-      const tds = tr.querySelectorAll("td");
-      const tdLengths = [];
-      for (let td of tds) {
-        let amountOfCharsInTd = 0;
-        for (let character of Array.from(e.target.value)) {
-          if (td.innerText.includes(character)) {
-            amountOfCharsInTd += 1;
+      for (let [i, tr] of e.target.tableRows[bodyIndex].entries()) {
+        const charMatchesInRow = [];
+        const tds = tr.querySelectorAll("td");
+        const tdLengths = [];
+        for (let td of tds) {
+          let amountOfCharsInTd = 0;
+          for (let character of Array.from(e.target.value)) {
+            if (td.innerText.includes(character)) {
+              amountOfCharsInTd += 1;
+            }
           }
+          charMatchesInRow.push(amountOfCharsInTd);
+          tdLengths.push(td.innerText.length);
         }
-        maxSimiliarityForRow.push(amountOfCharsInTd);
-        tdLengths.push(td.innerText.length);
-      }
-      let maxSimiliarityInRow = Math.max(...maxSimiliarityForRow);
-      let index = maxSimiliarityForRow.indexOf(maxSimiliarityInRow);
-      if (!isNaN(maxSimiliarityInRow / tdLengths[index])) {
-        columnToBeSorted.push(`${maxSimiliarityInRow / tdLengths[index]}#${i}`);
-        columnIndexAndTableRow[`${maxSimiliarityInRow / tdLengths[index]}#${i}`] =
-          cellsOrRows(e.target.table, tr);
-      } else {
-        columnToBeSorted.push(`0#${i}`);
-        columnIndexAndTableRow[`0#${i}`] = tr.innerHTML
-      }
-    }
-      console.log(columnToBeSorted);
+        let tdWithMaxCharMatch = Math.max(...charMatchesInRow);
+        let index = charMatchesInRow.indexOf(tdWithMaxCharMatch);
 
+        if (!isNaN(tdWithMaxCharMatch / tdLengths[index])) {
+          columnToBeSorted.push(
+            `${tdWithMaxCharMatch / tdLengths[index]}#${i}`
+          );
+          columnIndexAndTableRow[
+            `${tdWithMaxCharMatch / tdLengths[index]}#${i}`
+          ] = cellsOrRows(e.target.table, tr);
+        } else {
+          columnToBeSorted.push(`0#${i}`);
+          columnIndexAndTableRow[`0#${i}`] = cellsOrRows(e.target.table, tr);
+        }
+      }
       columnToBeSorted.sort().reverse();
-
-      console.log("reversed", columnToBeSorted);
-
-    for (let [i, tr] of e.target.tableRows[bodyIndex].entries()) {
-      if (e.target.table.hasClass.cellsSort) {
-        tr.innerHTML = columnIndexAndTableRow[columnToBeSorted[i]];
-      } else {
-        console.log("i", columnIndexAndTableRow[columnToBeSorted[i]]);
-        const template = document.createElement("template");
-        template.outerHTML = columnIndexAndTableRow[columnToBeSorted[i]];
-        tr = template.content.firstChild;
-        // tr.outerHTML =  columnIndexAndTableRow[columnData[i]];
+      for (let [i, tr] of e.target.tableRows[bodyIndex].entries()) {
+        if (e.target.table.hasClass.cellsSort) {
+          tr.innerHTML = columnIndexAndTableRow[columnToBeSorted[i]];
+        } else {
+          tr.outerHTML = columnIndexAndTableRow[columnToBeSorted[i]];
+        }
       }
-    }
     }
   }
 
@@ -264,7 +263,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function sortDates(datesFormat, table, column) {
-    try {
       for (let [i, tr] of table.visibleRows.entries()) {
         let columnOfTd, datesRegex;
         if (datesFormat === "mdy" || datesFormat === "dmy") {
@@ -300,13 +298,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         column.toBeSorted.push(`${numberToSort}#${i}`);
         columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(table, tr);
       }
-    } catch (e) {
-      console.log(e);
-    }
   }
 
   function sortByRuntime(table, column) {
-    try {
       for (let [i, tr] of table.visibleRows.entries()) {
         const regexMinutesAndSeconds = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
         let columnOfTd = "";
@@ -336,9 +330,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         column.toBeSorted.push(`${timeinSeconds}#${i}`);
         columnIndexAndTableRow[column.toBeSorted[i]] = cellsOrRows(table, tr);
       }
-    } catch (e) {
-      console.log(e);
-    }
   }
 
   function getTableData(tableProperties, timesClickedColumn) {
