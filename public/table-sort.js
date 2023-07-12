@@ -55,57 +55,61 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function inferSortClasses(tableRows, columnIndex, column, th) {
-    const runtimeRegex = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
-    const fileSizeRegex = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
-    // Don't infer dates with delimiter "."; as could capture semantic version numbers.
-    const dmyRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
-    const ymdRegex = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
-    // const numericRegex = /^(?:\(\d+(?:\.\d+)?\)|-?\d+(?:\.\d+)?)$/;  doesn't handle commas
-    const numericRegex =
-      /^-?(?:\d{1,3}(?:[',]\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?(?:[',]\d{3})*?)$/;
-    const inferableClasses = {
-      runtime: { regexp: runtimeRegex, class: "runtime-sort", count: 0 },
-      filesize: { regexp: fileSizeRegex, class: "file-size-sort", count: 0 },
-      dmyDates: { regexp: dmyRegex, class: "dates-dmy-sort", count: 0 },
-      ymdDates: { regexp: ymdRegex, class: "dates-ymd-sort", count: 0 },
-      numericRegex: { regexp: numericRegex, class: "numeric-sort", count: 0 },
-    };
-    let classNameAdded = false;
-    let regexNotFoundCount = 0;
-    const threshold = Math.ceil(tableRows.length / 2);
-    for (let tr of tableRows) {
-      if (regexNotFoundCount >= threshold) {
-        break;
-      }
-      const tableColumn = tr
-        .querySelectorAll("td")
-        .item(
-          column.span[columnIndex] === 1
-            ? column.spanSum[columnIndex] - 1
-            : column.spanSum[columnIndex] - column.span[columnIndex]
-        );
-      let foundMatch = false;
-      for (let key of Object.keys(inferableClasses)) {
-        let classRegexp = inferableClasses[key].regexp;
-        if (tableColumn?.innerText !== undefined) {
-          if (tableColumn.innerText.match(classRegexp)) {
-            foundMatch = true;
-            inferableClasses[key].count++;
-          }
-        }
-        if (inferableClasses[key].count >= threshold) {
-          th.classList.add(inferableClasses[key].class);
-          classNameAdded = true;
+    try {
+      const runtimeRegex = /^(\d+h)?\s?(\d+m)?\s?(\d+s)?$/i;
+      const fileSizeRegex = /^([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
+      // Don't infer dates with delimiter "."; as could capture semantic version numbers.
+      const dmyRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
+      const ymdRegex = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
+      // const numericRegex = /^(?:\(\d+(?:\.\d+)?\)|-?\d+(?:\.\d+)?)$/;  doesn't handle commas
+      const numericRegex =
+        /^-?(?:\d{1,3}(?:[',]\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?(?:[',]\d{3})*?)$/;
+      const inferableClasses = {
+        runtime: { regexp: runtimeRegex, class: "runtime-sort", count: 0 },
+        filesize: { regexp: fileSizeRegex, class: "file-size-sort", count: 0 },
+        dmyDates: { regexp: dmyRegex, class: "dates-dmy-sort", count: 0 },
+        ymdDates: { regexp: ymdRegex, class: "dates-ymd-sort", count: 0 },
+        numericRegex: { regexp: numericRegex, class: "numeric-sort", count: 0 },
+      };
+      let classNameAdded = false;
+      let regexNotFoundCount = 0;
+      const threshold = Math.ceil(tableRows.length / 2);
+      for (let tr of tableRows) {
+        if (regexNotFoundCount >= threshold) {
           break;
         }
+        const tableColumn = tr
+          .querySelectorAll("td")
+          .item(
+            column.span[columnIndex] === 1
+              ? column.spanSum[columnIndex] - 1
+              : column.spanSum[columnIndex] - column.span[columnIndex]
+          );
+        let foundMatch = false;
+        for (let key of Object.keys(inferableClasses)) {
+          let classRegexp = inferableClasses[key].regexp;
+          if (tableColumn.innerText !== undefined) {
+            if (tableColumn.innerText.match(classRegexp)) {
+              foundMatch = true;
+              inferableClasses[key].count++;
+            }
+          }
+          if (inferableClasses[key].count >= threshold) {
+            th.classList.add(inferableClasses[key].class);
+            classNameAdded = true;
+            break;
+          }
+        }
+        if (classNameAdded) {
+          break;
+        }
+        if (!foundMatch) {
+          regexNotFoundCount++;
+          continue;
+        }
       }
-      if (classNameAdded) {
-        break;
-      }
-      if (!foundMatch) {
-        regexNotFoundCount++;
-        continue;
-      }
+    } catch (e) {
+      console.log(e);
     }
   }
 
