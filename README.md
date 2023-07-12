@@ -61,12 +61,12 @@ Examples on using table-sort-js with frontend frameworks such as [React.js](http
 
 <br>
 
-| &lt;th&gt; classes | Description                                                                                                                              |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| "data-sort"        | Sort by [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes), e.g &lt;td data-sort="42"&gt;. Useful for doing custom sorts.  |
-| "dates-mdy-sort"   | Sorts dates in US style mm/dd/yyyy format;. e.g (12/28/2023). Can use "/" or "-" as separator. Overides inferred "dates-dmy-sort" class. |
-| "onload-sort"      | Sort column on loading of the page. Simulates a click from the user. (can only sort onload for one column)                               |
-| "disable-sort"     | Disallow sorting the table by this specific column.                                                                                      |
+| &lt;th&gt; classes | Description                                                                                                                                                             |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "data-sort"        | Sort by [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes), e.g &lt;td data-sort="42"&gt;. Useful for doing custom sorts. |
+| "dates-mdy-sort"   | Sorts dates in US style mm/dd/yyyy format;. e.g (12/28/2023). Can use "/" or "-" as separator. Overides inferred "dates-dmy-sort" class.                                |
+| "onload-sort"      | Sort column on loading of the page. Simulates a click from the user. (can only sort onload for one column)                                                              |
+| "disable-sort"     | Disallow sorting the table by this specific column.                                                                                                                     |
 
 <br>
 
