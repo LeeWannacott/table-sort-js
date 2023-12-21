@@ -26,7 +26,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   const [getTagTable] = getHTMLTables();
   const columnIndexAndTableRow = {};
   for (let table of getTagTable) {
-    if (table.classList.contains("table-sort") && !table.classList.contains("table-processed")) {
+    if (
+      table.classList.contains("table-sort") &&
+      !table.classList.contains("table-processed")
+    ) {
       makeTableSortable(table);
     }
   }
@@ -113,7 +116,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
   }
 
-  function makeTableSortable(sortableTable) {  
+  function makeTableSortable(sortableTable) {
     sortableTable.classList.add("table-processed");
     const table = {
       bodies: getTableBodies(sortableTable),
