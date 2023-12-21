@@ -114,6 +114,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
   }
 
   function makeTableSortable(sortableTable) {
+    if (sortableTable.classList.contains("table-processed")) {
+        return;
+    } else {
+        sortableTable.classList.add("table-processed");
+    }
     const table = {
       bodies: getTableBodies(sortableTable),
       theads: sortableTable.querySelectorAll("thead"),
