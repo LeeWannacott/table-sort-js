@@ -383,7 +383,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       return sortAscending(b, a);
     }
 
-    function clearArrows(arrowUp = "▲", arrowDown = "▼") {
+    function clearArrows(arrowUp, arrowDown, initialArrow = "↕") {
+      th.innerHTML = th.innerHTML.replace(initialArrow, "");
       th.innerHTML = th.innerHTML.replace(arrowUp, "");
       th.innerHTML = th.innerHTML.replace(arrowDown, "");
     }
@@ -515,13 +516,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     columnIndexesClicked
   ) {
     const desc = th.classList.contains("order-by-desc");
-    const arrow = { up: " ▲", down: " ▼" };
+    const initialArrow = " ↕";
+    const arrow = { up: " ↑", down: " ↓" };
     const fillValue = "!X!Y!Z!";
 
-    if (desc && table.hasClass.tableArrows) {
-      th.insertAdjacentText("beforeend", arrow.down);
-    } else if (table.hasClass.tableArrows) {
-      th.insertAdjacentText("beforeend", arrow.up);
+    if (table.hasClass.tableArrows) {
+      th.insertAdjacentText("beforeend", initialArrow);
     }
 
     let timesClickedColumn = 0;
