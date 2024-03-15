@@ -82,7 +82,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
           break;
         }
         const tableColumn = tr
-          .querySelectorAll("td")
+          .querySelectorAll("* > th , * > td")
           .item(
             column.span[columnIndex] === 1
               ? column.spanSum[columnIndex] - 1
@@ -125,11 +125,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       headers: [],
     };
     for (let index of table.theads.keys()) {
-      if (table.theads.item(index).querySelectorAll("th").length == 0) {
-        table.headers.push(table.theads.item(index).querySelectorAll("td"));
-      } else {
-        table.headers.push(table.theads.item(index).querySelectorAll("th"));
-      }
+      table.headers.push(
+        table.theads.item(index).querySelectorAll("* > th , * > td")
+      );
     }
     for (let index of table.bodies.keys()) {
       if (table.bodies.item(index) == null) {
@@ -200,7 +198,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     };
     const numberWithUnitType = /([.0-9]+)\s?(B|KB|KiB|MB|MiB|GB|GiB|TB|TiB)/i;
     for (let [i, tr] of table.visibleRows.entries()) {
-      let fileSizeTd = tr.querySelectorAll("td").item(columnIndex).textContent;
+      let fileSizeTd = tr
+        .querySelectorAll("* > th , * > td")
+        .item(columnIndex).textContent;
       let match = fileSizeTd.match(numberWithUnitType);
       if (match) {
         let number = parseFloat(match[1]);
@@ -465,7 +465,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         "NaN"
       );
     }
-    tr.querySelectorAll("td").item(columnIndex).innerHTML = fileSizeInBytesHTML;
+    tr.querySelectorAll("* > th , * > td").item(columnIndex).innerHTML =
+      fileSizeInBytesHTML;
     return table.hasClass.cellsSort ? tr.innerHTML : tr.outerHTML;
   }
 
@@ -532,7 +533,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     const column = {
       getColumn: function getColumn(tr, colSpanSum, colSpanData) {
         return tr
-          .querySelectorAll("td")
+          .querySelectorAll("* > th , * > td")
           .item(
             colSpanData[columnIndex] === 1
               ? colSpanSum[columnIndex] - 1
