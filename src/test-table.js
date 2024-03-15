@@ -12,8 +12,10 @@ export class App extends Component {
   };
 
   componentDidMount() {
+    console.log("mount");
     const script = document.createElement("script");
     script.src = "http://localhost:3000/table-sort-js/table-sort.js";
+    script.type = "application/javascript";
     script.async = true;
     document.body.appendChild(script);
 
