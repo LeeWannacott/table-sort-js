@@ -125,7 +125,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       headers: [],
     };
     for (let index of table.theads.keys()) {
-      table.headers.push(table.theads.item(index).querySelectorAll("th"));
+      if (table.theads.item(index).querySelectorAll("th").length == 0) {
+        table.headers.push(table.theads.item(index).querySelectorAll("td"));
+      } else {
+        table.headers.push(table.theads.item(index).querySelectorAll("th"));
+      }
     }
     for (let index of table.bodies.keys()) {
       if (table.bodies.item(index) == null) {
