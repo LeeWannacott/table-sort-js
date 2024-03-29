@@ -91,11 +91,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         let foundMatch = false;
         for (let key of Object.keys(inferableClasses)) {
           let classRegexp = inferableClasses[key].regexp;
-          if (tableColumn.innerText !== undefined) {
-            if (tableColumn.innerText.match(classRegexp)) {
+          let columnOfTd = testingTableSortJS
+          ? tableColumn.textContent
+          : tableColumn.innerText;
+          if (columnOfTd !== undefined && columnOfTd.match(classRegexp) ) {
               foundMatch = true;
               inferableClasses[key].count++;
-            }
           }
           if (inferableClasses[key].count >= threshold) {
             th.classList.add(inferableClasses[key].class);
@@ -562,6 +563,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         );
       }
       timesClickedColumn += 1;
+
 
       const hasThClass = {
         dataSort: th.classList.contains("data-sort"),
