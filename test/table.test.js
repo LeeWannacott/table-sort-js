@@ -617,6 +617,55 @@ test("Sort all combination of negative and positive integers and decimal numbers
   });
 });
 
+test("numeric-sort - percentages including negative", () => {
+  expect(
+    createTestTable(
+      {
+        col0: {
+          td: [
+            "0.88%",
+            "-0.98%",
+            "0.22%",
+            "-0.28%",
+            "0.27%",
+            "0.273%",
+            "(0.273%)",
+            "(0.893%)",
+            "22.273%",
+            "100.273%",
+            "10.273%",
+            "-10.273%",
+            "-81.273%",
+            "-82.273%",
+            "11.823%",
+            "11.803%",
+          ],
+        },
+      },
+      { classTags: "numeric-sort" }
+    )
+  ).toStrictEqual({
+    col0: [
+      "-82.273%",
+      "-81.273%",
+      "-10.273%",
+      "-0.98%",
+      "(0.893%)",
+      "-0.28%",
+      "(0.273%)",
+      "0.22%",
+      "0.27%",
+      "0.273%",
+      "0.88%",
+      "10.273%",
+      "11.803%",
+      "11.823%",
+      "22.273%",
+      "100.273%",
+    ],
+  });
+});
+
 test("numeric-sort - various currency", () => {
   expect(
     createTestTable(

@@ -150,8 +150,12 @@ test("InferSortClassesOnTH - NUMERIC", () => {
           "-£755,905",
         ],
       },
+      col5: {
+        td: ["0.88%", "-0.98%", "0.22%", "0.28%", "0.57%"],
+      },
     })
   ).toStrictEqual([
+    "numeric-sort",
     "numeric-sort",
     "numeric-sort",
     "numeric-sort",

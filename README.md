@@ -70,13 +70,14 @@ Examples on using table-sort-js with frontend frameworks such as [React.js](http
 
 <br>
 
-| &lt;th&gt; Inferred Classes. | Description                                                                                                                         |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| "numeric-sort"               | Sorts numbers including decimals - Positive, Negative (in both minus and parenthesis representations). Supports for common currencies e.g ($£€¥)   |
-| "dates-dmy-sort"             | Sorts dates in dd/mm/yyyy format. e.g (18/10/1995). Can use "/" or "-" as separator.                                                |
-| "dates-ymd-sort"             | Sorts dates in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) yyyy/mm/dd format. e.g (2021/10/28). Use "/" or "-" as separator. |
-| "file-size-sort"             | Sorts file sizes(B->TiB) uses the binary prefix. (e.g 10 B, 100 KiB, 1 MiB); optional space between number and prefix.              |
-| "runtime-sort"               | Sorts runtime in hours minutes and seconds e.g (10h 1m 20s). Useful for sorting the GitHub actions Run time column...               |
+| &lt;th&gt; Inferred Classes. | Description                                                                                                                                      |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| "numeric-sort"               | Sorts numbers including decimals - Positive, Negative (in both minus and parenthesis representations).
+|                              | Supports common currencies e.g ($£€¥) and percentage signs e.g (0.39%) |
+| "dates-dmy-sort"             | Sorts dates in dd/mm/yyyy format. e.g (18/10/1995). Can use "/" or "-" as separator.                                                             |
+| "dates-ymd-sort"             | Sorts dates in [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) yyyy/mm/dd format. e.g (2021/10/28). Use "/" or "-" as separator.              |
+| "file-size-sort"             | Sorts file sizes(B->TiB) uses the binary prefix. (e.g 10 B, 100 KiB, 1 MiB); optional space between number and prefix.                           |
+| "runtime-sort"               | Sorts runtime in hours minutes and seconds e.g (10h 1m 20s). Useful for sorting the GitHub actions Run time column...                            |
 
 <br>
 
