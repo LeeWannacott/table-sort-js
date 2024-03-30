@@ -1,40 +1,38 @@
 const createTestTable = require("./tagsInferenceTable");
 
-
 test("InferSortClassesOnTH - FILE SIZE", () => {
   expect(
     createTestTable({
-        col0: {
-          td: [
-            "10MB",
-            "10GB",
-            "10TB",
-            "10B",
-            "10MiB",
-            "10TiB",
-            "10Kib",
-            "10KB",
-            "10GiB",
-          ],
-        },
-        // add in space and make some undercase
-        col1: {
-          td: [
-            "10 mB",
-            "10 GB",
-            "10 Tb",
-            "10 B",
-            "10 mib",
-            "10 tib",
-            "10 kib",
-            "10 kB",
-            "10 giB",
-          ],
-        },
+      col0: {
+        td: [
+          "10MB",
+          "10GB",
+          "10TB",
+          "10B",
+          "10MiB",
+          "10TiB",
+          "10Kib",
+          "10KB",
+          "10GiB",
+        ],
+      },
+      // add in space and make some undercase
+      col1: {
+        td: [
+          "10 mB",
+          "10 GB",
+          "10 Tb",
+          "10 B",
+          "10 mib",
+          "10 tib",
+          "10 kib",
+          "10 kB",
+          "10 giB",
+        ],
+      },
     })
   ).toStrictEqual(["file-size-sort", "file-size-sort"]);
 });
-
 
 test("InferSortClassesOnTH - DATES", () => {
   expect(
@@ -67,29 +65,27 @@ test("InferSortClassesOnTH - DATES", () => {
       },
     })
     // two dates-dmy-sort as mdy is not an inferred class but explicit override.
-  ).toStrictEqual(["dates-ymd-sort","dates-dmy-sort","dates-dmy-sort"]);
+  ).toStrictEqual(["dates-ymd-sort", "dates-dmy-sort", "dates-dmy-sort"]);
 });
-
-
 
 test("InferSortClassesOnTH - RUNTIME", () => {
   expect(
     createTestTable({
-        col0: {
-          td: [
-            "2m 52s",
-            "1h 20m 10s",
-            "3s",
-            "11h 10m 10s",
-            "7s",
-            "11m 40s",
-            "36s",
-            "1h 10m 10s",
-            "9m 44s",
-            "1m 36s",
-            "41s",
-          ],
-        },
+      col0: {
+        td: [
+          "2m 52s",
+          "1h 20m 10s",
+          "3s",
+          "11h 10m 10s",
+          "7s",
+          "11m 40s",
+          "36s",
+          "1h 10m 10s",
+          "9m 44s",
+          "1m 36s",
+          "41s",
+        ],
+      },
     })
   ).toStrictEqual(["runtime-sort"]);
 });
@@ -97,63 +93,69 @@ test("InferSortClassesOnTH - RUNTIME", () => {
 test("InferSortClassesOnTH - NUMERIC", () => {
   expect(
     createTestTable({
-        // commas
-        col0: {
-          td: [
-            "20,000.89",
-            "30,000.32",
-            "1",
-            "0.111",
-            "21,000.92",
-            "19845",
-            "12000",
-            "-90",
-            "-10,000.39",
-            "-10,000.10",
-          ],
-        },
-        // negative numbers
-        col1: { td: ["1.05", "-2.3", "-3", "1", "-6", "(1.4)", "14"] },
-        // decimals
-        col2: { td: ["0.1", "0.2", "0.3", "0.11", "0.13", "0.13", "0.14"] },
-        col3: {
-          td: [
-            "1.05",
-            "-2.3",
-            "-3",
-            "1",
-            "-6",
-            "",
-            "(0.5)",
-            "1a",
-            "b",
-            "(c)",
-            "{1}",
-          ],
-        },
-        // TODO HANDLE CURRENCY $ / pounds, etc....
-        col4: {
-          td: [
-            "-$4.01",
-            "-¥2.02",
-            "-$5.03",
-            "$4.64",
-            "-£29,675",
-            "-$5.21",
-            "-£50,854",
-            "£2,038,720",
-            "£283,838,720",
-            "-£481,177",
-            "$2.01",
-            "$2.11",
-            "$2.21",
-            "-£1,976,799",
-            "£2,265",
-            "-£420,252",
-            "-€2,409,060",
-            "-£755,905",
-          ],
-        },
+      // commas
+      col0: {
+        td: [
+          "20,000.89",
+          "30,000.32",
+          "1",
+          "0.111",
+          "21,000.92",
+          "19845",
+          "12000",
+          "-90",
+          "-10,000.39",
+          "-10,000.10",
+        ],
+      },
+      // negative numbers
+      col1: { td: ["1.05", "-2.3", "-3", "1", "-6", "(1.4)", "14"] },
+      // decimals
+      col2: { td: ["0.1", "0.2", "0.3", "0.11", "0.13", "0.13", "0.14"] },
+      col3: {
+        td: [
+          "1.05",
+          "-2.3",
+          "-3",
+          "1",
+          "-6",
+          "",
+          "(0.5)",
+          "1a",
+          "b",
+          "(c)",
+          "{1}",
+        ],
+      },
+      // TODO HANDLE CURRENCY $ / pounds, etc....
+      col4: {
+        td: [
+          "-$4.01",
+          "-¥2.02",
+          "-$5.03",
+          "$4.64",
+          "-£29,675",
+          "-$5.21",
+          "-£50,854",
+          "£2,038,720",
+          "£283,838,720",
+          "-£481,177",
+          "$2.01",
+          "$2.11",
+          "$2.21",
+          "-£1,976,799",
+          "£2,265",
+          "-£420,252",
+          "-€2,409,060",
+          "-£755,905",
+        ],
+      },
     })
-  ).toStrictEqual(["numeric-sort","numeric-sort","numeric-sort","numeric-sort","numeric-sort"]);
+  ).toStrictEqual([
+    "numeric-sort",
+    "numeric-sort",
+    "numeric-sort",
+    "numeric-sort",
+    "numeric-sort",
+  ]);
 });
