@@ -65,7 +65,8 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       const dmyRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
       const ymdRegex = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
       const numericRegex =
-        /^-?(?:[$£€¥₩₽₺₣¤¿\u20A1\uFFE0]\d{1,3}(?:[',]\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?(?:[',]\d{3})*?)$/;
+        /^-?(?:[$£€¥₩₽₺₣฿₿Ξξ¤¿\u20A1\uFFE0]\d{1,3}(?:[',]\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?(?:[',]\d{3})*?)$/;
+
 
       const inferableClasses = {
         runtime: { regexp: runtimeRegex, class: "runtime-sort", count: 0 },
@@ -92,11 +93,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         for (let key of Object.keys(inferableClasses)) {
           let classRegexp = inferableClasses[key].regexp;
           let columnOfTd = testingTableSortJS
-            ? tableColumn.textContent
-            : tableColumn.innerText;
-          if (columnOfTd !== undefined && columnOfTd.match(classRegexp)) {
-            foundMatch = true;
-            inferableClasses[key].count++;
+          ? tableColumn.textContent
+          : tableColumn.innerText;
+          if (columnOfTd !== undefined && columnOfTd.match(classRegexp) ) {
+              foundMatch = true;
+              inferableClasses[key].count++;
           }
           if (inferableClasses[key].count >= threshold) {
             th.classList.add(inferableClasses[key].class);
@@ -359,13 +360,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function handleNumbers(str1, str2) {
-      const currencyAndComma = /[$£€¥₩₽₺₣¤¿\u20A1\uFFE0, ]/g;
+      const currencyAndComma =  /[$£€¥₩₽₺₣฿₿Ξξ¤¿\u20A1\uFFE0, ]/g
       str1 = str1.replace(currencyAndComma, "");
       str2 = str2.replace(currencyAndComma, "");
-      const [num1, num2] = [
-        parseNumberFromString(str1),
-        parseNumberFromString(str2),
-      ];
+      const [num1, num2] = [parseNumberFromString(str1),parseNumberFromString(str2)];
 
       if (!isNaN(num1) && !isNaN(num2)) {
         return num1 - num2;
@@ -565,6 +563,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         );
       }
       timesClickedColumn += 1;
+
 
       const hasThClass = {
         dataSort: th.classList.contains("data-sort"),
