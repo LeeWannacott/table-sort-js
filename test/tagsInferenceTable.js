@@ -76,9 +76,10 @@ function createTestTable(
   tableSortJs(true, dom.window.document);
   // Make an array from table contents to test if sorted correctly.
   let table = dom.window.document.querySelector("table");
-  const tableHeadWithInferredClassName = table
-    .querySelectorAll("thead th")
-  let inferedClassNamesOfTh = Array.from(tableHeadWithInferredClassName).map((e)=>e.getAttribute("class"))
+  const tableHeadWithInferredClassName = table.querySelectorAll("thead th");
+  let inferedClassNamesOfTh = Array.from(tableHeadWithInferredClassName).map(
+    (e) => e.getAttribute("class")
+  );
   return inferedClassNamesOfTh;
 }
 

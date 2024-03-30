@@ -617,6 +617,59 @@ test("Sort all combination of negative and positive integers and decimal numbers
   });
 });
 
+test("numeric-sort - various currency", () => {
+  expect(
+    createTestTable(
+      {
+        col0: {
+          td: [
+            "-$4.01",
+            "-¥2.02",
+            "($5.03)",
+            "$4.64",
+            "-£29,675",
+            "-$5.21",
+            "-£50,854",
+            "£2,038,720",
+            "£283,838,720",
+            "-£481,177",
+            "$2.01",
+            "$2.11",
+            "฿2.21",
+            "-£1,976,799",
+            "£2,265",
+            "(£420,252)",
+            "-€2,409,060",
+            "-£755,905",
+          ],
+        },
+      },
+      { classTags: "numeric-sort" }
+    )
+  ).toStrictEqual({
+    col0: [
+      "-€2,409,060",
+      "-£1,976,799",
+      "-£755,905",
+      "-£481,177",
+      "(£420,252)",
+      "-£50,854",
+      "-£29,675",
+      "-$5.21",
+      "($5.03)",
+      "-$4.01",
+      "-¥2.02",
+      "$2.01",
+      "$2.11",
+      "฿2.21",
+      "$4.64",
+      "£2,265",
+      "£2,038,720",
+      "£283,838,720",
+    ],
+  });
+});
+
 test("default behavior without cells-sort (tr's move when sorted)", () => {
   expect(
     createTestTable(
