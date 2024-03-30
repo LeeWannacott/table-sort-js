@@ -64,9 +64,9 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       // Don't infer dates with delimiter "."; as could capture semantic version numbers.
       const dmyRegex = /^(\d\d?)[/-](\d\d?)[/-]((\d\d)?\d\d)/;
       const ymdRegex = /^(\d\d\d\d)[/-](\d\d?)[/-](\d\d?)/;
-      // const numericRegex = /^(?:\(\d+(?:\.\d+)?\)|-?\d+(?:\.\d+)?)$/;  doesn't handle commas
       const numericRegex =
-        /^-?(?:\d{1,3}(?:[',]\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?(?:[',]\d{3})*?)$/;
+        /^-?(?:[$£€¥₩₽₺₣฿₿Ξξ¤¿\u20A1\uFFE0]\d{1,3}(?:[',]\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?(?:[',]\d{3})*?)(?:%?)$/;
+
       const inferableClasses = {
         runtime: { regexp: runtimeRegex, class: "runtime-sort", count: 0 },
         filesize: { regexp: fileSizeRegex, class: "file-size-sort", count: 0 },
@@ -91,11 +91,12 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
         let foundMatch = false;
         for (let key of Object.keys(inferableClasses)) {
           let classRegexp = inferableClasses[key].regexp;
-          if (tableColumn.innerText !== undefined) {
-            if (tableColumn.innerText.match(classRegexp)) {
-              foundMatch = true;
-              inferableClasses[key].count++;
-            }
+          let columnOfTd = testingTableSortJS
+            ? tableColumn.textContent
+            : tableColumn.innerText;
+          if (columnOfTd !== undefined && columnOfTd.match(classRegexp)) {
+            foundMatch = true;
+            inferableClasses[key].count++;
           }
           if (inferableClasses[key].count >= threshold) {
             th.classList.add(inferableClasses[key].class);
@@ -341,7 +342,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     function parseNumberFromString(str) {
       let num;
       str = str.slice(0, str.indexOf("#"));
-      if (str.match(/^\((\d+(?:\.\d+)?)\)$/)) {
+      if (str.match(/^\(-?(\d+(?:\.\d+)?)\)$/)) {
         num = -1 * Number(str.slice(1, -1));
       } else {
         num = Number(str);
@@ -358,11 +359,13 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function handleNumbers(str1, str2) {
-      let num1, num2;
-      str1 = str1.replaceAll(",", "");
-      str2 = str2.replaceAll(",", "");
-      num1 = parseNumberFromString(str1);
-      num2 = parseNumberFromString(str2);
+      const matchCurrencyCommaAndPercent = /[$£€¥₩₽₺₣฿₿Ξξ¤¿\u20A1\uFFE0,% ]/g;
+      str1 = str1.replace(matchCurrencyCommaAndPercent, "");
+      str2 = str2.replace(matchCurrencyCommaAndPercent, "");
+      const [num1, num2] = [
+        parseNumberFromString(str1),
+        parseNumberFromString(str2),
+      ];
 
       if (!isNaN(num1) && !isNaN(num2)) {
         return num1 - num2;
