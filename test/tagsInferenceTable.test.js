@@ -132,33 +132,28 @@ test("InferSortClassesOnTH - NUMERIC", () => {
           ],
         },
         // TODO HANDLE CURRENCY $ / pounds, etc....
+        col4: {
+          td: [
+            "-$4.01",
+            "-¥2.02",
+            "-$5.03",
+            "$4.64",
+            "-£29,675",
+            "-$5.21",
+            "-£50,854",
+            "£2,038,720",
+            "£283,838,720",
+            "-£481,177",
+            "$2.01",
+            "$2.11",
+            "$2.21",
+            "-£1,976,799",
+            "£2,265",
+            "-£420,252",
+            "-€2,409,060",
+            "-£755,905",
+          ],
+        },
     })
-  ).toStrictEqual(["numeric-sort","numeric-sort","numeric-sort","numeric-sort"]);
+  ).toStrictEqual(["numeric-sort","numeric-sort","numeric-sort","numeric-sort","numeric-sort"]);
 });
-
-
-// TODO no-class-infer
-// test("InferSortClassesOnTH - no-class-infer", () => {
-//   expect(
-//     createTestTable(
-//       {
-//         col0: {
-//           td: [
-//             "2m 52s",
-//             "1h 20m 10s",
-//             "3s",
-//             "11h 10m 10s",
-//             "7s",
-//             "11m 40s",
-//             "36s",
-//             "1h 10m 10s",
-//             "9m 44s",
-//             "1m 36s",
-//             "41s",
-//           ],
-//         },
-//     },
-//     // props={ tableTags: "no-class-infer"},
-//     )
-//   ).toStrictEqual(["runtime-sort"]);
-// });
