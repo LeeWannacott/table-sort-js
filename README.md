@@ -54,8 +54,8 @@ Examples on using table-sort-js with frontend frameworks such as [React.js](http
 | &lt;table&gt; classes | Description                                                                                                   |
 | --------------------- | ------------------------------------------------------------------------------------------------------------- |
 | "table-sort"          | Make the table sortable! (Words, numbers, dates, file sizes)...                                               |
-| "no-class-infer"      | Turns off inference for adding sort classes automatically i.e (file-size-sort, runtime-sort, dates-dmy-sort). |
-| "table-arrows"        | Display ascending or descending triangles.                                                                    |
+| "table-arrows"        | Display ascending or descending arrows. Supports custom arrows; example: "table-arrows-⇈⇆⇊"                   |
+| "no-class-infer"      | Turns off inference for adding sort classes automatically e.g (file-size-sort, dates-dmy-sort), etc. |
 | "remember-sort"       | If clicking on different columns remembers sort of the original column.                                       |
 | "cells-sort"          | sort cells (td) rather than table rows (tr); useful for keeping table rows with classes/attributes in place.  |
 

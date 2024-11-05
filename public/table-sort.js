@@ -139,8 +139,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     table.hasClass = {
       noClassInfer: sortableTable.classList.contains("no-class-infer"),
       cellsSort: sortableTable.classList.contains("cells-sort"),
-      tableArrows: sortableTable.classList.contains("table-arrows"),
       rememberSort: sortableTable.classList.contains("remember-sort"),
+      // tableArrows: sortableTable.classList.contains("table-arrows"),
+      tableArrows: Array.from(sortableTable.classList).filter((item) =>
+        item.includes("table-arrows")
+      ),
     };
     for (
       let headerIndex = 0;
@@ -400,14 +403,11 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       return;
     }
 
-    function changeTableArrow(arrowDirection) {
+    function changeArrowAndSort(arrowDirection, sortDirection) {
       if (table.hasClass.tableArrows) {
         clearArrows(arrow);
         th.insertAdjacentText("beforeend", arrowDirection);
       }
-    }
-
-    function sortColumn(sortDirection) {
       column.toBeSorted.sort(sortDirection, {
         numeric: !isAlphaSort,
         ignorePunctuation: !isPunctSort,
@@ -415,22 +415,14 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     if (timesClickedColumn === 1) {
-      if (desc) {
-        changeTableArrow(arrow.down);
-        sortColumn(sortDescending);
-      } else {
-        changeTableArrow(arrow.up);
-        sortColumn(sortAscending);
-      }
+      desc
+        ? changeArrowAndSort(arrow.down, sortDescending)
+        : changeArrowAndSort(arrow.up, sortAscending);
     } else if (timesClickedColumn === 2) {
       timesClickedColumn = 0;
-      if (desc) {
-        changeTableArrow(arrow.up);
-        sortColumn(sortAscending);
-      } else {
-        changeTableArrow(arrow.down);
-        sortColumn(sortDescending);
-      }
+      desc
+        ? changeArrowAndSort(arrow.up, sortAscending)
+        : changeArrowAndSort(arrow.down, sortDescending);
     }
     return timesClickedColumn;
   }
@@ -524,20 +516,20 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     columnIndexesClicked
   ) {
     const desc = th.classList.contains("order-by-desc");
-    const custom_arrows = th.classList.contains("custom-arrows");
-    // for (let word in th.classList) {
-    //   console.log(word);
-    // }
-    let arrow = { neutral: " ↕", up: " ↑", down: " ↓" };
     let fillValue = "!X!Y!Z!";
-    if (custom_arrows) {
-      console.log(custom_arrows);
-      console.log(custom_arrows.split("-"));
-      [arrow.up, arrow.neutral, arrow.down] = custom_arrows.split();
-      th.classList.add("table-arrows");
-    }
-
-    if (table.hasClass.tableArrows) {
+    let arrow = { up: " ↑", neutral: " ↕", down: " ↓" };
+    if (table.hasClass.tableArrows[0]) {
+      if (table.hasClass.tableArrows[0].split("-").length > 2) {
+        var customArrow = table.hasClass.tableArrows[0].split("-")[2];
+        if (customArrow.length === 3) {
+          console.log(table.hasClass.tableArrows[0].split("-"));
+          [arrow.up, arrow.neutral, arrow.down] = [
+            " " + customArrow[0],
+            " " + customArrow[1],
+            " " + customArrow[2],
+          ];
+        }
+      }
       th.insertAdjacentText("beforeend", arrow.neutral);
     }
 
