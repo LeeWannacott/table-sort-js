@@ -140,7 +140,6 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       noClassInfer: sortableTable.classList.contains("no-class-infer"),
       cellsSort: sortableTable.classList.contains("cells-sort"),
       rememberSort: sortableTable.classList.contains("remember-sort"),
-      // tableArrows: sortableTable.classList.contains("table-arrows"),
       tableArrows: Array.from(sortableTable.classList).filter((item) =>
         item.includes("table-arrows")
       ),
@@ -520,14 +519,14 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     let arrow = { up: " ↑", neutral: " ↕", down: " ↓" };
     if (table.hasClass.tableArrows[0]) {
       if (table.hasClass.tableArrows[0].split("-").length > 2) {
-        var customArrow = table.hasClass.tableArrows[0].split("-")[2];
+        // Array.from to support utf-8 strings e.g emojis
+        var customArrow = Array.from(
+          table.hasClass.tableArrows[0].split("-")[2]
+        );
+        customArrow = customArrow.map((i) => " " + i);
+        console.log(customArrow);
         if (customArrow.length === 3) {
-          console.log(table.hasClass.tableArrows[0].split("-"));
-          [arrow.up, arrow.neutral, arrow.down] = [
-            " " + customArrow[0],
-            " " + customArrow[1],
-            " " + customArrow[2],
-          ];
+          [arrow.up, arrow.neutral, arrow.down] = [...customArrow];
         }
       }
       th.insertAdjacentText("beforeend", arrow.neutral);
