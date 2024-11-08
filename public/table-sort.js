@@ -520,7 +520,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     if (table.hasClass.tableArrows[0]) {
       if (table.hasClass.tableArrows[0].split("-").length > 2) {
         // Array.from to support utf-8 strings e.g emojis
-        var customArrow = Array.from(
+        let customArrow = Array.from(
           table.hasClass.tableArrows[0].split("-")[2]
         );
         customArrow = customArrow.map((i) => " " + i);
