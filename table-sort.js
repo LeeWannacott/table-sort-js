@@ -6,6 +6,8 @@ Licence: MIT License Copyright (c) 2021-2024 Lee Wannacott
 GitHub Repository: https://github.com/LeeWannacott/table-sort-js
 
 Instructions:
+	Load as script:
+	<script src="https://cdn.jsdelivr.net/npm/table-sort-js/table-sort.min.js"></script>
   Add class="table-sort" to tables you'd like to make sortable
   Click on the table headers to sort them.
 */
