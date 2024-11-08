@@ -1,16 +1,13 @@
 /*
 table-sort-js
 Author: Lee Wannacott
-Licence: MIT License Copyright (c) 2021 Lee Wannacott
+Licence: MIT License Copyright (c) 2021-2024 Lee Wannacott
 
 GitHub Repository: https://github.com/LeeWannacott/table-sort-js
-npm package: https://www.npmjs.com/package/table-sort-js
-Demo: https://leewannacott.github.io/Portfolio/#/GitHub
-Install:
-Frontend: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script> or
-Download this file and add <script src="table-sort.js"></script> to your HTML
-Backend: npm install table-sort-js and use require("../node_modules/table-sort-js/table-sort.js")
+
 Instructions:
+	Load as script:
+	<script src="https://cdn.jsdelivr.net/npm/table-sort-js/table-sort.min.js"></script>
   Add class="table-sort" to tables you'd like to make sortable
   Click on the table headers to sort them.
 */
