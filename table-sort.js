@@ -1,15 +1,10 @@
-/* 
+/*
 table-sort-js
 Author: Lee Wannacott
-Licence: MIT License Copyright (c) 2021 Lee Wannacott 
-    
+Licence: MIT License Copyright (c) 2021-2024 Lee Wannacott
+
 GitHub Repository: https://github.com/LeeWannacott/table-sort-js
-npm package: https://www.npmjs.com/package/table-sort-js
-Demo: https://leewannacott.github.io/Portfolio/#/GitHub
-Install:
-Frontend: <script src="https://leewannacott.github.io/table-sort-js/table-sort.js"></script> or
-Download this file and add <script src="table-sort.js"></script> to your HTML 
-Backend: npm install table-sort-js and use require("../node_modules/table-sort-js/table-sort.js") 
+
 Instructions:
   Add class="table-sort" to tables you'd like to make sortable
   Click on the table headers to sort them.
@@ -139,8 +134,10 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     table.hasClass = {
       noClassInfer: sortableTable.classList.contains("no-class-infer"),
       cellsSort: sortableTable.classList.contains("cells-sort"),
-      tableArrows: sortableTable.classList.contains("table-arrows"),
       rememberSort: sortableTable.classList.contains("remember-sort"),
+      tableArrows: Array.from(sortableTable.classList).filter((item) =>
+        item.includes("table-arrows")
+      ),
     };
     for (
       let headerIndex = 0;
@@ -390,24 +387,21 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
       return sortAscending(b, a);
     }
 
-    function clearArrows(arrowUp, arrowDown, initialArrow = "↕") {
-      th.innerHTML = th.innerHTML.replace(initialArrow, "");
-      th.innerHTML = th.innerHTML.replace(arrowUp, "");
-      th.innerHTML = th.innerHTML.replace(arrowDown, "");
+    function clearArrows(arrow) {
+      th.innerHTML = th.innerHTML.replace(arrow.neutral, "");
+      th.innerHTML = th.innerHTML.replace(arrow.up, "");
+      th.innerHTML = th.innerHTML.replace(arrow.down, "");
     }
 
     if (column.toBeSorted[0] === undefined) {
       return;
     }
 
-    function changeTableArrow(arrowDirection) {
+    function changeArrowAndSort(arrowDirection, sortDirection) {
       if (table.hasClass.tableArrows) {
-        clearArrows(arrow.up, arrow.down);
+        clearArrows(arrow);
         th.insertAdjacentText("beforeend", arrowDirection);
       }
-    }
-
-    function sortColumn(sortDirection) {
       column.toBeSorted.sort(sortDirection, {
         numeric: !isAlphaSort,
         ignorePunctuation: !isPunctSort,
@@ -415,22 +409,14 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     if (timesClickedColumn === 1) {
-      if (desc) {
-        changeTableArrow(arrow.down);
-        sortColumn(sortDescending);
-      } else {
-        changeTableArrow(arrow.up);
-        sortColumn(sortAscending);
-      }
+      desc
+        ? changeArrowAndSort(arrow.down, sortDescending)
+        : changeArrowAndSort(arrow.up, sortAscending);
     } else if (timesClickedColumn === 2) {
       timesClickedColumn = 0;
-      if (desc) {
-        changeTableArrow(arrow.up);
-        sortColumn(sortAscending);
-      } else {
-        changeTableArrow(arrow.down);
-        sortColumn(sortDescending);
-      }
+      desc
+        ? changeArrowAndSort(arrow.up, sortAscending)
+        : changeArrowAndSort(arrow.down, sortDescending);
     }
     return timesClickedColumn;
   }
@@ -524,12 +510,21 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     columnIndexesClicked
   ) {
     const desc = th.classList.contains("order-by-desc");
-    const initialArrow = " ↕";
-    const arrow = { up: " ↑", down: " ↓" };
-    const fillValue = "!X!Y!Z!";
-
-    if (table.hasClass.tableArrows) {
-      th.insertAdjacentText("beforeend", initialArrow);
+    let fillValue = "!X!Y!Z!";
+    let arrow = { up: " ↑", neutral: " ↕", down: " ↓" };
+    if (table.hasClass.tableArrows[0]) {
+      if (table.hasClass.tableArrows[0].split("-").length > 2) {
+        // Array.from to support utf-8 strings e.g emojis
+        let customArrow = Array.from(
+          table.hasClass.tableArrows[0].split("-")[2]
+        );
+        customArrow = customArrow.map((i) => " " + i);
+        console.log(customArrow);
+        if (customArrow.length === 3) {
+          [arrow.up, arrow.neutral, arrow.down] = [...customArrow];
+        }
+      }
+      th.insertAdjacentText("beforeend", arrow.neutral);
     }
 
     let timesClickedColumn = 0;
