@@ -400,7 +400,7 @@ function tableSortJs(testingTableSortJS = false, domDocumentWindow = document) {
     }
 
     function changeArrowAndSort(arrowDirection, sortDirection) {
-      if (table.hasClass.tableArrows) {
+      if (table.hasClass.tableArrows[0]) {
         clearArrows(arrow);
         th.insertAdjacentText("beforeend", arrowDirection);
       }
